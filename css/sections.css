@@ -2517,3 +2517,110 @@
   color: rgba(255, 255, 255, 0.75) !important;
   text-shadow: 0 2px 12px rgba(255, 255, 255, 0.25);
 }
+
+/* ==========================================================================
+   ULTRA-PREMIUM PRELOADER & LIQUID PLATINUM LUXURY OVERRIDE
+   ========================================================================== */
+
+/* 1. Fix Preloader Background & Make VELORA Wordmark Gleaming Platinum */
+.velora-preloader,
+#veloraPreloader {
+  background: radial-gradient(circle at 50% 42%, #1c1c22 0%, #0b0b0e 58%, #050507 100%) !important;
+}
+
+.preloader-wordmark,
+.velora-preloader .wordmark-text {
+  background: linear-gradient(
+    115deg,
+    #cbd5e1 0%,
+    #ffffff 32%,
+    #e2e8f0 52%,
+    #ffffff 74%,
+    #94a3b8 100%
+  ) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  filter: drop-shadow(0 4px 24px rgba(255, 255, 255, 0.28)) !important;
+  letter-spacing: 0.34em !important;
+}
+
+.preloader-sub,
+.velora-preloader .wordmark-sub {
+  color: #cbd5e1 !important;
+  letter-spacing: 0.14em !important;
+}
+
+.preloader-line,
+.preloader-bar {
+  background: rgba(255, 255, 255, 0.14) !important;
+}
+
+.preloader-line-fill,
+.preloader-progress {
+  background: linear-gradient(90deg, #94a3b8, #ffffff, #cbd5e1) !important;
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.65) !important;
+}
+
+/* 2. Eliminate ANY Remaining Maroon Tint Across All Sections & Overlays */
+.collections-section,
+.collections-pin-wrap,
+.hero-section,
+.spotlight-section,
+.site-footer,
+.announcement-bar,
+.mobile-drawer {
+  background: radial-gradient(circle at 75% 20%, #1e1e24 0%, #0e0e12 58%, #070709 100%) !important;
+}
+
+/* 3. Luxury Architectural Typography & Contrast Polish */
+.hero-wordmark {
+  background: linear-gradient(
+    115deg,
+    #cbd5e1 0%,
+    #ffffff 30%,
+    #f1f5f9 50%,
+    #ffffff 72%,
+    #94a3b8 100%
+  ) !important;
+  background-size: 200% auto !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  filter: drop-shadow(0 6px 30px rgba(255, 255, 255, 0.2)) !important;
+}
+
+.hero-sub,
+.spotlight-desc,
+.footer-desc {
+  color: #cbd5e1 !important;
+}
+
+.hero-trust-item span {
+  color: #f1f5f9 !important;
+}
+
+.hero-trust-icon {
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: #ffffff !important;
+}
+
+/* 4. Museum-Grade Product & Collection Card Elevation */
+.product-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 15, 18, 0.08) !important;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.04) !important;
+}
+
+.product-card:hover {
+  border-color: rgba(15, 15, 18, 0.28) !important;
+  box-shadow: 0 24px 52px rgba(0, 0, 0, 0.11) !important;
+}
+
+.badge-shimmer {
+  background: rgba(10, 10, 13, 0.9) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  backdrop-filter: blur(8px);
+}
