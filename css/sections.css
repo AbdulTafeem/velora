@@ -2550,3 +2550,5 @@ h1, .hero-title, .section-title, .brand-logo, .collection-title, .why-card h3, .
 .room-card::after { content: ''; position: absolute; inset: 8px; border: 1px solid rgba(237, 213, 158, 0.35); border-radius: 9px; pointer-events: none; z-index: 2; }
 footer, .site-footer { margin-top: 0 !important; border-top: 1px solid rgba(212, 175, 55, 0.35) !important; }
 
+
+#why-velora .why-lead, .why-header .why-lead { color: rgba(251, 244, 230, 0.9) !important; font-size: 1rem !important; } #why-velora .why-card { background: #fffdf8 !important; border: 1px solid rgba(212, 175, 55, 0.75) !important; } #why-velora .why-card h3 { color: #240409 !important; } #why-velora .why-card p { color: #3d1e24 !important; opacity: 1 !important; }

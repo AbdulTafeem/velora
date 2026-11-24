@@ -177,18 +177,18 @@ const VELORA_DEFAULT_SHEET_CSV = "https://docs.google.com/spreadsheets/d/1yskAN_
             badge: row.badge || 'Best Seller',
             badgeType: 'Silver',
             image: row.image || 'assets/images/product-1.jpg',
-            hoverImage: row.image || 'assets/images/product-1.jpg',
+            hoverImage: row.hoverimage || row.image || 'assets/images/product-1.jpg',
             finishes: row.finishes ? row.finishes.split('|').map(s => s.trim()).filter(Boolean) : ['Brushed Silver', 'Brushed Gold', 'Matte Black'],
             dimensions: row.dimensions || '165cm H x 140cm W x 42cm D',
             description: row.description || 'Handcrafted 304-grade stainless steel and seasoned solid wood architectural piece.'
           };
         }).filter(Boolean);
         if (items.length > 0 && typeof VELORA_PRODUCTS !== 'undefined') {
-          VELORA_PRODUCTS.length = 0;
-          VELORA_PRODUCTS.push(...items);
+          VELORA_PRODUCTS.splice(0, VELORA_PRODUCTS.length, ...items);
           window.dispatchEvent(new Event('velora:catalogUpdated'));
         }
       });
   } catch (e) {}
 })();
+
 
