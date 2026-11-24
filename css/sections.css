@@ -2557,3 +2557,10 @@ footer, .site-footer { margin-top: 0 !important; border-top: 1px solid rgba(212,
 @media (min-width: 769px) { .footer-bottom { padding-right: 14.5rem !important; } }
 @media (max-width: 768px) { .footer-bottom { padding-bottom: 4.5rem !important; } }
 
+
+/* === ZERO-JITTER GPU REVEALS & SECTION SPACING === */
+.velora-reveal { opacity: 0; transform: translate3d(0, 16px, 0); transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1), transform 0.55s cubic-bezier(0.22, 1, 0.36, 1); }
+.velora-reveal.is-revealed { opacity: 1; transform: translate3d(0, 0, 0); }
+#why-velora.why-section { padding-top: 5.5rem !important; padding-bottom: 5rem !important; min-height: auto !important; overflow: visible !important; }
+#why-velora .why-header { margin-bottom: 3rem !important; padding-top: 0.5rem !important; }
+
