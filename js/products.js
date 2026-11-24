@@ -22,7 +22,7 @@ const VELORA_PRODUCTS = [
     badgeType: 'gold',
     image: 'assets/images/product-5.jpg',
     hoverImage: 'assets/images/product-1-hover.jpg',
-    finishes: ['Mirror Chrome', 'Brushed Gold', 'Matte Black'],
+    finishes: ['Mirror Chrome', 'Brushed Silver', 'Matte Black'],
     dimensions: '165cm H x 140cm W x 42cm D',
     description: 'Three-level stepped garment rack built from 25mm heavy-gauge 304-grade steel tubing with weighted 28cm disc bases. Supports up to 45kg without wall drilling.'
   },
@@ -37,7 +37,7 @@ const VELORA_PRODUCTS = [
     badgeType: 'gold',
     image: 'assets/images/product-2.jpg',
     hoverImage: 'assets/images/product-1-hover.jpg',
-    finishes: ['Satin Steel', 'Champagne Gold'],
+    finishes: ['Satin Steel', 'Brushed Silver'],
     dimensions: '170cm H x 105cm W x 45cm D',
     description: 'Slanted free-standing steel frame with rubber-padded floor rails for crease-free hanging of coats, sarees, and daily outfits.'
   },
@@ -67,7 +67,7 @@ const VELORA_PRODUCTS = [
     badgeType: 'gold',
     image: 'assets/images/product-3.jpg',
     hoverImage: 'assets/images/decor-lamp.jpg',
-    finishes: ['Matte Black', 'Brushed Gold'],
+    finishes: ['Matte Black', 'Brushed Silver'],
     dimensions: '85cm Diameter x 18cm Depth',
     description: 'Wall-mounted circular steel shelf with four staggered display ledges for books, planters, and table lamps. Includes concealed wall anchors.'
   },
@@ -97,7 +97,7 @@ const VELORA_PRODUCTS = [
     badgeType: 'gold',
     image: 'assets/images/spotlight-tstand.jpg',
     hoverImage: 'assets/images/product-5.jpg',
-    finishes: ['Natural Teak Wood / Matte Black', 'Smoked Walnut Wood / Brushed Gold'],
+    finishes: ['Natural Teak Wood / Matte Black', 'Smoked Walnut Wood / Brushed Silver'],
     dimensions: '158cm H x 95cm W x 28cm D',
     description: '14kg solid natural Solid Wood cylinder base supporting a 95cm powder-coated steel crossbar with felt floor protection.'
   },
@@ -127,7 +127,7 @@ const VELORA_PRODUCTS = [
     badgeType: 'maroon',
     image: 'assets/images/product-1-hover.jpg',
     hoverImage: 'assets/images/product-5.jpg',
-    finishes: ['Brushed Gold', 'Mirror Chrome'],
+    finishes: ['Brushed Silver', 'Mirror Chrome'],
     dimensions: '90cm H x 110cm W x 35cm D',
     description: 'Compact open-frame steel stand holding up to 8 pairs of footwear on lower rails with upper hanging space for jackets and bags.'
   }
@@ -136,4 +136,5 @@ const VELORA_PRODUCTS = [
 function formatINR(amount) {
   return '₹' + Number(amount).toLocaleString('en-IN');
 }
+
 
