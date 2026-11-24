@@ -164,7 +164,7 @@ const VELORA_DEFAULT_SHEET_CSV = "https://docs.google.com/spreadsheets/d/1yskAN_
     const sheetUrl = (typeof VELORA_GOOGLE_SHEET_CSV !== 'undefined' && VELORA_GOOGLE_SHEET_CSV) || localStorage.getItem('velora_google_sheet_csv') || VELORA_DEFAULT_SHEET_CSV;
     if (!sheetUrl || typeof VELORA_PRODUCTS === 'undefined') return;
 
-    fetch(sheetUrl)
+    fetch(sheetUrl + "&cb=" + Date.now(), { cache: "no-store" })
       .then(res => res.text())
       .then(csvText => {
         const lines = csvText.split(/\r?\n/).filter(l => l.trim());
@@ -175,7 +175,7 @@ const VELORA_DEFAULT_SHEET_CSV = "https://docs.google.com/spreadsheets/d/1yskAN_
           const row = {};
           headers.forEach((h, idx) => row[h] = cols[idx] || '');
           if (!row.name || !row.price) return null;
-          const price = Number(row.price.replace(/[^0-9]/g, '')) || 4999;
+          const price = Number(String(row.price).replace(/[^0-9]/g, "")) || 3499;
           return {
             id: row.id || ('velora-sheet-' + (i + 1)),
             name: row.name,
@@ -202,6 +202,7 @@ const VELORA_DEFAULT_SHEET_CSV = "https://docs.google.com/spreadsheets/d/1yskAN_
       .catch(() => {});
   } catch (e) {}
 })();
+
 
 
 
