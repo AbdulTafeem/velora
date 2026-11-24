@@ -488,3 +488,11 @@
 .preloader-tagline { animation: taglineFade 0.8s 0.2s cubic-bezier(0.22, 1, 0.36, 1) both; }
 @keyframes taglineFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 0.92; transform: translateY(0); } }
 
+
+/* === CROSS-PAGE VELVET CURTAIN TRANSITION (CLOSE ON CLICK, OPEN ON LOAD) === */
+.preloader.is-closing { display: flex !important; pointer-events: all !important; }
+.preloader.is-closing .curtain-panel { transition: transform 0.45s cubic-bezier(0.76, 0, 0.24, 1) !important; transform: translate3d(0, 0, 0) !important; }
+.preloader.is-closing .preloader-frame,
+.preloader.is-closing .preloader-logo-wrap,
+.preloader.is-closing .preloader-seam { opacity: 1 !important; transform: none !important; transition: opacity 0.35s ease 0.12s !important; }
+
