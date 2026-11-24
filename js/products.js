@@ -195,12 +195,13 @@ const VELORA_DEFAULT_SHEET_CSV = "https://docs.google.com/spreadsheets/d/1yskAN_
         }).filter(Boolean);
 
         if (sheetItems.length > 0) {
-          if (sheetItems.length > 0) { VELORA_PRODUCTS.length = 0; VELORA_PRODUCTS.push(...sheetItems); document.dispatchEvent(new Event("DOMContentLoaded")); }
+          if (sheetItems.length > 0) { VELORA_PRODUCTS.length = 0; VELORA_PRODUCTS.push(...sheetItems); window.dispatchEvent(new Event("velora:catalogUpdated")); }
           window.dispatchEvent(new Event('velora:catalogUpdated'));
         }
       })
       .catch(() => {});
   } catch (e) {}
 })();
+
 
 

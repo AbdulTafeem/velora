@@ -320,7 +320,8 @@
         showToast('Saved to your Velora Wishlist');
       }
       saveState();
-      renderProducts();
+      window.addEventListener('velora:catalogUpdated', () => { renderProducts(); });
+  renderProducts();
       renderCart();
       return;
     }
@@ -471,9 +472,11 @@
     render: renderCart
   };
 
+  window.addEventListener('velora:catalogUpdated', () => { renderProducts(); });
   renderProducts();
   renderCart();
 })();
+
 
 
 
