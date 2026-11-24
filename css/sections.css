@@ -2661,3 +2661,36 @@
 [class*="load" i] svg polygon {
   stroke: #ffffff !important;
 }
+
+/* ==========================================================================
+   CLEAN SEAMLESS PRELOADER (ZERO INNER BLACK BOXES)
+   ========================================================================== */
+[id*="load" i] *,
+[class*="load" i] * {
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* Re-apply seamless gradient text ONLY to the VELORA wordmark */
+.preloader-wordmark,
+.velora-preloader .wordmark-text,
+[id*="load" i] h1,
+[class*="load" i] h1 {
+  background: linear-gradient(115deg, #cbd5e1 0%, #ffffff 35%, #e2e8f0 55%, #ffffff 78%, #94a3b8 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  filter: drop-shadow(0 2px 20px rgba(255, 255, 255, 0.3)) !important;
+}
+
+/* Restore crisp silver progress line */
+.preloader-line,
+.preloader-bar {
+  background: rgba(255, 255, 255, 0.16) !important;
+}
+
+.preloader-line-fill,
+.preloader-progress {
+  background: linear-gradient(90deg, #94a3b8, #ffffff, #cbd5e1) !important;
+}
