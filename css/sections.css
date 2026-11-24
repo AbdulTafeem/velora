@@ -2522,63 +2522,31 @@ h1, h2, h3, .hero-title, .section-title, .product-title, .velvet-promo-content {
 }
 
 
-/* === VELORA HAUTE-LUXURY FONT HIERARCHY === */
-:root { --font-display: 'Bodoni Moda', 'Cormorant Garamond', Georgia, serif; --font-editorial: 'Cormorant Garamond', Georgia, serif; --font-sans: 'Montserrat', -apple-system, sans-serif; }
-body { font-family: 'Montserrat', sans-serif !important; font-weight: 400; letter-spacing: 0.01em; }
-h1, .hero-title, .section-title, .brand-logo { font-family: 'Bodoni Moda', Georgia, serif !important; font-weight: 600 !important; letter-spacing: -0.02em !important; line-height: 1.08 !important; }
-h2, h3, .product-title, .velvet-promo-content { font-family: 'Cormorant Garamond', Georgia, serif !important; font-weight: 600 !important; letter-spacing: 0.005em !important; }
-.product-title a { font-size: 1.28rem !important; font-weight: 600 !important; color: #1c1012 !important; }
-.nav-link, .eyebrow, .section-eyebrow, .product-room-tag, .badge-shimmer, .btn-add-cart, .btn-quick-view, .filter-pill, .tab-btn { font-family: 'Montserrat', sans-serif !important; letter-spacing: 0.16em !important; text-transform: uppercase !important; font-weight: 600 !important; font-size: 0.72rem !important; }
-.price-now { font-family: 'Montserrat', sans-serif !important; font-weight: 600 !important; font-size: 1.02rem !important; letter-spacing: 0.02em !important; font-variant-numeric: tabular-nums !important; }
 
-
-/* === VELORA ARCHITECTURAL OUTLINES & LUXURY SURFACE FINISH === */
-.product-card { background: #ffffff !important; border: 1px solid rgba(197, 160, 89, 0.32) !important; border-radius: 14px !important; overflow: hidden !important; box-shadow: 0 10px 30px -18px rgba(43, 5, 11, 0.14) !important; }
+/* === VELORA SURGICAL LUXURY TYPOGRAPHY, CONTRAST & FINISH === */
+:root { --velora-maroon: #3b0912; --velora-maroon-deep: #1e0308; --velora-gold: #d4af37; --velora-champagne: #f3dfb0; --velora-ivory: #fbf6ed; }
+body { font-family: 'Montserrat', -apple-system, sans-serif !important; background: radial-gradient(circle at 50% 0%, #fcf8f0 0%, #f5ecdc 100%) !important; color: #22060b !important; }
+h1, .hero-title, .section-title, .brand-logo, .collection-title, .why-card h3, .product-title { font-family: 'Cormorant Garamond', Georgia, serif !important; font-weight: 600 !important; letter-spacing: -0.01em !important; line-height: 1.12 !important; }
+/* Light sections default dark maroon ink */
+.section-cream .section-title, .rooms-section .section-title, .gallery-section .section-title { color: #24050b !important; }
+/* ALL Dark sections (.section-dark, #collections, #why-velora, #spotlight) crisp warm silk ivory headings */
+.section-dark .section-title, .section-dark h1, .section-dark h2, .section-dark h3, #collections .section-title, #why-velora .section-title, #spotlight .section-title, #spotlight h2, .spotlight-details h2 { color: #fbf4e6 !important; text-shadow: 0 2px 18px rgba(0, 0, 0, 0.35) !important; }
+.section-dark .section-eyebrow, #collections .section-eyebrow, #why-velora .section-eyebrow, #spotlight .section-eyebrow { color: #e8c982 !important; letter-spacing: 0.24em !important; font-weight: 700 !important; }
+.section-cream .section-eyebrow, .rooms-section .section-eyebrow { color: #9c7224 !important; letter-spacing: 0.24em !important; font-weight: 700 !important; }
+/* Imperial Velvet Maroon band for #why-velora + crisp ivory .why-card contrast */
+#why-velora.why-section { background: radial-gradient(ellipse at 50% 0%, #59101c 0%, #2b040b 68%, #1a0206 100%) !important; border-top: 1px solid rgba(212, 175, 55, 0.45) !important; border-bottom: 1px solid rgba(212, 175, 55, 0.45) !important; padding-bottom: 4.5rem !important; }
+#why-velora > .container > .section-header p, #why-velora .section-subtitle { color: rgba(248, 239, 224, 0.86) !important; }
+.why-card { background: linear-gradient(165deg, #fffdf9 0%, #f7efe2 100%) !important; border: 1px solid rgba(212, 175, 55, 0.65) !important; border-radius: 14px !important; box-shadow: 0 18px 38px -16px rgba(0, 0, 0, 0.48), inset 0 1px 0 #ffffff !important; }
+.why-card h3 { color: #26040a !important; font-size: 1.32rem !important; margin-bottom: 0.5rem !important; }
+.why-card p { color: #4a2a30 !important; opacity: 1 !important; font-size: 0.88rem !important; line-height: 1.6 !important; }
+/* Product Cards, Swatches & Satin Gold Buttons */
+.product-card { background: #ffffff !important; border: 1px solid rgba(197, 160, 89, 0.34) !important; border-radius: 14px !important; box-shadow: 0 10px 30px -18px rgba(43, 5, 11, 0.14) !important; }
 .product-card:hover { border-color: #c5a059 !important; box-shadow: 0 24px 48px -18px rgba(43, 5, 11, 0.22), 0 0 0 1px rgba(197, 160, 89, 0.45) !important; }
-.product-media { border-bottom: 1px solid rgba(197, 160, 89, 0.22) !important; background: #f8f5f0 !important; }
-.wishlist-btn { border: 1px solid rgba(197, 160, 89, 0.4) !important; background: rgba(255, 255, 255, 0.92) !important; backdrop-filter: blur(6px); }
-.wishlist-btn:hover { border-color: #4a0e17 !important; background: #4a0e17 !important; color: #f3e5ab !important; }
-.badge-shimmer { border: 1px solid rgba(197, 160, 89, 0.55) !important; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45) !important; }
-.mini-swatch { width: 13px !important; height: 13px !important; border: 1px solid rgba(28, 16, 18, 0.22) !important; box-shadow: 0 0 0 1.5px #ffffff, 0 0 0 2.5px rgba(197, 160, 89, 0.5) !important; }
-.filter-pill, .tab-btn { border: 1px solid rgba(61, 12, 20, 0.22) !important; background: #ffffff !important; color: #2b050b !important; border-radius: 6px !important; }
-.filter-pill.is-active, .filter-pill.active, .tab-btn.is-active, .tab-btn.active, .filter-pill:hover, .tab-btn:hover { background: #3b0a12 !important; color: #f5e6c4 !important; border-color: #c5a059 !important; box-shadow: 0 8px 20px -8px rgba(59, 10, 18, 0.45) !important; }
-.btn-add-cart { background: #2b050b !important; color: #f7ead0 !important; border: 1px solid #c5a059 !important; border-radius: 6px !important; }
-.btn-add-cart:hover { background: #4a0e17 !important; color: #ffffff !important; border-color: #e6c875 !important; box-shadow: 0 10px 22px -10px rgba(74, 14, 23, 0.6) !important; }
-.btn-quick-view { background: rgba(43, 5, 11, 0.94) !important; color: #f5e6c4 !important; border: 1px solid rgba(212, 175, 55, 0.65) !important; }
-.cart-drawer, .quick-view-modal { border-left: 1px solid rgba(197, 160, 89, 0.45) !important; }
-.cart-drawer-header, .site-header, header { border-bottom: 1px solid rgba(197, 160, 89, 0.28) !important; }
-
-
-/* === VELORA 10-LAKH COUTURE COLOUR RICHNESS & ARCHITECTURAL DEPTH === */
-:root { --velora-maroon: #3b0912; --velora-maroon-deep: #220308; --velora-gold: #d4af37; --velora-champagne: #edd59e; --velora-ivory: #fbf6ed; --velora-silk: #f4ead8; }
-body { background: radial-gradient(circle at 50% 0%, #fcf8f0 0%, #f5ecdc 100%) !important; color: #22060b !important; }
-h1, .hero-title, .section-title, .brand-logo { font-family: 'Cormorant Garamond', Georgia, serif !important; font-weight: 600 !important; letter-spacing: -0.015em !important; line-height: 1.08 !important; color: #24050b !important; }
-.eyebrow, .section-eyebrow { color: #9c7224 !important; letter-spacing: 0.24em !important; font-weight: 700 !important; }
-/* Rich Imperial Maroon Band for The Velora Promise */
-.promise-section, #why-velora, section[aria-label*='Promise'], .velora-promise { background: radial-gradient(ellipse at 50% 0%, #59101c 0%, #2b040b 68%, #1a0206 100%) !important; color: #f8efe0 !important; border-top: 1px solid rgba(212, 175, 55, 0.45) !important; border-bottom: 1px solid rgba(212, 175, 55, 0.45) !important; position: relative; }
-.promise-section .section-eyebrow, #why-velora .section-eyebrow, .velora-promise .section-eyebrow { color: #e8c982 !important; }
-.promise-section h2, #why-velora h2, .velora-promise h2, .promise-section .section-title { color: #fbf4e6 !important; text-shadow: 0 2px 18px rgba(0, 0, 0, 0.35); }
-.promise-section p, #why-velora p, .velora-promise p { color: rgba(248, 239, 224, 0.84) !important; }
-.promise-card, .feature-card, .value-card { background: linear-gradient(160deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%) !important; border: 1px solid rgba(212, 175, 55, 0.38) !important; box-shadow: inset 0 1px 0 rgba(255, 236, 185, 0.18), 0 18px 36px -16px rgba(0, 0, 0, 0.45) !important; border-radius: 14px !important; }
-.promise-card h3, .feature-card h3, .value-card h3 { color: #f3dba0 !important; }
-/* Couture Maroon & Satin Gold Buttons (Replaces Flat Black Buttons) */
-.btn-outline, .btn-secondary, .btn-primary, .view-all-btn, a.btn { background: linear-gradient(135deg, #470c17 0%, #260309 100%) !important; color: #f6e3b4 !important; border: 1px solid #cfa349 !important; box-shadow: inset 0 1px 0 rgba(255, 236, 185, 0.25), 0 10px 24px -10px rgba(43, 4, 11, 0.55) !important; letter-spacing: 0.18em !important; border-radius: 6px !important; }
-.btn-outline:hover, .btn-secondary:hover, .btn-primary:hover, .view-all-btn:hover, a.btn:hover { background: linear-gradient(135deg, #5e111f 0%, #34050d 100%) !important; border-color: #f0d28a !important; color: #ffffff !important; box-shadow: 0 14px 30px -10px rgba(89, 16, 28, 0.65) !important; }
-/* Room Cards Museum Framing */
-.room-card { border: 1px solid rgba(197, 160, 89, 0.42) !important; border-radius: 14px !important; overflow: hidden !important; box-shadow: 0 18px 38px -18px rgba(43, 5, 11, 0.25) !important; }
-.room-card::after { content: ''; position: absolute; inset: 8px; border: 1px solid rgba(237, 213, 158, 0.32); border-radius: 9px; pointer-events: none; z-index: 2; }
-
-
-
-/* === VELORA DARK-SECTION CONTRAST & POLISH FIX === */
-/* 1. Fix dark headings on dark maroon & dark espresso sections */
-.collections-section .section-title, .collection-section .section-title, #collections .section-title, .spotlight-section .section-title, .spotlight-section h2, .featured-product .section-title, .featured-product h2, [class*='dark'] .section-title, [class*='maroon'] .section-title { color: #fbf4e6 !important; text-shadow: 0 2px 16px rgba(0, 0, 0, 0.35); }
-/* 2. Fix invisible white paragraph text inside white Promise cards */
-.promise-section .promise-card, .velora-promise .promise-card, .promise-card, .feature-card, .value-card { background: linear-gradient(165deg, #fffdf9 0%, #f7efe2 100%) !important; border: 1px solid rgba(212, 175, 55, 0.65) !important; box-shadow: 0 18px 38px -16px rgba(0, 0, 0, 0.5), inset 0 1px 0 #ffffff !important; }
-.promise-card h3, .feature-card h3, .value-card h3 { color: #2b050b !important; font-weight: 700 !important; }
-.promise-card p, .feature-card p, .value-card p, .promise-section .promise-card p { color: #4a2c31 !important; opacity: 1 !important; }
-/* 3. Fix Spotlight / Featured Product dark background heading & clean footer top edge */
-#spotlight, .spotlight-section, .featured-spotlight, [id*='spotlight'] { color: #f8efe0 !important; }
-#spotlight h2, .spotlight-section h2, .featured-spotlight h2, [id*='spotlight'] h2 { color: #fbf4e6 !important; }
+.product-title a { font-size: 1.28rem !important; color: #1c1012 !important; }
+.price-now { font-family: 'Montserrat', sans-serif !important; font-weight: 600 !important; font-variant-numeric: tabular-nums !important; }
+.mini-swatch { width: 13px !important; height: 13px !important; box-shadow: 0 0 0 1.5px #ffffff, 0 0 0 2.5px rgba(197, 160, 89, 0.55) !important; }
+.filter-pill.is-active, .filter-pill:hover, .btn-add-cart { background: linear-gradient(135deg, #470c17 0%, #260309 100%) !important; color: #f6e3b4 !important; border: 1px solid #cfa349 !important; }
+.room-card { border: 1px solid rgba(197, 160, 89, 0.45) !important; border-radius: 14px !important; }
+.room-card::after { content: ''; position: absolute; inset: 8px; border: 1px solid rgba(237, 213, 158, 0.35); border-radius: 9px; pointer-events: none; z-index: 2; }
 footer, .site-footer { margin-top: 0 !important; border-top: 1px solid rgba(212, 175, 55, 0.35) !important; }
 
