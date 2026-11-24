@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="css/components.css" />
   <link rel="stylesheet" href="css/sections.css" />
   <style>
-    .shop-hero { padding: 9.5rem 0 4rem; background: var(--grad-velvet); color: var(--cream); text-align: center; border-bottom: 1px solid rgba(212,175,55,0.3); }
+    .shop-hero { padding: 8.8rem 0 3.2rem; background: linear-gradient(180deg, rgba(36, 6, 12, 0.72) 0%, rgba(36, 6, 12, 0.42) 100%) !important; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: var(--cream); text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.35); }
     .shop-layout { display: grid; grid-template-columns: 270px 1fr; gap: 2.5rem; padding-block: 4rem; align-items: start; }
     .shop-sidebar { background: var(--white); padding: 1.75rem; border-radius: 4px; border: 1px solid rgba(43,5,11,0.1); position: sticky; top: 6.5rem; display: flex; flex-direction: column; gap: 1.65rem; }
     .filter-group h4 { font-family: var(--font-display); font-size: 0.85rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--maroon-900); margin-bottom: 0.85rem; padding-bottom: 0.45rem; border-bottom: 1px solid rgba(212,175,55,0.3); }
@@ -33,14 +33,14 @@
     .shop-room-bg {
       position: fixed; inset: -3%; z-index: -1; pointer-events: none;
       background: url('https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261104_080623_c94c85a3-23d5-4a0c-afff-41be1b5b8191.png&w=2400&q=85') center/cover no-repeat;
-      filter: blur(3px) saturate(1.06); transform: scale(1.06);
+      filter: saturate(1.08) contrast(1.03); transform: scale(1.01);
     }
     .shop-room-bg::after {
       content: ''; position: absolute; inset: 0;
-      background: radial-gradient(75% 65% at 50% 40%, rgba(251, 246, 237, 0.52), rgba(235, 226, 212, 0.72));
+      background: linear-gradient(180deg, rgba(24, 14, 10, 0.34) 0%, rgba(255, 252, 246, 0.14) 38%, rgba(255, 252, 246, 0.22) 100%);
     }
     .shop-sidebar, #shopCatalogGrid .product-card {
-      background: linear-gradient(155deg, rgba(255, 253, 248, 0.82), rgba(245, 237, 224, 0.72)) !important;
+      background: linear-gradient(155deg, rgba(255, 253, 248, 0.56), rgba(248, 242, 232, 0.44)) !important;
       backdrop-filter: blur(20px) saturate(1.4) !important;
       -webkit-backdrop-filter: blur(20px) saturate(1.4) !important;
       border: 1px solid rgba(255, 255, 255, 0.78) !important;
@@ -48,7 +48,7 @@
       border-radius: 20px !important;
     }
     .shop-toolbar {
-      background: rgba(255, 253, 248, 0.74); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      background: rgba(255, 253, 248, 0.48); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
       padding: 0.85rem 1.25rem; border-radius: 14px; border: 1px solid rgba(255, 255, 255, 0.72);
     }
   </style>
@@ -322,6 +322,7 @@
 
 </body>
 </html>
+
 
 
 
