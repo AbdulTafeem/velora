@@ -2414,3 +2414,5 @@
   transform: translateY(-2px);
   box-shadow: 0 16px 34px rgba(212, 175, 55, 0.42) !important;
 }
+
+#bestSellersGrid, #shopCatalogGrid, .products-grid, .product-card { opacity: 1 !important; visibility: visible !important; }
