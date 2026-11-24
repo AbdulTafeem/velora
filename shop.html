@@ -264,7 +264,7 @@
               <div class="product-footer-row">
                 <div class="product-price-box">
                   <span class="price-now">${formatINR(p.price)}</span>
-                  <span class="price-mrp">${formatINR(p.mrp)}</span>
+                  ${p.mrp ? `<span class="price-mrp">${formatINR(p.mrp)}</span>` : ""}
                 </div>
                 <button type="button" class="btn-add-cart" data-add="${p.id}">Add to Cart</button>
               </div>
@@ -293,12 +293,12 @@
         document.querySelector('input[name="cat"][value="all"]').checked = true;
         renderShop();
       });
-      renderShop();
-    })();
+      renderShop(); window.addEventListener('velora:catalogUpdated', renderShop); })();
   </script>
-<script>window.addEventListener('velora:catalogUpdated', function(){ if (typeof renderShopGrid === 'function') renderShopGrid(); });</script>
+
 </body>
 </html>
+
 
 
 
