@@ -2531,3 +2531,20 @@ h2, h3, .product-title, .velvet-promo-content { font-family: 'Cormorant Garamond
 .nav-link, .eyebrow, .section-eyebrow, .product-room-tag, .badge-shimmer, .btn-add-cart, .btn-quick-view, .filter-pill, .tab-btn { font-family: 'Montserrat', sans-serif !important; letter-spacing: 0.16em !important; text-transform: uppercase !important; font-weight: 600 !important; font-size: 0.72rem !important; }
 .price-now { font-family: 'Montserrat', sans-serif !important; font-weight: 600 !important; font-size: 1.02rem !important; letter-spacing: 0.02em !important; font-variant-numeric: tabular-nums !important; }
 
+
+/* === VELORA ARCHITECTURAL OUTLINES & LUXURY SURFACE FINISH === */
+.product-card { background: #ffffff !important; border: 1px solid rgba(197, 160, 89, 0.32) !important; border-radius: 14px !important; overflow: hidden !important; box-shadow: 0 10px 30px -18px rgba(43, 5, 11, 0.14) !important; }
+.product-card:hover { border-color: #c5a059 !important; box-shadow: 0 24px 48px -18px rgba(43, 5, 11, 0.22), 0 0 0 1px rgba(197, 160, 89, 0.45) !important; }
+.product-media { border-bottom: 1px solid rgba(197, 160, 89, 0.22) !important; background: #f8f5f0 !important; }
+.wishlist-btn { border: 1px solid rgba(197, 160, 89, 0.4) !important; background: rgba(255, 255, 255, 0.92) !important; backdrop-filter: blur(6px); }
+.wishlist-btn:hover { border-color: #4a0e17 !important; background: #4a0e17 !important; color: #f3e5ab !important; }
+.badge-shimmer { border: 1px solid rgba(197, 160, 89, 0.55) !important; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45) !important; }
+.mini-swatch { width: 13px !important; height: 13px !important; border: 1px solid rgba(28, 16, 18, 0.22) !important; box-shadow: 0 0 0 1.5px #ffffff, 0 0 0 2.5px rgba(197, 160, 89, 0.5) !important; }
+.filter-pill, .tab-btn { border: 1px solid rgba(61, 12, 20, 0.22) !important; background: #ffffff !important; color: #2b050b !important; border-radius: 6px !important; }
+.filter-pill.is-active, .filter-pill.active, .tab-btn.is-active, .tab-btn.active, .filter-pill:hover, .tab-btn:hover { background: #3b0a12 !important; color: #f5e6c4 !important; border-color: #c5a059 !important; box-shadow: 0 8px 20px -8px rgba(59, 10, 18, 0.45) !important; }
+.btn-add-cart { background: #2b050b !important; color: #f7ead0 !important; border: 1px solid #c5a059 !important; border-radius: 6px !important; }
+.btn-add-cart:hover { background: #4a0e17 !important; color: #ffffff !important; border-color: #e6c875 !important; box-shadow: 0 10px 22px -10px rgba(74, 14, 23, 0.6) !important; }
+.btn-quick-view { background: rgba(43, 5, 11, 0.94) !important; color: #f5e6c4 !important; border: 1px solid rgba(212, 175, 55, 0.65) !important; }
+.cart-drawer, .quick-view-modal { border-left: 1px solid rgba(197, 160, 89, 0.45) !important; }
+.cart-drawer-header, .site-header, header { border-bottom: 1px solid rgba(197, 160, 89, 0.28) !important; }
+
