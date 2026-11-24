@@ -11,7 +11,7 @@
 .announcement-close { position: absolute; right: var(--gutter); font-size: 1.15rem; color: var(--gold-300); opacity: 0.7; }
 
 .navbar { position: relative; background: rgba(251, 245, 236, 0.96); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid rgba(18, 18, 22, 0.1); transition: background-color 0.45s var(--ease-luxury), box-shadow 0.45s var(--ease-luxury); } .site-header.is-scrolled .navbar { background: rgba(251, 245, 236, 0.98); box-shadow: 0 10px 32px rgba(18, 18, 22, 0.12); border-bottom-color: rgba(203, 213, 225, 0.35); }
-.site-header.is-scrolled .navbar { background: rgba(18, 18, 22, 0.9); border-bottom-color: rgba(203, 213, 225, 0.35); box-shadow: 0 12px 35px rgba(27, 3, 7, 0.35); }
+.site-header.is-scrolled .navbar { background: rgba(18, 18, 22, 0.9); border-bottom-color: rgba(203, 213, 225, 0.35); box-shadow: 0 12px 35px rgba(14, 14, 18, 0.35); }
 .navbar-inner { display: flex; align-items: center; justify-content: space-between; padding-block: 0.85rem; gap: 1.5rem; }
 
 .brand-logo { display: flex; flex-direction: column; align-items: center; text-align: center; line-height: 1; }
@@ -44,7 +44,7 @@
 .mega-col a:hover { color: var(--gold-300); transform: translateX(6px); }
 .mega-featured { position: relative; border-radius: 14px; overflow: hidden; border: 1px solid rgba(203, 213, 225, 0.35); height: 210px; }
 .mega-featured img { width: 100%; height: 100%; object-fit: cover; }
-.mega-featured-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(27, 3, 7, 0.92), rgba(27, 3, 7, 0.25)); padding: 1.25rem; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start; gap: 0.4rem; }
+.mega-featured-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(14, 14, 18, 0.92), rgba(14, 14, 18, 0.25)); padding: 1.25rem; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start; gap: 0.4rem; }
 .mega-featured-overlay h4 { font-family: var(--font-display); font-size: 1.15rem; color: var(--gold-200); }
 .mega-cta { font-size: var(--text-xs); color: var(--gold-400); letter-spacing: 0.08em; text-transform: uppercase; }
 
@@ -75,7 +75,7 @@
 .drawer-backdrop.is-visible { opacity: 1; visibility: visible; }
 
 /* HERO SECTION */
-.hero-section { position: relative; min-height: 100svh; display: flex; align-items: center; padding-top: clamp(7.5rem, 12vw, 9.5rem); padding-bottom: clamp(4rem, 7vw, 6rem); overflow: hidden; background: radial-gradient(circle at 75% 45%, #18181c 0%, #3D0710 42%, #09090b 100%); }
+.hero-section { position: relative; min-height: 100svh; display: flex; align-items: center; padding-top: clamp(7.5rem, 12vw, 9.5rem); padding-bottom: clamp(4rem, 7vw, 6rem); overflow: hidden; background: radial-gradient(circle at 75% 45%, #18181c 0%, #0d0d10 42%, #0d0d10 100%); }
 .hero-ambient-glow { position: absolute; top: 15%; right: 8%; width: min(560px, 70vw); height: min(560px, 70vw); border-radius: 50%; background: radial-gradient(circle, rgba(203, 213, 225, 0.22) 0%, rgba(203, 213, 225, 0) 70%); filter: blur(40px); pointer-events: none; }
 .hero-particles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
 .gold-dust { position: absolute; border-radius: 50%; background: radial-gradient(circle, #F8ECC2 0%, #cbd5e1 70%, transparent 100%); opacity: 0.45; animation: floatDust linear infinite; }
@@ -94,13 +94,13 @@
 .pillar-sep { width: 1px; height: 30px; background: rgba(203, 213, 225, 0.25); }
 
 .hero-visual { display: flex; justify-content: center; }
-.hero-arch-frame { position: relative; width: 100%; max-width: 450px; padding: 0; border-radius: 232px 232px 4px 4px; border: 1px solid rgba(203, 213, 225, 0.38); background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(27, 3, 7, 0.45) 100%); box-shadow: 0 30px 80px rgba(15, 2, 4, 0.65); animation: gentleLevitate 6s ease-in-out infinite; }
+.hero-arch-frame { position: relative; width: 100%; max-width: 450px; padding: 0; border-radius: 232px 232px 4px 4px; border: 1px solid rgba(203, 213, 225, 0.38); background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(14, 14, 18, 0.45) 100%); box-shadow: 0 30px 80px rgba(15, 2, 4, 0.65); animation: gentleLevitate 6s ease-in-out infinite; }
 @keyframes gentleLevitate { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
 .hero-arch-inner { position: relative; width: 100%; aspect-ratio: 4 / 5; border-radius: 230px 230px 2px 2px; overflow: hidden; background: var(--cream); }
 .hero-slide { position: absolute; inset: 0; opacity: 0; visibility: hidden; transform: scale(1.06); transition: opacity 0.8s var(--ease-luxury), transform 1s var(--ease-luxury), visibility 0.8s; }
 .hero-slide.is-active { opacity: 1; visibility: visible; transform: scale(1); }
 .hero-slide img { width: 100%; height: 100%; object-fit: cover; }
-.hero-floating-tag { position: absolute; bottom: 1rem; left: 1rem; right: 1rem; padding: 0.85rem 1.15rem; border-radius: 2px; background: rgba(27, 3, 7, 0.88); backdrop-filter: blur(12px); display: flex; flex-direction: column; gap: 0.15rem; color: var(--cream); }
+.hero-floating-tag { position: absolute; bottom: 1rem; left: 1rem; right: 1rem; padding: 0.85rem 1.15rem; border-radius: 2px; background: rgba(14, 14, 18, 0.88); backdrop-filter: blur(12px); display: flex; flex-direction: column; gap: 0.15rem; color: var(--cream); }
 .tag-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--gold-400); }
 .hero-floating-tag strong { font-family: var(--font-display); font-size: 0.98rem; font-weight: 500; color: var(--white); }
 .tag-price { position: absolute; right: 1.15rem; top: 50%; transform: translateY(-50%); font-weight: 600; font-size: 0.95rem; color: var(--gold-300); }
@@ -348,7 +348,7 @@
   flex: 1;
   padding: 0.6rem 0.85rem;
   border-radius: 999px;
-  background: rgba(27, 3, 7, 0.88);
+  background: rgba(14, 14, 18, 0.88);
   backdrop-filter: blur(8px);
   color: var(--gold-300);
   border: 1px solid rgba(203, 213, 225, 0.45);
@@ -463,7 +463,7 @@
 .velvet-promo-overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, rgba(90, 11, 24, 0.55) 0%, rgba(27, 3, 7, 0.92) 100%);
+  background: radial-gradient(circle at center, rgba(14, 14, 18, 0.55) 0%, rgba(14, 14, 18, 0.92) 100%);
 }
 
 .velvet-promo-content {
@@ -584,9 +584,9 @@
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(27, 3, 7, 0.15) 0%,
-    rgba(27, 3, 7, 0.45) 48%,
-    rgba(27, 3, 7, 0.95) 100%
+    rgba(14, 14, 18, 0.15) 0%,
+    rgba(14, 14, 18, 0.45) 48%,
+    rgba(14, 14, 18, 0.95) 100%
   );
 }
 
@@ -609,7 +609,7 @@
   z-index: 2;
   padding: 0.32rem 0.85rem;
   border-radius: 999px;
-  background: rgba(27, 3, 7, 0.78);
+  background: rgba(14, 14, 18, 0.78);
   backdrop-filter: blur(8px);
   border: 1px solid rgba(203, 213, 225, 0.4);
   font-size: 0.68rem;
@@ -863,7 +863,7 @@
 
 .room-card:hover {
   border-color: var(--gold-500);
-  box-shadow: 0 24px 55px rgba(27, 3, 7, 0.25);
+  box-shadow: 0 24px 55px rgba(14, 14, 18, 0.25);
 }
 
 /* Bento Grid Spans */
@@ -906,9 +906,9 @@
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(27, 3, 7, 0.08) 0%,
-    rgba(27, 3, 7, 0.42) 55%,
-    rgba(27, 3, 7, 0.92) 100%
+    rgba(14, 14, 18, 0.08) 0%,
+    rgba(14, 14, 18, 0.42) 55%,
+    rgba(14, 14, 18, 0.92) 100%
   );
   transition: opacity 0.4s ease;
 }
@@ -1084,7 +1084,7 @@
   z-index: 5;
   padding: 1rem 1.25rem;
   border-radius: 14px;
-  background: rgba(27, 3, 7, 0.92);
+  background: rgba(14, 14, 18, 0.92);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(203, 213, 225, 0.45);
   color: var(--cream);
@@ -1368,7 +1368,7 @@
 .gallery-tile-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(27, 3, 7, 0.1), rgba(27, 3, 7, 0.85));
+  background: linear-gradient(180deg, rgba(14, 14, 18, 0.1), rgba(14, 14, 18, 0.85));
   opacity: 0;
   display: flex;
   flex-direction: column;
@@ -1808,7 +1808,7 @@
   background: var(--maroon-950);
   color: var(--gold-300);
   border-color: var(--gold-500);
-  box-shadow: 0 8px 22px rgba(27, 3, 7, 0.16);
+  box-shadow: 0 8px 22px rgba(14, 14, 18, 0.16);
 }
 
 .filter-tab.is-active::after {
@@ -2009,11 +2009,11 @@
 .whatsapp-float {
   border-radius: 999px !important;
   padding: 0.72rem 1.35rem !important;
-  background: rgba(27, 3, 7, 0.94) !important;
+  background: rgba(14, 14, 18, 0.94) !important;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(203, 213, 225, 0.45) !important;
-  box-shadow: 0 12px 32px rgba(27, 3, 7, 0.35) !important;
+  box-shadow: 0 12px 32px rgba(14, 14, 18, 0.35) !important;
   transition: transform 0.35s var(--ease-luxury), border-color 0.3s ease, box-shadow 0.35s ease !important;
 }
 
@@ -2050,7 +2050,7 @@
   position: absolute;
   inset: 8% 6%;
   border-radius: 240px 240px 12px 12px;
-  background: radial-gradient(circle at 50% 45%, rgba(203, 213, 225, 0.22) 0%, rgba(90, 11, 24, 0) 70%);
+  background: radial-gradient(circle at 50% 45%, rgba(203, 213, 225, 0.22) 0%, rgba(14, 14, 18, 0) 70%);
   filter: blur(28px);
   pointer-events: none;
   z-index: 0;
@@ -2200,7 +2200,7 @@
    BESPOKE CLIENT THEME: OBSIDIAN BLACK, BRUSHED SILVER & SUBTLE GOLD
    ========================================================================== */
 :root {
-  --maroon-950: #0c0c0e;
+  --maroon-950: #0d0d10;
   --maroon-900: #141418;
   --maroon-800: #1e1e24;
   --maroon-700: #2a2a32;
@@ -2218,7 +2218,7 @@
 
   --grad-silver: linear-gradient(135deg, #f8fafc 0%, #cbd5e1 48%, #94a3b8 100%);
   --grad-silver-gold: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 62%, #cbd5e1 100%);
-  --grad-obsidian: radial-gradient(circle at 75% 25%, #232329 0%, #121216 55%, #09090b 100%);
+  --grad-obsidian: radial-gradient(circle at 75% 25%, #232329 0%, #121216 55%, #0d0d10 100%);
 
   --cream-50: #faf9f6;
   --cream-100: #f4f2ed;
@@ -2259,7 +2259,7 @@
 /* Primary Buttons: Brushed Silver Metallic with Obsidian Text & Gold Border Accent */
 .btn-gold {
   background: var(--grad-silver) !important;
-  color: #0c0c0e !important;
+  color: #0d0d10 !important;
   border: 1px solid rgba(203, 213, 225, 0.55) !important;
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35) !important;
 }
@@ -2300,7 +2300,7 @@
 
 .finish-pill.is-active {
   background: var(--grad-silver) !important;
-  color: #0c0c0e !important;
+  color: #0d0d10 !important;
   border-color: var(--gold-500) !important;
 }
 
@@ -2349,7 +2349,7 @@
 
 .btn-gold {
   background: linear-gradient(135deg, #f8fafc 0%, #cbd5e1 55%, #94a3b8 100%) !important;
-  color: #0c0c0e !important;
+  color: #0d0d10 !important;
   border: 1px solid #cbd5e1 !important;
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.38) !important;
 }
@@ -2385,7 +2385,7 @@
 
 .finish-pill.is-active {
   background: linear-gradient(135deg, #f8fafc 0%, #cbd5e1 60%, #94a3b8 100%) !important;
-  color: #0c0c0e !important;
+  color: #0d0d10 !important;
   border-color: #ffffff !important;
 }
 
@@ -2427,7 +2427,7 @@
 .spotlight-section,
 .site-footer,
 .announcement-bar {
-  background: radial-gradient(circle at 75% 20%, #242429 0%, #111114 55%, #08080a 100%) !important;
+  background: radial-gradient(circle at 75% 20%, #242429 0%, #111114 55%, #0d0d10 100%) !important;
 }
 
 /* Fix Hero Arch Floating Caption Card & Product Cards to Pure Obsidian Glass */
@@ -2467,7 +2467,7 @@
 /* Diamond-Faceted Primary Buttons */
 .btn-gold {
   background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 35%, #cbd5e1 65%, #ffffff 100%) !important;
-  color: #09090b !important;
+  color: #0d0d10 !important;
   border: 1px solid #ffffff !important;
   box-shadow: 0 0 24px rgba(255, 255, 255, 0.24), 0 10px 26px rgba(0, 0, 0, 0.45) !important;
   font-weight: 600 !important;
@@ -2525,7 +2525,7 @@
 /* 1. Fix Preloader Background & Make VELORA Wordmark Gleaming Platinum */
 .velora-preloader,
 #veloraPreloader {
-  background: radial-gradient(circle at 50% 42%, #1c1c22 0%, #0b0b0e 58%, #050507 100%) !important;
+  background: radial-gradient(circle at 50% 42%, #1c1c22 0%, #0d0d10 58%, #0d0d10 100%) !important;
 }
 
 .preloader-wordmark,
@@ -2570,7 +2570,7 @@
 .site-footer,
 .announcement-bar,
 .mobile-drawer {
-  background: radial-gradient(circle at 75% 20%, #1e1e24 0%, #0e0e12 58%, #070709 100%) !important;
+  background: radial-gradient(circle at 75% 20%, #1e1e24 0%, #0d0d10 58%, #0d0d10 100%) !important;
 }
 
 /* 3. Luxury Architectural Typography & Contrast Polish */
@@ -2623,4 +2623,41 @@
   color: #ffffff !important;
   border: 1px solid rgba(255, 255, 255, 0.25) !important;
   backdrop-filter: blur(8px);
+}
+
+
+/* ==========================================================================
+   UNIVERSAL PRELOADER & DIAMOND PLATINUM OVERRIDE (ZERO MAROON / ZERO GOLD)
+   ========================================================================== */
+[id*="load" i],
+[class*="load" i] {
+  background-color: #070709 !important;
+  background-image: radial-gradient(circle at 50% 42%, #1d1d24 0%, #0b0b0e 55%, #050507 100%) !important;
+}
+
+[id*="load" i] *,
+[class*="load" i] * {
+  color: #f8fafc !important;
+}
+
+[id*="load" i] h1,
+[id*="load" i] .wordmark-text,
+[class*="load" i] h1,
+[class*="load" i] .wordmark-text,
+[class*="load" i] [class*="title" i],
+[class*="load" i] [class*="logo" i] {
+  background: linear-gradient(115deg, #cbd5e1 0%, #ffffff 35%, #e2e8f0 55%, #ffffff 78%, #94a3b8 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  filter: drop-shadow(0 4px 24px rgba(255, 255, 255, 0.35)) !important;
+}
+
+[id*="load" i] svg path,
+[id*="load" i] svg rect,
+[id*="load" i] svg polygon,
+[class*="load" i] svg path,
+[class*="load" i] svg rect,
+[class*="load" i] svg polygon {
+  stroke: #ffffff !important;
 }

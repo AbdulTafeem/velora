@@ -57,9 +57,9 @@
     if (f.includes('Silver') || f.includes('brass')) return 'background:linear-gradient(135deg,#f8fafc,#94a3b8);';
     if (f.includes('chrome') || f.includes('steel')) return 'background:linear-gradient(135deg,#f4f4f5,#a1a1aa);';
     if (f.includes('Natural Teak Wood')) return 'background:linear-gradient(135deg,#fafaf9 50%,#1c1917 50%);';
-    if (f.includes('maroon')) return 'background:linear-gradient(135deg,#5a0b18,#2b050b);';
+    if (f.includes('maroon')) return 'background:linear-gradient(135deg,#0d0d10,#0d0d10);';
     if (f.includes('olive')) return 'background:linear-gradient(135deg,#4d5d3b,#2c3621);';
-    return 'background:linear-gradient(135deg,#27272a,#09090b);';
+    return 'background:linear-gradient(135deg,#27272a,#0d0d10);';
   }
   function showToast(message) {
     if (!toastEl) return;
@@ -470,6 +470,7 @@
   renderProducts();
   renderCart();
 })();
+
 
 
 

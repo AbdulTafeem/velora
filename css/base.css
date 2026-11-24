@@ -1,7 +1,7 @@
 ﻿:root {
-  --maroon-950: #09090b;
-  --maroon-900: #0c0c0e;
-  --maroon-800: #3D0710;
+  --maroon-950: #0d0d10;
+  --maroon-900: #0d0d10;
+  --maroon-800: #0d0d10;
   --maroon-700: #18181c;
   --maroon-600: #7A1022;
   --gold-200: #F8ECC2;
@@ -20,7 +20,7 @@
   --border-dark: rgba(18, 18, 22, 0.1);
   --grad-gold: linear-gradient(135deg, #f8fafc 0%, #cbd5e1 50%, #94a3b8 100%);
   --grad-gold-hover: linear-gradient(135deg, #F8ECC2 0%, #E3C66F 50%, #cbd5e1 100%);
-  --grad-velvet: radial-gradient(circle at 30% 20%, #18181c 0%, #3D0710 45%, #0c0c0e 100%);
+  --grad-velvet: radial-gradient(circle at 30% 20%, #18181c 0%, #0d0d10 45%, #0d0d10 100%);
   --font-wordmark: 'Cinzel', Georgia, serif;
   --font-display: 'Cormorant Garamond', Georgia, serif;
   --font-italic: 'Cormorant Garamond', Georgia, serif;
@@ -36,7 +36,7 @@
   --gutter: clamp(1.25rem, 3vw, 3rem);
   --section-py: clamp(4.5rem, 8vw, 8.5rem);
   --shadow-soft: 0 14px 36px rgba(18, 18, 22, 0.06);
-  --shadow-luxury: 0 24px 60px rgba(27, 3, 7, 0.3);
+  --shadow-luxury: 0 24px 60px rgba(14, 14, 18, 0.3);
   --shadow-gold: 0 10px 28px rgba(203, 213, 225, 0.22);
   --ease-luxury: cubic-bezier(0.22, 1, 0.36, 1);
   --z-cursor: 9999;
@@ -104,5 +104,6 @@ ul, ol { list-style: none; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
+
 
 
