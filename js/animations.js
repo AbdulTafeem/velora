@@ -540,7 +540,7 @@
         scrollTrigger: {
           trigger: '.footer-watermark-wrap',
           start: 'top 92%',
-          end: 'bottom 68%',
+          end: 'bottom 98%',
           scrub: 0.8
         }
       });
@@ -574,4 +574,5 @@
 
 /* veloraFooterObserver */
 (function(){ var f = document.querySelector('footer, .site-footer'); if (f && 'IntersectionObserver' in window) { new IntersectionObserver(function(entries){ entries.forEach(function(e){ if (e.isIntersecting) { f.classList.add('is-visible'); if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh(); } }); }, { threshold: 0.15 }).observe(f); } })();
+
 

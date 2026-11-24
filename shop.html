@@ -102,8 +102,8 @@
       </div>
 
       <div class="filter-group">
-        <h4>Max Price: <span id="maxPriceLabel">₹10,000</span></h4>
-        <input type="range" id="priceRangeInput" min="3500" max="10000" step="500" value="10000" style="width:100%;accent-color:var(--maroon-900);cursor:pointer;" />
+        <h4>Max Price: <span id="maxPriceLabel">₹4,000</span></h4>
+        <input type="range" id="priceRangeInput" min="3500" max="4000" step="500" value="4000" style="width:100%;accent-color:var(--maroon-900);cursor:pointer;" />
       </div>
 
       <button type="button" class="btn-magnetic btn-maroon" id="resetShopFilters" style="width:100%;padding-block:0.7rem;">
@@ -239,7 +239,7 @@
       const priceLabel = document.getElementById('maxPriceLabel');
       const sortSelect = document.getElementById('shopSortSelect');
       let selectedCat = 'all';
-      let maxPrice = 10000;
+      let maxPrice = 4000;
 
       function renderShop() {
         let list = VELORA_PRODUCTS.filter((p) => (selectedCat === 'all' || p.category === selectedCat) && p.price <= maxPrice);
@@ -286,9 +286,9 @@
       sortSelect.addEventListener('change', renderShop);
       document.getElementById('resetShopFilters').addEventListener('click', () => {
         selectedCat = 'all';
-        maxPrice = 10000;
-        priceInput.value = 10000;
-        priceLabel.textContent = '₹10,000';
+        maxPrice = 4000;
+        priceInput.value = 4000;
+        priceLabel.textContent = '₹4,000';
         sortSelect.value = 'featured';
         document.querySelector('input[name="cat"][value="all"]').checked = true;
         renderShop();
@@ -296,8 +296,10 @@
       renderShop();
     })();
   </script>
+<script>window.addEventListener('velora:catalogUpdated', function(){ if (typeof renderShopGrid === 'function') renderShopGrid(); });</script>
 </body>
 </html>
+
 
 
 

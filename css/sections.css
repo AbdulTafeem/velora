@@ -2552,8 +2552,8 @@ h1, .hero-title, .section-title, .brand-logo, .collection-title, .why-card h3, .
 footer, .site-footer { margin-top: 0 !important; border-top: 1px solid rgba(212, 175, 55, 0.35) !important; }
 
 
-/* === RESTORE FOOTER VELORA GOLD FILL ANIMATION & CLEAR WHATSAPP OVERLAP === */
-footer svg text, .footer-watermark text, .footer-brand-svg text { stroke: #d4af37 !important; stroke-width: 1.4px !important; transition: fill 1.4s cubic-bezier(0.22, 1, 0.36, 1), stroke-dashoffset 1.6s ease !important; }
-footer.is-visible svg text, .footer-watermark.is-visible text, footer:hover svg text { fill: #e3c274 !important; }
-.footer-bottom, .site-footer-bottom { padding-bottom: 4.5rem !important; }
+
+/* === FOOTER GOLD FILL & WHATSAPP CLEARANCE === */
+@media (min-width: 769px) { .footer-bottom { padding-right: 14.5rem !important; } }
+@media (max-width: 768px) { .footer-bottom { padding-bottom: 4.5rem !important; } }
 
