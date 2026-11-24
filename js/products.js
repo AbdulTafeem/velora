@@ -141,3 +141,65 @@ function formatINR(amount) {
 
 
 
+
+
+// ============================================================================
+// LIVE GOOGLE SHEET CSV AUTO-SYNC ENGINE (NO-CODE PRODUCT UPDATES)
+// ============================================================================
+const VELORA_DEFAULT_SHEET_CSV = ""; // Paste published Google Sheet CSV URL here for global live sync
+
+(function initVeloraLiveCatalog() {
+  try {
+    // 1. Check if admin studio saved local preview products
+    const localSaved = localStorage.getItem('velora_custom_products_v1');
+    if (localSaved && typeof VELORA_PRODUCTS !== 'undefined') {
+      const parsed = JSON.parse(localSaved);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        VELORA_PRODUCTS.length = 0;
+        VELORA_PRODUCTS.push(...parsed);
+      }
+    }
+
+    // 2. Fetch live rows from Google Sheet CSV if configured
+    const sheetUrl = (typeof VELORA_GOOGLE_SHEET_CSV !== 'undefined' && VELORA_GOOGLE_SHEET_CSV) || localStorage.getItem('velora_google_sheet_csv') || VELORA_DEFAULT_SHEET_CSV;
+    if (!sheetUrl || typeof VELORA_PRODUCTS === 'undefined') return;
+
+    fetch(sheetUrl)
+      .then(res => res.text())
+      .then(csvText => {
+        const lines = csvText.split(/\r?\n/).filter(l => l.trim());
+        if (lines.length < 2) return;
+        const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+        const sheetItems = lines.slice(1).map((line, i) => {
+          const cols = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/^"|"$/g, '').trim());
+          const row = {};
+          headers.forEach((h, idx) => row[h] = cols[idx] || '');
+          if (!row.name || !row.price) return null;
+          const price = Number(row.price.replace(/[^0-9]/g, '')) || 4999;
+          return {
+            id: row.id || ('velora-sheet-' + (i + 1)),
+            name: row.name,
+            category: row.category || 'clothes-racks',
+            room: row.room || 'Bedroom',
+            price,
+            originalPrice: Number((row.mrp || '').replace(/[^0-9]/g, '')) || Math.round(price * 1.25),
+            badge: row.badge || 'NEW ARRIVAL',
+            image: row.image || 'assets/images/product-1.jpg',
+            hoverImage: row.hoverimage || row.image || 'assets/images/product-1.jpg',
+            finishes: row.finishes ? row.finishes.split('|').map(s => s.trim()) : ['Teak & Brushed Silver', 'Walnut & Matte Obsidian'],
+            dimensions: row.dimensions || '165 cm (H) x 110 cm (W) x 42 cm (D)',
+            material: row.material || '304-Grade Brushed Steel & Kiln-Dried Solid Wood',
+            weightCapacity: '85 kg',
+            description: row.description || 'Hand-finished solid wood base paired with 304-grade brushed steel frame.'
+          };
+        }).filter(Boolean);
+
+        if (sheetItems.length > 0) {
+          VELORA_PRODUCTS.length = 0;
+          VELORA_PRODUCTS.push(...sheetItems);
+          window.dispatchEvent(new Event('velora:catalogUpdated'));
+        }
+      })
+      .catch(() => {});
+  } catch (e) {}
+})();

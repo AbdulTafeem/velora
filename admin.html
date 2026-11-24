@@ -1,0 +1,224 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VELORA — Studio Catalog Manager</title>
+  <link rel="stylesheet" href="css/base.css?v=2026" />
+  <link rel="stylesheet" href="css/components.css?v=2026" />
+  <link rel="stylesheet" href="css/sections.css?v=2026" />
+  <style>
+    body { background: #0a0a0d; color: #f8fafc; min-height: 100vh; }
+    .admin-wrap { max-width: 1120px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+    .admin-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; padding-bottom: 1.75rem; border-bottom: 1px solid rgba(255,255,255,0.12); margin-bottom: 2.25rem; }
+    .admin-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 2rem; }
+    @media (max-width: 900px) { .admin-grid { grid-template-columns: 1fr; } }
+    .admin-card { background: #131318; border: 1px solid rgba(255,255,255,0.14); border-radius: 4px; padding: 1.75rem; }
+    .admin-card h2 { font-family: var(--font-serif); font-size: 1.45rem; margin-bottom: 0.4rem; color: #ffffff; }
+    .admin-sub { font-size: 0.82rem; color: #94a3b8; margin-bottom: 1.5rem; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-full { grid-column: 1 / -1; }
+    .field label { display: block; font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: #cbd5e1; margin-bottom: 0.4rem; }
+    .field input, .field select, .field textarea { width: 100%; padding: 0.65rem 0.85rem; background: #09090b; border: 1px solid rgba(255,255,255,0.2); border-radius: 3px; color: #ffffff; font-size: 0.88rem; }
+    .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: #ffffff; }
+    .sheet-banner { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.18); padding: 1.25rem; border-radius: 4px; margin-bottom: 2rem; }
+    .product-list-item { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.85rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .product-list-item img { width: 52px; height: 52px; object-fit: cover; border-radius: 3px; background: #1e1e24; }
+    .btn-del { padding: 0.35rem 0.75rem; border: 1px solid rgba(248,113,113,0.45); color: #fca5a5; border-radius: 2px; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; }
+    .btn-del:hover { background: rgba(239,68,68,0.16); }
+    .toast-msg { margin-top: 1rem; font-size: 0.84rem; color: #86efac; min-height: 1.2em; }
+  </style>
+</head>
+<body>
+  <div class="admin-wrap">
+    <div class="admin-header">
+      <div>
+        <span style="font-size:0.7rem;letter-spacing:0.25em;text-transform:uppercase;color:#94a3b8;">No-Code Storefront Manager</span>
+        <h1 style="font-family:var(--font-serif);font-size:2.1rem;color:#ffffff;margin-top:0.2rem;">VELORA Catalog Studio</h1>
+      </div>
+      <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+        <a href="index.html" class="btn-outline-gold" style="padding:0.65rem 1.25rem;">&larr; View Storefront</a>
+        <button type="button" id="downloadProductsBtn" class="btn-gold" style="padding:0.65rem 1.35rem;">Download Updated products.js</button>
+      </div>
+    </div>
+
+    <div class="sheet-banner">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1rem;">
+        <div>
+          <strong style="color:#ffffff;font-size:0.95rem;">Live Google Sheet Auto-Sync (Zero Code Updates)</strong>
+          <p style="font-size:0.8rem;color:#cbd5e1;margin-top:0.25rem;">Paste your published Google Sheet CSV link below or inside <code>js/products.js</code> — any row added in Google Sheets appears live on the website automatically.</p>
+        </div>
+        <div style="display:flex;gap:0.5rem;flex:1;min-width:280px;max-width:460px;">
+          <input type="url" id="sheetUrlInput" placeholder="https://docs.google.com/spreadsheets/d/.../pub?output=csv" style="flex:1;padding:0.6rem 0.85rem;background:#09090b;border:1px solid rgba(255,255,255,0.22);color:#fff;border-radius:3px;font-size:0.8rem;" />
+          <button type="button" id="saveSheetBtn" class="btn-gold" style="padding:0.6rem 1.1rem;font-size:0.75rem;">Connect</button>
+        </div>
+      </div>
+      <div id="sheetStatus" style="font-size:0.78rem;color:#94a3b8;margin-top:0.6rem;"></div>
+    </div>
+
+    <div class="admin-grid">
+      <div class="admin-card">
+        <h2>Add New Furniture Piece</h2>
+        <p class="admin-sub">Fill out the details below to add a product to your catalog immediately.</p>
+        <form id="addProductForm" class="form-grid">
+          <div class="field form-full">
+            <label>Product Name *</label>
+            <input type="text" id="pName" required placeholder="e.g. Architectural Teak & Brushed Steel Rack" />
+          </div>
+          <div class="field">
+            <label>Selling Price (INR) *</label>
+            <input type="number" id="pPrice" required placeholder="8499" />
+          </div>
+          <div class="field">
+            <label>Original MRP (INR)</label>
+            <input type="number" id="pMrp" placeholder="10999" />
+          </div>
+          <div class="field">
+            <label>Category *</label>
+            <select id="pCategory">
+              <option value="clothes-racks">Clothes Rack Stand</option>
+              <option value="shoe-racks">Shoe Rack</option>
+              <option value="storage-racks">Storage Rack</option>
+              <option value="wall-shelves">Wall Shelves</option>
+              <option value="stools">Sculpted Stools</option>
+              <option value="decor">Home Decor</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Room *</label>
+            <select id="pRoom">
+              <option value="Bedroom">Bedroom</option>
+              <option value="Entryway">Entryway</option>
+              <option value="Living Room">Living Room</option>
+              <option value="Dressing Area">Dressing Area</option>
+              <option value="Dining & Bar">Dining & Bar</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Badge Tag</label>
+            <input type="text" id="pBadge" value="NEW ARRIVAL" placeholder="NEW ARRIVAL / BEST SELLER" />
+          </div>
+          <div class="field">
+            <label>Dimensions</label>
+            <input type="text" id="pDim" value="165 cm (H) x 110 cm (W) x 42 cm (D)" />
+          </div>
+          <div class="field form-full">
+            <label>Primary Image URL or Path *</label>
+            <input type="text" id="pImg1" required placeholder="https://... or assets/images/product-1.jpg" />
+          </div>
+          <div class="field form-full">
+            <label>Hover / Secondary Image URL (Optional)</label>
+            <input type="text" id="pImg2" placeholder="https://... or assets/images/product-2.jpg" />
+          </div>
+          <div class="field form-full">
+            <label>Finishes (Comma Separated)</label>
+            <input type="text" id="pFinishes" value="Teak & Brushed Silver, Walnut & Matte Obsidian" />
+          </div>
+          <div class="field form-full">
+            <label>Short Description</label>
+            <textarea id="pDesc" rows="2" placeholder="Hand-finished solid wood base paired with 304-grade brushed steel frame."></textarea>
+          </div>
+          <div class="form-full" style="margin-top:0.5rem;">
+            <button type="submit" class="btn-gold" style="width:100%;padding:0.85rem;">+ Add Product to Catalog</button>
+          </div>
+        </form>
+        <div class="toast-msg" id="adminToast"></div>
+      </div>
+
+      <div class="admin-card">
+        <h2>Current Catalog (<span id="catalogCount">0</span>)</h2>
+        <p class="admin-sub">Preview active products. Click "Download Updated products.js" at the top to save permanently.</p>
+        <div id="adminProductList" style="max-height:560px;overflow-y:auto;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/products.js?v=2026"></script>
+  <script>
+    const STORAGE_KEY = 'velora_custom_products_v1';
+    const SHEET_KEY = 'velora_google_sheet_csv';
+
+    let catalog = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null') || (typeof VELORA_PRODUCTS !== 'undefined' ? [...VELORA_PRODUCTS] : []);
+
+    const sheetInput = document.getElementById('sheetUrlInput');
+    const sheetStatus = document.getElementById('sheetStatus');
+    sheetInput.value = localStorage.getItem(SHEET_KEY) || '';
+
+    document.getElementById('saveSheetBtn').addEventListener('click', () => {
+      const url = sheetInput.value.trim();
+      localStorage.setItem(SHEET_KEY, url);
+      sheetStatus.style.color = '#86efac';
+      sheetStatus.textContent = url ? '✓ Google Sheet CSV URL saved! Storefront will auto-load rows from this sheet.' : 'Cleared custom sheet URL.';
+    });
+
+    function renderCatalogList() {
+      document.getElementById('catalogCount').textContent = catalog.length;
+      const list = document.getElementById('adminProductList');
+      list.innerHTML = catalog.map((p, idx) => `
+        <div class="product-list-item">
+          <div style="display:flex;align-items:center;gap:0.85rem;">
+            <img src="${p.image}" alt="${p.name}" onerror="this.style.opacity=0.3" />
+            <div>
+              <div style="font-size:0.9rem;color:#fff;font-weight:500;">${p.name}</div>
+              <div style="font-size:0.75rem;color:#94a3b8;">₹${Number(p.price).toLocaleString('en-IN')} &bull; ${p.room} &bull; ${p.category}</div>
+            </div>
+          </div>
+          <button type="button" class="btn-del" data-idx="${idx}">Remove</button>
+        </div>
+      `).join('');
+
+      list.querySelectorAll('.btn-del').forEach(btn => {
+        btn.addEventListener('click', () => {
+          catalog.splice(Number(btn.dataset.idx), 1);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(catalog));
+          renderCatalogList();
+        });
+      });
+    }
+
+    document.getElementById('addProductForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('pName').value.trim();
+      const price = Number(document.getElementById('pPrice').value);
+      const mrp = Number(document.getElementById('pMrp').value) || Math.round(price * 1.25);
+      const img1 = document.getElementById('pImg1').value.trim();
+      const img2 = document.getElementById('pImg2').value.trim() || img1;
+      const finishes = document.getElementById('pFinishes').value.split(',').map(s => s.trim()).filter(Boolean);
+
+      const newItem = {
+        id: 'velora-' + name.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Date.now().toString().slice(-4),
+        name,
+        category: document.getElementById('pCategory').value,
+        room: document.getElementById('pRoom').value,
+        price,
+        originalPrice: mrp,
+        badge: document.getElementById('pBadge').value.trim() || 'NEW ARRIVAL',
+        image: img1,
+        hoverImage: img2,
+        finishes: finishes.length ? finishes : ['Teak & Brushed Silver'],
+        dimensions: document.getElementById('pDim').value.trim(),
+        material: '304-Grade Brushed Steel & Kiln-Dried Solid Wood',
+        weightCapacity: '85 kg',
+        description: document.getElementById('pDesc').value.trim() || 'Hand-finished solid wood base paired with heavy-gauge brushed steel frame.'
+      };
+
+      catalog.unshift(newItem);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(catalog));
+      renderCatalogList();
+      e.target.reset();
+      document.getElementById('adminToast').textContent = `✓ "${name}" added! Click "Download Updated products.js" to publish permanently.`;
+    });
+
+    document.getElementById('downloadProductsBtn').addEventListener('click', () => {
+      const fileContent = `// VELORA Product Catalog (Updated via Catalog Studio)\nconst VELORA_GOOGLE_SHEET_CSV = ${JSON.stringify(sheetInput.value.trim())};\nconst VELORA_PRODUCTS = ${JSON.stringify(catalog, null, 2)};\n`;
+      const blob = new Blob([fileContent], { type: 'application/javascript' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'products.js';
+      a.click();
+    });
+
+    renderCatalogList();
+  </script>
+</body>
+</html>
