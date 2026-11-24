@@ -16,7 +16,7 @@ const VELORA_PRODUCTS = [
     name: 'Stepped 3-Tier Stainless Steel Clothes Rack',
     category: 'clothes-rack',
     room: 'Bedroom',
-    price: 4999,
+    price: 3499,
     mrp: null,
     badge: 'Best Seller',
     badgeType: 'Silver',
@@ -31,7 +31,7 @@ const VELORA_PRODUCTS = [
     name: 'Leaning Angled Steel Garment Frame',
     category: 'storage-rack',
     room: 'Entryway',
-    price: 5499,
+    price: 3499,
     mrp: null,
     badge: 'New Release',
     badgeType: 'Silver',
@@ -46,7 +46,7 @@ const VELORA_PRODUCTS = [
     name: 'Circular Hoop Garment Stand',
     category: 'clothes-rack',
     room: 'Store',
-    price: 6499,
+    price: 3499,
     mrp: null,
     badge: 'Studio Pick',
     badgeType: 'maroon',
@@ -76,7 +76,7 @@ const VELORA_PRODUCTS = [
     name: 'Curved Brushed Steel & Velvet Stool',
     category: 'stool',
     room: 'Living',
-    price: 5999,
+    price: 3499,
     mrp: null,
     badge: 'Limited Batch',
     badgeType: 'maroon',
@@ -91,7 +91,7 @@ const VELORA_PRODUCTS = [
     name: 'Solid Wood Cylinder Base T-Stand',
     category: 'clothes-rack',
     room: 'Bedroom',
-    price: 7499,
+    price: 3499,
     mrp: null,
     badge: 'Signature',
     badgeType: 'Silver',
@@ -121,7 +121,7 @@ const VELORA_PRODUCTS = [
     name: 'Two-Tier Entryway Shoe & Coat Stand',
     category: 'shoe-rack',
     room: 'Entryway',
-    price: 4299,
+    price: 3499,
     mrp: null,
     badge: 'Best Value',
     badgeType: 'maroon',
@@ -146,7 +146,7 @@ function formatINR(amount) {
 // ============================================================================
 // LIVE GOOGLE SHEET CSV AUTO-SYNC ENGINE (NO-CODE PRODUCT UPDATES)
 // ============================================================================
-const VELORA_DEFAULT_SHEET_CSV = ""; // Paste published Google Sheet CSV URL here for global live sync
+const VELORA_DEFAULT_SHEET_CSV = "https://docs.google.com/spreadsheets/d/1yskAN_jSn2RRHHkt64wO0h4y855tGC2TdPm4NpKJFmM/gviz/tq?tqx=out:csv&sheet=Sheet1"; // Paste published Google Sheet CSV URL here for global live sync
 
 (function initVeloraLiveCatalog() {
   try {
@@ -203,3 +203,4 @@ const VELORA_DEFAULT_SHEET_CSV = ""; // Paste published Google Sheet CSV URL her
       .catch(() => {});
   } catch (e) {}
 })();
+
