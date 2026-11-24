@@ -141,7 +141,7 @@
   background: var(--maroon-950); color: var(--gold-300); border-top: 1px solid rgba(212, 175, 55, 0.35);
   border-bottom: 1px solid rgba(212, 175, 55, 0.35); padding-block: 0.95rem; overflow: hidden; white-space: nowrap;
 }
-.marquee-track { display: inline-flex; align-items: center; gap: 2.5rem; animation: marqueeScroll 28s linear infinite; will-change: transform; }
+.marquee-track { display: inline-flex; align-items: center; gap: 2.5rem; animation: marqueeScroll 28s linear infinite;  }
 .gold-marquee:hover .marquee-track { animation-play-state: paused; }
 .marquee-item { display: inline-flex; align-items: center; gap: 2.5rem; font-family: var(--font-display); font-size: var(--text-sm); letter-spacing: 0.18em; text-transform: uppercase; }
 .marquee-diamond { color: var(--gold-500); font-size: 0.7rem; }
@@ -248,7 +248,7 @@
   flex-direction: column;
   transition: transform 0.45s var(--ease-luxury), box-shadow 0.45s var(--ease-luxury), border-color 0.45s ease;
   transform-style: preserve-3d;
-  will-change: transform;
+  
 }
 
 .product-card:hover {
@@ -544,7 +544,7 @@
   gap: clamp(1.5rem, 3vw, 2.5rem);
   padding-left: var(--gutter);
   padding-right: clamp(4rem, 12vw, 10rem);
-  will-change: transform;
+  
 }
 
 .collection-panel {
@@ -1257,7 +1257,7 @@
   gap: 1.7rem;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   scrollbar-width: none;
   padding-block: 0.5rem 1.5rem;
   cursor: grab;
@@ -1686,7 +1686,7 @@
   border-top: 1px solid rgba(212, 175, 55, 0.4);
   transform: translateY(100%);
   pointer-events: none;
-  will-change: transform;
+  
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1707,7 +1707,7 @@
   background: var(--grad-gold);
   transform: scaleX(0);
   transform-origin: left center;
-  will-change: transform;
+  
   pointer-events: none;
 }
 
@@ -2443,7 +2443,7 @@ html, body { max-width: 100%; overflow-x: clip; }
 .price-mrp { text-decoration: line-through; opacity: 0.6; font-size: 0.85em; margin-left: 0.4rem; }
 
 /* === VELORA FLAGSHIP LUXURY TYPOGRAPHY, TEXT & MOTION POLISH === */
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 :root {
   --font-display: 'Cormorant Garamond', Georgia, serif;
@@ -2452,7 +2452,7 @@ html, body { max-width: 100%; overflow-x: clip; }
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -2493,7 +2493,7 @@ h1, h2, h3, .hero-title, .section-title, .product-title, .velvet-promo-content {
 /* Silky Card & Button Micro-Interactions */
 .product-card {
   transition: transform 0.55s var(--ease-velora), box-shadow 0.55s var(--ease-velora), border-color 0.4s ease;
-  will-change: transform;
+  
 }
 .product-card:hover {
   transform: translateY(-6px);
@@ -2501,7 +2501,7 @@ h1, h2, h3, .hero-title, .section-title, .product-title, .velvet-promo-content {
 }
 .product-img-main {
   transition: transform 0.85s var(--ease-velora), opacity 0.4s ease !important;
-  will-change: transform;
+  
 }
 .btn-add-cart, .btn-quick-view, .filter-pill, .tab-btn {
   transition: transform 0.3s var(--ease-velora), background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
@@ -2520,3 +2520,4 @@ h1, h2, h3, .hero-title, .section-title, .product-title, .velvet-promo-content {
 .cart-drawer, .quick-view-modal, .mobile-drawer {
   transition: transform 0.5s var(--ease-velora), opacity 0.4s ease;
 }
+

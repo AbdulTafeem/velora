@@ -9,7 +9,7 @@
   let lenis = null;
   if (typeof Lenis !== 'undefined' && !prefersReducedMotion) {
     lenis = new Lenis({
-      duration: 1.15,
+      duration: 0.65,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true
     });
@@ -564,6 +564,7 @@
     window.addEventListener('load', () => ScrollTrigger.refresh());
   }
 })();
+
 
 
 
