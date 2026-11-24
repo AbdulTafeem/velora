@@ -146,7 +146,7 @@ function formatINR(amount) {
 // ============================================================================
 // LIVE GOOGLE SHEET CSV AUTO-SYNC ENGINE (NO-CODE PRODUCT UPDATES)
 // ============================================================================
-const VELORA_DEFAULT_SHEET_CSV = ""; // Paste published Google Sheet CSV URL here for global live sync
+const VELORA_DEFAULT_SHEET_CSV = "https://docs.google.com/spreadsheets/d/1yskAN_jSn2RRHHkt64wO0h4y855tGC2TdPm4NpKJFmM/gviz/tq?tqx=out:csv&sheet=Sheet1"; // Paste published Google Sheet CSV URL here for global live sync
 
 (function initVeloraLiveCatalog() {
   try {
@@ -203,3 +203,4 @@ const VELORA_DEFAULT_SHEET_CSV = ""; // Paste published Google Sheet CSV URL her
       .catch(() => {});
   } catch (e) {}
 })();
+
