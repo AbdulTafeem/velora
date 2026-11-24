@@ -28,10 +28,34 @@
     .shop-catalog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.65rem; }
     @media (max-width: 1024px) { .shop-layout { grid-template-columns: 1fr; } .shop-sidebar { position: static; } .shop-catalog-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 560px) { .shop-catalog-grid { grid-template-columns: 1fr; } }
+      /* === ARCHITECTURAL LIVING ROOM BG & FROSTED GLASS CARDS === */
+    body { background: #e9e4dc !important; position: relative; }
+    .shop-room-bg {
+      position: fixed; inset: -3%; z-index: -1; pointer-events: none;
+      background: url('https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261104_080623_c94c85a3-23d5-4a0c-afff-41be1b5b8191.png&w=2400&q=85') center/cover no-repeat;
+      filter: blur(3px) saturate(1.06); transform: scale(1.06);
+    }
+    .shop-room-bg::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(75% 65% at 50% 40%, rgba(251, 246, 237, 0.52), rgba(235, 226, 212, 0.72));
+    }
+    .shop-sidebar, #shopCatalogGrid .product-card {
+      background: linear-gradient(155deg, rgba(255, 253, 248, 0.82), rgba(245, 237, 224, 0.72)) !important;
+      backdrop-filter: blur(20px) saturate(1.4) !important;
+      -webkit-backdrop-filter: blur(20px) saturate(1.4) !important;
+      border: 1px solid rgba(255, 255, 255, 0.78) !important;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), 0 20px 48px -22px rgba(40, 22, 16, 0.28) !important;
+      border-radius: 20px !important;
+    }
+    .shop-toolbar {
+      background: rgba(255, 253, 248, 0.74); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      padding: 0.85rem 1.25rem; border-radius: 14px; border: 1px solid rgba(255, 255, 255, 0.72);
+    }
   </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body><div class="page-transition-curtain" id="pageTransitionCurtain" aria-hidden="true"></div>
+<body>
+  <div class="shop-room-bg" aria-hidden="true"></div><div class="page-transition-curtain" id="pageTransitionCurtain" aria-hidden="true"></div>
   <a href="#top" class="skip-link">Skip to main content</a>
   <div class="grain-overlay" aria-hidden="true"></div>
   <header class="site-header is-scrolled" id="siteHeader">
@@ -298,6 +322,7 @@
 
 </body>
 </html>
+
 
 
 
