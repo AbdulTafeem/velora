@@ -458,7 +458,7 @@
   });
 
   document.getElementById('spotlightWaBtn')?.addEventListener('click', () => {
-    const msg = `Hello VELORA! I want to order the Teak & Solid Wood Base T-Stand (${spotlightFinish}) - ₹7,499.`;
+    const msg = `Hello VELORA! I want to order the Teak & Solid Wood Base T-Stand (${spotlightFinish}) - ₹3,999.`;
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
   });
 
@@ -480,6 +480,7 @@
   renderProducts();
   renderCart();
 })();
+
 
 
 
