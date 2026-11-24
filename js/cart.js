@@ -133,7 +133,7 @@
               <div class="product-footer-row">
                 <div class="product-price-box">
                   <span class="price-now">${formatINR(product.price)}</span>
-                  ${product.mrp ? `<span class="price-mrp">${formatINR(product.mrp)}</span>` : ""}
+                  ${(product.mrp || product.originalPrice) ? `<span class="price-mrp">${formatINR((product.mrp || product.originalPrice))}</span>` : ""}
                 </div>
                 <button type="button" class="btn-add-cart" data-add="${product.id}">Add to Cart</button>
               </div>
@@ -419,7 +419,7 @@
 
   document.getElementById('applyPromoBtn')?.addEventListener('click', () => {
     const code = document.getElementById('promoCodeInput')?.value.trim().toUpperCase();
-    if (code === 'VELORA10') {
+    if ((code === 'VELORA10' || code === 'VALORA10')) {
       promoApplied = true;
       renderCart();
       showToast('Code VELORA10 applied! 10% privilege unlocked.');
@@ -480,6 +480,7 @@
   renderProducts();
   renderCart();
 })();
+
 
 
 

@@ -17,7 +17,7 @@ const VELORA_PRODUCTS = [
     category: 'clothes-rack',
     room: 'Bedroom',
     price: 3499,
-    mrp: null,
+    mrp: 4499, originalPrice: 4499, originalPrice: 4499,
     badge: 'Best Seller',
     badgeType: 'Silver',
     image: 'assets/images/product-5.jpg',
@@ -32,7 +32,7 @@ const VELORA_PRODUCTS = [
     category: 'storage-rack',
     room: 'Entryway',
     price: 3499,
-    mrp: null,
+    mrp: 4499, originalPrice: 4499, originalPrice: 4499,
     badge: 'New Release',
     badgeType: 'Silver',
     image: 'assets/images/product-2.jpg',
@@ -47,7 +47,7 @@ const VELORA_PRODUCTS = [
     category: 'clothes-rack',
     room: 'Store',
     price: 3499,
-    mrp: null,
+    mrp: 4499, originalPrice: 4499, originalPrice: 4499,
     badge: 'Studio Pick',
     badgeType: 'maroon',
     image: 'assets/images/product-4.jpg',
@@ -62,7 +62,7 @@ const VELORA_PRODUCTS = [
     category: 'wall-shelf',
     room: 'Living',
     price: 3999,
-    mrp: null,
+    mrp: 4499, originalPrice: 4499, originalPrice: 4499,
     badge: 'Popular',
     badgeType: 'Silver',
     image: 'assets/images/product-3.jpg',
@@ -77,7 +77,7 @@ const VELORA_PRODUCTS = [
     category: 'stool',
     room: 'Living',
     price: 3499,
-    mrp: null,
+    mrp: 4499, originalPrice: 4499, originalPrice: 4499,
     badge: 'Limited Batch',
     badgeType: 'maroon',
     image: 'assets/images/product-1.jpg',
@@ -92,7 +92,7 @@ const VELORA_PRODUCTS = [
     category: 'clothes-rack',
     room: 'Bedroom',
     price: 3499,
-    mrp: null,
+    mrp: 4499, originalPrice: 4499, originalPrice: 4499,
     badge: 'Signature',
     badgeType: 'Silver',
     image: 'assets/images/spotlight-tstand.jpg',
@@ -107,7 +107,7 @@ const VELORA_PRODUCTS = [
     category: 'decor',
     room: 'Entryway',
     price: 3499,
-    mrp: null,
+    mrp: 4499, originalPrice: 4499, originalPrice: 4499,
     badge: 'Ready to Ship',
     badgeType: 'Silver',
     image: 'assets/images/decor-lamp.jpg',
@@ -122,7 +122,7 @@ const VELORA_PRODUCTS = [
     category: 'shoe-rack',
     room: 'Entryway',
     price: 3499,
-    mrp: null,
+    mrp: 4499, originalPrice: 4499, originalPrice: 4499,
     badge: 'Best Value',
     badgeType: 'maroon',
     image: 'assets/images/product-1-hover.jpg',
@@ -202,6 +202,7 @@ const VELORA_DEFAULT_SHEET_CSV = "https://docs.google.com/spreadsheets/d/1yskAN_
       .catch(() => {});
   } catch (e) {}
 })();
+
 
 
 

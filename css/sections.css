@@ -2430,3 +2430,5 @@
 }
 
 .product-card:hover .product-img-main, .product-card:active .product-img-main { opacity: 1 !important; visibility: visible !important; }
+
+.product-card:hover .product-img-main, .product-card:active .product-img-main { opacity: 1 !important; visibility: visible !important; } .product-card:hover .product-img-hover, .product-card:active .product-img-hover { opacity: 0 !important; }
