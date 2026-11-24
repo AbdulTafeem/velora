@@ -56,7 +56,7 @@
     const f = finishName.toLowerCase();
     if (f.includes('gold') || f.includes('brass')) return 'background:linear-gradient(135deg,#f1dc9a,#b8892b);';
     if (f.includes('chrome') || f.includes('steel')) return 'background:linear-gradient(135deg,#f4f4f5,#a1a1aa);';
-    if (f.includes('white marble')) return 'background:linear-gradient(135deg,#fafaf9 50%,#1c1917 50%);';
+    if (f.includes('Natural Teak Wood')) return 'background:linear-gradient(135deg,#fafaf9 50%,#1c1917 50%);';
     if (f.includes('maroon')) return 'background:linear-gradient(135deg,#5a0b18,#2b050b);';
     if (f.includes('olive')) return 'background:linear-gradient(135deg,#4d5d3b,#2c3621);';
     return 'background:linear-gradient(135deg,#27272a,#09090b);';
@@ -194,7 +194,7 @@
       cartItemsContainer.innerHTML = `
         <div class="cart-empty-state">
           <h4>Your Velvet Bag is Empty</h4>
-          <p style="font-size:0.85rem;margin-bottom:1.25rem;">Explore our garment racks, marble stands, and wall shelves.</p>
+          <p style="font-size:0.85rem;margin-bottom:1.25rem;">Explore our garment racks, Solid Wood stands, and wall shelves.</p>
           <button type="button" class="btn-magnetic btn-maroon" id="emptyExploreBtn"><span class="btn-text">Explore Collection</span></button>
         </div>
       `;
@@ -436,7 +436,7 @@
     showToast('Pay via UPI / COD online checkout coming soon — please Order via WhatsApp above.');
   });
 
-  let spotlightFinish = 'White Marble / Noir';
+  let spotlightFinish = 'Natural Teak Wood / Noir';
   document.getElementById('spotlightFinishPills')?.addEventListener('click', (e) => {
     const pill = e.target.closest('[data-finish]');
     if (!pill) return;
@@ -451,7 +451,7 @@
   });
 
   document.getElementById('spotlightWaBtn')?.addEventListener('click', () => {
-    const msg = `Hello VELORA! I want to order the Carrara Marble Base T-Stand (${spotlightFinish}) - ₹7,499.`;
+    const msg = `Hello VELORA! I want to order the Carrara Solid Wood Base T-Stand (${spotlightFinish}) - ₹7,499.`;
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
   });
 
@@ -470,6 +470,8 @@
   renderProducts();
   renderCart();
 })();
+
+
 
 
 

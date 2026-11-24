@@ -88,7 +88,7 @@ const VELORA_PRODUCTS = [
   },
   {
     id: 'vel-06',
-    name: 'Marble Cylinder Base T-Stand',
+    name: 'Solid Wood Cylinder Base T-Stand',
     category: 'clothes-rack',
     room: 'Bedroom',
     price: 7499,
@@ -97,9 +97,9 @@ const VELORA_PRODUCTS = [
     badgeType: 'gold',
     image: 'assets/images/spotlight-tstand.jpg',
     hoverImage: 'assets/images/product-5.jpg',
-    finishes: ['White Marble / Matte Black', 'Black Marquina / Brushed Gold'],
+    finishes: ['Natural Teak Wood / Matte Black', 'Smoked Walnut Wood / Brushed Gold'],
     dimensions: '158cm H x 95cm W x 28cm D',
-    description: '14kg solid natural marble cylinder base supporting a 95cm powder-coated steel crossbar with felt floor protection.'
+    description: '14kg solid natural Solid Wood cylinder base supporting a 95cm powder-coated steel crossbar with felt floor protection.'
   },
   {
     id: 'vel-07',
@@ -136,3 +136,4 @@ const VELORA_PRODUCTS = [
 function formatINR(amount) {
   return '₹' + Number(amount).toLocaleString('en-IN');
 }
+

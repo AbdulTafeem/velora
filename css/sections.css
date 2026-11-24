@@ -2195,3 +2195,119 @@
 .qv-modal.is-open .qv-dialog {
   transform: translateY(0) scale(1);
 }
+
+/* ==========================================================================
+   BESPOKE CLIENT THEME: OBSIDIAN BLACK, BRUSHED SILVER & SUBTLE GOLD
+   ========================================================================== */
+:root {
+  --maroon-950: #0c0c0e;
+  --maroon-900: #141418;
+  --maroon-800: #1e1e24;
+  --maroon-700: #2a2a32;
+
+  /* Silver Primary Metallic + Warm Gold Accent */
+  --silver-200: #f1f5f9;
+  --silver-300: #e2e8f0;
+  --silver-400: #cbd5e1;
+  --silver-500: #94a3b8;
+
+  --gold-300: #f3e5ab;
+  --gold-400: #e5c158;
+  --gold-500: #d4af37;
+  --gold-600: #b8962e;
+
+  --grad-silver: linear-gradient(135deg, #f8fafc 0%, #cbd5e1 48%, #94a3b8 100%);
+  --grad-silver-gold: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 62%, #d4af37 100%);
+  --grad-obsidian: radial-gradient(circle at 75% 25%, #232329 0%, #121216 55%, #09090b 100%);
+
+  --cream-50: #faf9f6;
+  --cream-100: #f4f2ed;
+  --surface-card: #ffffff;
+}
+
+/* Dark Obsidian Surfaces */
+.announcement-bar,
+.hero-section,
+.spotlight-section,
+.site-footer {
+  background: var(--grad-obsidian) !important;
+}
+
+.announcement-bar {
+  border-bottom: 1px solid rgba(203, 213, 225, 0.16) !important;
+  color: var(--silver-300) !important;
+}
+
+/* Hero Wordmark in Brushed Silver with Subtle Gold Rim */
+.hero-wordmark,
+.wordmark-text {
+  background: var(--grad-silver-gold) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+}
+
+.hero-eyebrow,
+.section-eyebrow {
+  color: var(--gold-400) !important;
+}
+
+.hero-tagline {
+  color: var(--silver-300) !important;
+}
+
+/* Primary Buttons: Brushed Silver Metallic with Obsidian Text & Gold Border Accent */
+.btn-gold {
+  background: var(--grad-silver) !important;
+  color: #0c0c0e !important;
+  border: 1px solid rgba(212, 175, 55, 0.55) !important;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35) !important;
+}
+
+.btn-gold:hover {
+  box-shadow: 0 14px 34px rgba(212, 175, 55, 0.25) !important;
+  border-color: var(--gold-400) !important;
+}
+
+.btn-outline-gold {
+  border-color: rgba(203, 213, 225, 0.4) !important;
+  color: var(--silver-200) !important;
+}
+
+.btn-outline-gold:hover {
+  border-color: var(--gold-400) !important;
+  background: rgba(212, 175, 55, 0.1) !important;
+}
+
+/* Navbar & Active Pills in Obsidian + Silver + Gold */
+.site-header {
+  background: rgba(250, 249, 246, 0.96) !important;
+  border-bottom: 1px solid rgba(20, 20, 24, 0.08) !important;
+}
+
+.nav-link.is-active,
+.filter-tab.is-active,
+.btn-add-cart,
+.btn-maroon {
+  background: #141418 !important;
+  color: var(--silver-200) !important;
+  border-color: var(--gold-500) !important;
+}
+
+.filter-tab.is-active::after {
+  color: var(--gold-400) !important;
+}
+
+.finish-pill.is-active {
+  background: var(--grad-silver) !important;
+  color: #0c0c0e !important;
+  border-color: var(--gold-500) !important;
+}
+
+.hero-visual::before {
+  background: radial-gradient(circle at 50% 45%, rgba(203, 213, 225, 0.22) 0%, rgba(212, 175, 55, 0.1) 45%, transparent 72%) !important;
+}
+
+.scroll-progress-bar {
+  background: linear-gradient(90deg, #94a3b8, #f8fafc, #d4af37) !important;
+}
