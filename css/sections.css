@@ -2614,3 +2614,11 @@ footer, .site-footer { margin-top: 0 !important; border-top: 1px solid rgba(212,
 }
 
 
+
+/* === ZERO-JITTER 120HZ SCROLL LOCK === */
+html, body { overscroll-behavior-y: none; }
+.velora-reveal, .velora-reveal.is-revealed { opacity: 1 !important; transform: none !important; transition: none !important; }
+.site-header { will-change: transform; backface-visibility: hidden; }
+.product-card, .why-card, .room-card, .collection-panel, .testimonial-card { contain: layout style paint; backface-visibility: hidden; }
+.footer-watermark { background-size: 100% 100% !important; transition: none !important; }
+

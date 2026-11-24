@@ -103,31 +103,28 @@
     }
   });
 
-  // 5. Passive 60fps Scroll Progress Bar & Footer VELORA Gold Fill
+    // 5. Ultra-Light GPU-Only Scroll Progress Line (Zero Layout Thrashing / Zero Jitter)
   const progressLine = document.getElementById('scrollProgressBar');
-  const watermark = document.getElementById('footerWatermark');
+  const hdr = document.querySelector('.site-header');
+  let maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+  window.addEventListener('resize', () => { maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight); }, { passive: true });
   let ticking = false;
+  let lastScrolled = false;
   window.addEventListener('scroll', () => {
     if (ticking) return;
     ticking = true;
     requestAnimationFrame(() => {
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      if (progressLine && docHeight > 0) {
-        progressLine.style.transform = `scaleX(${Math.min(1, Math.max(0, scrollTop / docHeight))})`;
-      }
-      if (watermark) {
-        const rect = watermark.getBoundingClientRect();
-        const pct = Math.min(100, Math.max(0, ((window.innerHeight - rect.top) / (rect.height + 140)) * 100));
-        watermark.style.backgroundSize = `${pct.toFixed(1)}% 100%`;
-      }
+      const y = window.scrollY;
+      if (progressLine) progressLine.style.transform = 'scaleX(' + Math.min(1, Math.max(0, y / maxScroll)) + ')';
+      const isSc = y > 30;
+      if (hdr && isSc !== lastScrolled) { lastScrolled = isSc; hdr.classList.toggle('is-scrolled', isSc); }
       ticking = false;
     });
   }, { passive: true });
 })();
 
 /* Lightweight Hero Slider & Navbar Scroll */
-(function(){ var slides = document.querySelectorAll('.hero-slide'); var dots = document.querySelectorAll('.hero-dot'); var idx = 0; function showSlide(n){ if(!slides.length) return; idx = (n + slides.length) % slides.length; slides.forEach(function(s,i){ s.classList.toggle('is-active', i === idx); }); dots.forEach(function(d,i){ d.classList.toggle('is-active', i === idx); }); } document.getElementById('heroNextBtn')?.addEventListener('click', function(){ showSlide(idx + 1); }); document.getElementById('heroPrevBtn')?.addEventListener('click', function(){ showSlide(idx - 1); }); dots.forEach(function(d,i){ d.addEventListener('click', function(){ showSlide(i); }); }); var hdr = document.querySelector('.site-header'); window.addEventListener('scroll', function(){ if(hdr) hdr.classList.toggle('is-scrolled', window.scrollY > 30); }, { passive: true }); })();
+(function(){ var slides = document.querySelectorAll('.hero-slide'); var dots = document.querySelectorAll('.hero-dot'); var idx = 0; function showSlide(n){ if(!slides.length) return; idx = (n + slides.length) % slides.length; slides.forEach(function(s,i){ s.classList.toggle('is-active', i === idx); }); dots.forEach(function(d,i){ d.classList.toggle('is-active', i === idx); }); } document.getElementById('heroNextBtn')?.addEventListener('click', function(){ showSlide(idx + 1); }); document.getElementById('heroPrevBtn')?.addEventListener('click', function(){ showSlide(idx - 1); }); dots.forEach(function(d,i){ d.addEventListener('click', function(){ showSlide(i); }); });  })();
 
 
 
@@ -176,4 +173,5 @@
   document.getElementById('reviewPrevBtn')?.addEventListener('click', function(){ if(track) track.scrollBy({ left: -340, behavior: 'smooth' }); });
   document.getElementById('reviewNextBtn')?.addEventListener('click', function(){ if(track) track.scrollBy({ left: 340, behavior: 'smooth' }); });
 })();
+
 
