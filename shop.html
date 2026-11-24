@@ -238,7 +238,7 @@
       const priceInput = document.getElementById('priceRangeInput');
       const priceLabel = document.getElementById('maxPriceLabel');
       const sortSelect = document.getElementById('shopSortSelect');
-      let selectedCat = 'all';
+      const formatINR = window.formatINR || function(a){ return '₹' + Number(a || 0).toLocaleString('en-IN'); }; let selectedCat = 'all';
       let maxPrice = 4000;
 
       function renderShop() {
@@ -298,6 +298,7 @@
 
 </body>
 </html>
+
 
 
 

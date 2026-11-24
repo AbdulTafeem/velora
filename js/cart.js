@@ -1,4 +1,5 @@
-﻿/* ==========================================================================
+﻿window.formatINR = function(a){ return '₹' + Number(a || 0).toLocaleString('en-IN'); };
+/* ==========================================================================
    VELORA — E-COMMERCE STORE, CART, QUICK-VIEW & WHATSAPP ENGINE (js/cart.js)
    ========================================================================== */
 (function () {
@@ -478,6 +479,7 @@
   renderProducts();
   renderCart();
 })();
+
 
 
 

@@ -213,7 +213,7 @@
   <script src="js/animations.js"></script>
   <script>
     (function () {
-      const params = new URLSearchParams(window.location.search);
+      const formatINR = window.formatINR || function(a){ return '₹' + Number(a || 0).toLocaleString('en-IN'); }; const params = new URLSearchParams(window.location.search);
       const id = params.get('id') || 'vel-01';
       const product = VELORA_PRODUCTS.find((p) => p.id === id) || VELORA_PRODUCTS[0];
       let chosenFinish = product.finishes[0];
@@ -272,6 +272,7 @@
 <script>window.addEventListener('velora:catalogUpdated', function(){ if (typeof renderProductDetail === 'function') renderProductDetail(); });</script>
 </body>
 </html>
+
 
 
 
