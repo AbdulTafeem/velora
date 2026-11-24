@@ -80,8 +80,8 @@
   }
 
   // 4. Smooth Animated Counters (runs once cleanly when visible)
-  document.querySelectorAll('[data-count], .stat-number').forEach((counter) => {
-    const raw = counter.getAttribute('data-count') || counter.textContent.replace(/[^0-9]/g, '');
+  document.querySelectorAll('[data-target], [data-count], .counter-number, .stat-number').forEach((counter) => {
+    const raw = (counter.getAttribute('data-target') || counter.getAttribute('data-count')) || counter.textContent.replace(/[^0-9]/g, '');
     const target = parseInt(raw, 10);
     if (!target || isNaN(target)) return;
     const suffix = counter.getAttribute('data-suffix') || (counter.textContent.includes('+') ? '+' : '');
@@ -153,4 +153,5 @@
   sClose?.addEventListener('click', function(){ if(sDrawer) sDrawer.classList.remove('is-open'); });
   document.getElementById('closeAnnouncement')?.addEventListener('click', function(){ document.getElementById('announcementBar')?.classList.add('is-dismissed'); });
 })();
+
 
