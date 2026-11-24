@@ -135,3 +135,22 @@
 
 
 
+
+/* Mobile Menu, Search Drawer & Announcement Bar Controls */
+(function(){
+  var mBtn = document.getElementById('mobileMenuBtn');
+  var mDrawer = document.getElementById('mobileDrawer');
+  var mClose = document.getElementById('mobileMenuClose');
+  var backdrop = document.getElementById('drawerBackdrop');
+  function closeMobile(){ if(mDrawer){ mDrawer.classList.remove('is-open'); mDrawer.setAttribute('aria-hidden','true'); } if(backdrop) backdrop.classList.remove('is-visible'); document.body.style.overflow=''; }
+  mBtn?.addEventListener('click', function(){ if(mDrawer){ mDrawer.classList.add('is-open'); mDrawer.setAttribute('aria-hidden','false'); } if(backdrop) backdrop.classList.add('is-visible'); document.body.style.overflow='hidden'; });
+  mClose?.addEventListener('click', closeMobile);
+  document.querySelectorAll('.mobile-nav-link').forEach(function(l){ l.addEventListener('click', closeMobile); });
+  var sBtn = document.getElementById('searchToggleBtn');
+  var sDrawer = document.getElementById('searchDrawer');
+  var sClose = document.getElementById('searchCloseBtn');
+  sBtn?.addEventListener('click', function(){ if(sDrawer){ sDrawer.classList.toggle('is-open'); document.getElementById('liveSearchInput')?.focus(); } });
+  sClose?.addEventListener('click', function(){ if(sDrawer) sDrawer.classList.remove('is-open'); });
+  document.getElementById('closeAnnouncement')?.addEventListener('click', function(){ document.getElementById('announcementBar')?.classList.add('is-dismissed'); });
+})();
+
