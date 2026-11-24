@@ -14,7 +14,7 @@ const VELORA_PRODUCTS = [
   {
     "id": "vel-01",
     "name": "Stepped 3-Tier Stainless Steel Clothes Rack",
-    "category": "clothes-rack",
+    "category": "clothes-racks",
     "room": "Bedroom",
     "price": 3299,
     "mrp": null,
@@ -34,7 +34,7 @@ const VELORA_PRODUCTS = [
   {
     "id": "vel-02",
     "name": "Leaning Angled Steel Garment Frame",
-    "category": "storage-rack",
+    "category": "storage-racks",
     "room": "Entryway",
     "price": 2999,
     "mrp": null,
@@ -53,8 +53,8 @@ const VELORA_PRODUCTS = [
   {
     "id": "vel-03",
     "name": "Circular Hoop Garment Stand",
-    "category": "clothes-rack",
-    "room": "Store",
+    "category": "clothes-racks",
+    "room": "Dressing Area",
     "price": 3799,
     "mrp": null,
     "badge": "Studio Pick",
@@ -72,8 +72,8 @@ const VELORA_PRODUCTS = [
   {
     "id": "vel-04",
     "name": "Round 4-Shelf Metal Wall Organizer",
-    "category": "wall-shelf",
-    "room": "Living",
+    "category": "wall-shelves",
+    "room": "Living Room",
     "price": 2299,
     "mrp": null,
     "badge": "Popular",
@@ -91,8 +91,8 @@ const VELORA_PRODUCTS = [
   {
     "id": "vel-05",
     "name": "Curved Brushed Steel & Velvet Stool",
-    "category": "stool",
-    "room": "Living",
+    "category": "stools",
+    "room": "Living Room",
     "price": 3499,
     "mrp": null,
     "badge": "Limited Batch",
@@ -110,7 +110,7 @@ const VELORA_PRODUCTS = [
   {
     "id": "vel-06",
     "name": "Solid Wood Cylinder Base T-Stand",
-    "category": "clothes-rack",
+    "category": "clothes-racks",
     "room": "Bedroom",
     "price": 3999,
     "mrp": null,
@@ -148,7 +148,7 @@ const VELORA_PRODUCTS = [
   {
     "id": "vel-08",
     "name": "Two-Tier Entryway Shoe & Coat Stand",
-    "category": "shoe-rack",
+    "category": "shoe-racks",
     "room": "Entryway",
     "price": 2499,
     "mrp": null,
