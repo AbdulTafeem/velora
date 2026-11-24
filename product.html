@@ -207,31 +207,44 @@
   <script src="js/products.js"></script>
   <script src="js/cart.js"></script>
   <script src="js/animations.js"></script>
-  <script>
-    (function () {
-      const formatINR = window.formatINR || function(a){ return '₹' + Number(a || 0).toLocaleString('en-IN'); }; const params = new URLSearchParams(window.location.search);
+    <script>
+    function renderProductDetail() {
+      const formatINR = window.formatINR || function(a){ return '₹' + Number(a || 0).toLocaleString('en-IN'); };
+      const params = new URLSearchParams(window.location.search);
       const id = params.get('id') || 'vel-01';
-      const product = VELORA_PRODUCTS.find((p) => p.id === id) || VELORA_PRODUCTS[0];
+      const product = (typeof VELORA_PRODUCTS !== 'undefined' && VELORA_PRODUCTS.find((p) => p.id === id)) || VELORA_PRODUCTS[0];
+      if (!product) return;
       let chosenFinish = product.finishes[0];
 
-      document.title = `${product.name} | VELORA India`;
+      document.title = product.name + ' | VELORA India';
       document.getElementById('pdpCrumbName').textContent = product.name;
       document.getElementById('pdpBadge').textContent = product.badge;
       document.getElementById('pdpTitle').textContent = product.name;
       document.getElementById('pdpPrice').textContent = formatINR(product.price);
-      document.getElementById('pdpMrp').textContent = formatINR(product.mrp);
+      const mrpEl = document.getElementById('pdpMrp');
+      if (mrpEl) {
+        if (product.mrp && product.mrp > product.price) {
+          mrpEl.textContent = formatINR(product.mrp);
+          mrpEl.style.display = 'inline';
+        } else {
+          mrpEl.style.display = 'none';
+        }
+      }
       document.getElementById('pdpDesc').textContent = product.description;
-      document.getElementById('pdpDims').textContent = product.dimensions + ' • Engineered for 45kg distributed load.';
+      document.getElementById('pdpDims').textContent = product.dimensions + ' • ' + (product.material || 'Heavy-Gauge Steel & Solid Wood') + ' • Engineered for 45kg distributed load.';
+      const delEl = document.getElementById('pdpDelivery');
+      if (delEl && product.delivery) delEl.textContent = product.delivery + ' • Cash on Delivery & UPI accepted.';
 
       const mainImg = document.getElementById('pdpMainImg');
       mainImg.src = product.image;
       mainImg.alt = product.name;
 
       const thumbsEl = document.getElementById('pdpThumbs');
-      [product.image, product.hoverImage].forEach((src, i) => {
+      thumbsEl.innerHTML = '';
+      [product.image, product.hoverImage].filter(Boolean).forEach((src, i) => {
         const btn = document.createElement('button');
-        btn.className = `pdp-thumb ${i === 0 ? 'is-active' : ''}`;
-        btn.innerHTML = `<img src="${src}" alt="View ${i + 1}" />`;
+        btn.className = 'pdp-thumb ' + (i === 0 ? 'is-active' : '');
+        btn.innerHTML = '<img src="' + src + '" alt="View ' + (i + 1) + '" />';
         btn.addEventListener('click', () => {
           mainImg.src = src;
           document.querySelectorAll('.pdp-thumb').forEach((t) => t.classList.remove('is-active'));
@@ -241,9 +254,10 @@
       });
 
       const finishesEl = document.getElementById('pdpFinishes');
+      finishesEl.innerHTML = '';
       product.finishes.forEach((f, i) => {
         const b = document.createElement('button');
-        b.className = `qv-finish-btn ${i === 0 ? 'is-active' : ''}`;
+        b.className = 'qv-finish-btn ' + (i === 0 ? 'is-active' : '');
         b.textContent = f;
         b.addEventListener('click', () => {
           chosenFinish = f;
@@ -253,21 +267,35 @@
         finishesEl.appendChild(b);
       });
 
-      document.getElementById('pdpAddBtn').addEventListener('click', () => {
-        if (window.VeloraCart && typeof window.VeloraCart.add === 'function') {
-          window.VeloraCart.add(product.id, chosenFinish);
-        }
-      });
+      const addBtn = document.getElementById('pdpAddBtn');
+      if (product.stock === 0) {
+        addBtn.disabled = true;
+        addBtn.style.opacity = '0.5';
+        addBtn.style.cursor = 'not-allowed';
+        addBtn.innerHTML = '<span class="btn-text">Sold Out</span>';
+      } else {
+        addBtn.disabled = false;
+        addBtn.style.opacity = '1';
+        addBtn.style.cursor = 'pointer';
+        addBtn.innerHTML = '<span class="btn-text">Add to Bag — ' + formatINR(product.price) + '</span>';
+        addBtn.onclick = () => {
+          if (window.VeloraCart && typeof window.VeloraCart.add === 'function') {
+            window.VeloraCart.add(product.id, chosenFinish);
+          }
+        };
+      }
 
-      document.getElementById('pdpWaBtn').addEventListener('click', () => {
-        const msg = `Hello VELORA! I want to order: ${product.name} (${chosenFinish}) - ${formatINR(product.price)}`;
-        window.open(`https://wa.me/919876543210?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
-      });
-    })();
+      document.getElementById('pdpWaBtn').onclick = () => {
+        const msg = 'Hello VELORA! I want to order: ' + product.name + ' (' + chosenFinish + ') - ' + formatINR(product.price);
+        window.open('https://wa.me/919876543210?text=' + encodeURIComponent(msg), '_blank', 'noopener');
+      };
+    }
+    renderProductDetail();
+    window.addEventListener('velora:catalogUpdated', renderProductDetail);
   </script>
-<script>window.addEventListener('velora:catalogUpdated', function(){ if (typeof renderProductDetail === 'function') renderProductDetail(); });</script>
 </body>
 </html>
+
 
 
 

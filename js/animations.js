@@ -155,3 +155,25 @@
 })();
 
 
+
+/* Interactive Spotlight Hotspots & Testimonial Carousel Controls */
+(function(){
+  var pins = document.querySelectorAll('.hotspot-pin');
+  var card = document.getElementById('hotspotDisplayCard');
+  if (pins.length && card) {
+    pins.forEach(function(pin){
+      pin.addEventListener('click', function(){
+        pins.forEach(function(p){ p.classList.remove('is-active'); });
+        pin.classList.add('is-active');
+        var h4 = card.querySelector('h4');
+        var p = card.querySelector('p');
+        if (h4) h4.textContent = pin.getAttribute('data-title') || '';
+        if (p) p.textContent = pin.getAttribute('data-detail') || '';
+      });
+    });
+  }
+  var track = document.getElementById('testimonialsTrack');
+  document.getElementById('reviewPrevBtn')?.addEventListener('click', function(){ if(track) track.scrollBy({ left: -340, behavior: 'smooth' }); });
+  document.getElementById('reviewNextBtn')?.addEventListener('click', function(){ if(track) track.scrollBy({ left: 340, behavior: 'smooth' }); });
+})();
+

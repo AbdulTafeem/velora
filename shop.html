@@ -76,7 +76,7 @@
     #shopCatalogGrid .mini-swatch { width: 11px; height: 11px; border-radius: 50%; border: 1px solid rgba(43,5,11,0.25); }
     @keyframes cardFadeUp { from { opacity: 0; transform: translate3d(0, 10px, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
     #shopCatalogGrid .product-card { animation: cardFadeUp 0.38s cubic-bezier(0.22, 1, 0.36, 1) both; }
-      @media (max-width: 640px) {
+      @media (max-width: 640px) { .shop-sidebar, #shopCatalogGrid .product-card { backdrop-filter: blur(8px) !important; -webkit-backdrop-filter: blur(8px) !important; background: rgba(255, 253, 248, 0.82) !important; }
       .shop-hero { padding: 7.4rem 0 2.35rem !important; }
       .shop-hero .section-title { font-size: 1.75rem !important; }
       .shop-layout { padding-block: 1.75rem 5.5rem !important; gap: 1.35rem !important; }
@@ -157,7 +157,7 @@
       <div class="filter-group">
         <h4>Category</h4>
         <div class="filter-check-list" id="shopCatFilters">
-          <label><input type="radio" name="cat" value="all" checked /> All Pieces (8)</label>
+          <label><input type="radio" name="cat" value="all" checked /> All Pieces (<span id="allPiecesCount">8</span>)</label>
           <label><input type="radio" name="cat" value="clothes-rack" /> Clothes Racks</label>
           <label><input type="radio" name="cat" value="storage-rack" /> Storage Racks</label>
           <label><input type="radio" name="cat" value="shoe-rack" /> Shoe &amp; Valet Racks</label>
@@ -304,11 +304,11 @@
       let maxPrice = 4000;
 
       function renderShop() {
-        let list = VELORA_PRODUCTS.filter((p) => (selectedCat === 'all' || p.category === selectedCat) && p.price <= maxPrice);
+        let list = VELORA_PRODUCTS.filter((p) => (selectedCat === 'all' || p.category === selectedCat || p.category.replace(/s$/,'') === selectedCat.replace(/s$/,'')) && p.price <= maxPrice);
         if (sortSelect.value === 'price-asc') list.sort((a, b) => a.price - b.price);
         if (sortSelect.value === 'price-desc') list.sort((a, b) => b.price - a.price);
 
-        countLabel.textContent = `Showing ${list.length} product${list.length === 1 ? '' : 's'}`;
+        const allSpan = document.getElementById('allPiecesCount'); if (allSpan) allSpan.textContent = VELORA_PRODUCTS.length; countLabel.textContent = 'Showing ' + list.length + ' product' + (list.length === 1 ? '' : 's');
         grid.innerHTML = list.map((p) => `
           <article class="product-card">
             <div class="product-media">
@@ -376,6 +376,7 @@
 
 </body>
 </html>
+
 
 
 
