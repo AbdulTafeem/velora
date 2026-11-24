@@ -321,6 +321,8 @@
       }
       saveState();
       window.addEventListener('velora:catalogUpdated', () => { renderProducts(); });
+    window.addEventListener('load', () => { if (productsGrid && !productsGrid.children.length) renderProducts(); });
+  setTimeout(() => { if (productsGrid && !productsGrid.children.length) renderProducts(); }, 600);
   renderProducts();
       renderCart();
       return;
@@ -473,9 +475,12 @@
   };
 
   window.addEventListener('velora:catalogUpdated', () => { renderProducts(); });
+    window.addEventListener('load', () => { if (productsGrid && !productsGrid.children.length) renderProducts(); });
+  setTimeout(() => { if (productsGrid && !productsGrid.children.length) renderProducts(); }, 600);
   renderProducts();
   renderCart();
 })();
+
 
 
 
