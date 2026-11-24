@@ -1,0 +1,303 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shop All Pieces | VELORA India</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Poppins:wght@300;400;500;600&display=swap" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%232B050B'/%3E%3Cpath d='M12 36L32 16L52 36' stroke='%23D4AF37' stroke-width='4' fill='none'/%3E%3Ctext x='32' y='52' text-anchor='middle' font-family='Georgia,serif' font-weight='bold' font-size='18' fill='%23F1DC9A'%3EV%3C/text%3E%3C/svg%3E" />
+  <meta property="og:title" content="VELORA — Luxury Home Furniture &amp; Storage Racks India" />
+  <meta property="og:description" content="Heavy-gauge steel clothes racks, marble-base stands, and wall shelves with free insured delivery across India." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/images/logo-velvet.jpg" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/sections.css" />
+  <style>
+    .shop-hero { padding: 9.5rem 0 4rem; background: var(--grad-velvet); color: var(--cream); text-align: center; border-bottom: 1px solid rgba(212,175,55,0.3); }
+    .shop-layout { display: grid; grid-template-columns: 270px 1fr; gap: 2.5rem; padding-block: 4rem; align-items: start; }
+    .shop-sidebar { background: var(--white); padding: 1.75rem; border-radius: 4px; border: 1px solid rgba(43,5,11,0.1); position: sticky; top: 6.5rem; display: flex; flex-direction: column; gap: 1.65rem; }
+    .filter-group h4 { font-family: var(--font-display); font-size: 0.85rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--maroon-900); margin-bottom: 0.85rem; padding-bottom: 0.45rem; border-bottom: 1px solid rgba(212,175,55,0.3); }
+    .filter-check-list { display: flex; flex-direction: column; gap: 0.55rem; font-size: var(--text-sm); }
+    .filter-check-list label { display: flex; align-items: center; gap: 0.6rem; cursor: pointer; }
+    .filter-check-list input[type="radio"] { accent-color: var(--maroon-900); width: 16px; height: 16px; }
+    .shop-toolbar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1.75rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-dark); }
+    .shop-sort-select { padding: 0.55rem 1.15rem; border-radius: 4px; border: 1px solid rgba(43,5,11,0.2); background: var(--white); font-size: var(--text-xs); cursor: pointer; }
+    .shop-catalog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.65rem; }
+    @media (max-width: 1024px) { .shop-layout { grid-template-columns: 1fr; } .shop-sidebar { position: static; } .shop-catalog-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .shop-catalog-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body><div class="page-transition-curtain" id="pageTransitionCurtain" aria-hidden="true"></div>
+  <a href="#top" class="skip-link">Skip to main content</a>
+  <div class="grain-overlay" aria-hidden="true"></div>
+  <header class="site-header is-scrolled" id="siteHeader">
+    <nav class="navbar" aria-label="Primary Navigation">
+      <div class="container navbar-inner">
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+        <a href="index.html" class="brand-logo" aria-label="Velora Home">
+          <span class="brand-wordmark"><span class="brand-line"></span>VELORA<span class="brand-line"></span></span>
+          <span class="brand-sub">Elevate Your Lifestyle</span>
+        </a>
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="shop.html" class="nav-link is-active">Catalog</a></li>
+          <li><a href="product.html?id=vel-06" class="nav-link">Marble T-Stand</a></li>
+          <li><a href="index.html#rooms" class="nav-link">Shop by Room</a></li>
+          <li><a href="#footer" class="nav-link">Contact</a></li>
+        </ul>
+        <div class="nav-actions">
+          <button class="icon-btn" id="cartOpenBtn" aria-label="Shopping Bag">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            <span class="action-badge" id="cartCount">0</span>
+          </button>
+        </div>
+      </div>
+    <div class="scroll-progress-bar" id="scrollProgressBar" aria-hidden="true"></div></nav>
+  </header>
+
+  <!-- Mobile Navigation Drawer -->
+  <div class="mobile-drawer" id="mobileDrawer" aria-hidden="true" data-lenis-prevent>
+    <div class="mobile-drawer-header">
+      <span class="font-display text-gold-gradient" style="font-size:1.35rem;font-weight:600;">VELORA</span>
+      <button id="mobileMenuClose" aria-label="Close menu">&times;</button>
+    </div>
+    <ul class="mobile-nav-list">
+      <li><a href="index.html" class="mobile-nav-link">Home</a></li>
+      <li><a href="shop.html" class="mobile-nav-link">Catalog</a></li>
+      <li><a href="product.html?id=vel-06" class="mobile-nav-link">Marble T-Stand</a></li>
+      <li><a href="index.html#rooms" class="mobile-nav-link">Shop by Room</a></li>
+      <li><a href="#footer" class="mobile-nav-link">Contact</a></li>
+    </ul>
+    <div class="mobile-drawer-footer"><p>Free Shipping Across India &bull; COD + UPI Available</p></div>
+  </div>
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+
+  <section class="shop-hero">
+    <div class="container">
+      <span class="section-eyebrow">Complete Product Range</span>
+      <h1 class="section-title" style="font-size:var(--text-2xl);">Home Furniture &amp; Storage Racks</h1>
+      <p style="max-width:54ch;margin:0.85rem auto 0;color:rgba(251,245,236,0.8);font-size:var(--text-sm);">
+        Free Insured Shipping Across India &bull; Cash on Delivery &amp; UPI Available
+      </p>
+    </div>
+  </section>
+
+  <main class="container shop-layout">
+    <aside class="shop-sidebar" aria-label="Filter Products">
+      <div class="filter-group">
+        <h4>Category</h4>
+        <div class="filter-check-list" id="shopCatFilters">
+          <label><input type="radio" name="cat" value="all" checked /> All Pieces (8)</label>
+          <label><input type="radio" name="cat" value="clothes-rack" /> Clothes Racks</label>
+          <label><input type="radio" name="cat" value="storage-rack" /> Storage Racks</label>
+          <label><input type="radio" name="cat" value="shoe-rack" /> Shoe &amp; Valet Racks</label>
+          <label><input type="radio" name="cat" value="wall-shelf" /> Wall Shelves</label>
+          <label><input type="radio" name="cat" value="stool" /> Metal Stools</label>
+          <label><input type="radio" name="cat" value="decor" /> Wall Lighting</label>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <h4>Max Price: <span id="maxPriceLabel">₹10,000</span></h4>
+        <input type="range" id="priceRangeInput" min="3500" max="10000" step="500" value="10000" style="width:100%;accent-color:var(--maroon-900);cursor:pointer;" />
+      </div>
+
+      <button type="button" class="btn-magnetic btn-maroon" id="resetShopFilters" style="width:100%;padding-block:0.7rem;">
+        <span class="btn-text">Reset Filters</span>
+      </button>
+    </aside>
+
+    <div>
+      <div class="shop-toolbar">
+        <span id="shopResultCount" style="font-size:var(--text-sm);color:var(--ink-muted);">Showing 8 products</span>
+        <select id="shopSortSelect" class="shop-sort-select" aria-label="Sort products">
+          <option value="featured">Sort by: Featured</option>
+          <option value="price-asc">Price: Low to High (₹)</option>
+          <option value="price-desc">Price: High to Low (₹)</option>
+        </select>
+      </div>
+      <div class="shop-catalog-grid" id="shopCatalogGrid"></div>
+    </div>
+  </main>
+
+  <footer class="site-footer" id="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <span class="font-display text-gold-gradient" style="font-size:1.65rem;font-weight:600;letter-spacing:0.12em;">VELORA</span>
+          <p class="footer-brand-desc">Steel clothes racks, marble-base stands, and modern storage furniture built for Indian homes.</p>
+        </div>
+        <div>
+          <h3 class="footer-heading">Categories</h3>
+          <ul class="footer-links">
+            <li><a href="shop.html">All Products</a></li>
+            <li><a href="product.html?id=vel-01">Stepped Chrome Rack</a></li>
+            <li><a href="product.html?id=vel-06">Carrara Marble T-Stand</a></li>
+            <li><a href="product.html?id=vel-04">Circular Wall Shelf</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="footer-heading">Client Care</h3>
+          <ul class="footer-links">
+            <li><a href="index.html#why-velora">Free Pan-India Shipping</a></li>
+            <li><a href="index.html#why-velora">7-Day Easy Replacement</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="footer-heading">Support</h3>
+          <ul class="footer-contact">
+            <li>Mon &ndash; Sat: 10:00 AM &ndash; 7:00 PM IST</li>
+            <li>WhatsApp: +91 98765 43210</li>
+            <li>Email: concierge@veloraliving.in</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 VELORA Living India. All rights reserved.</p>
+        <div class="payment-pills">
+          <span class="pay-pill">UPI / GPay / PhonePe</span>
+          <span class="pay-pill">VISA</span>
+          <span class="pay-pill">MASTERCARD</span>
+          <span class="pay-pill">RUPAY</span>
+          <span class="pay-pill">COD AVAILABLE</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/919876543210?text=Hello%20VELORA!%20I%20would%20like%20assistance%20with%20your%20furniture%20collection."
+     target="_blank" rel="noopener noreferrer" class="whatsapp-float" aria-label="Chat with Velora on WhatsApp">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824z"/></svg>
+    <span>WhatsApp Concierge</span>
+  </a>
+
+  <!-- Shared Cart Drawer & Quick-View Modal -->
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping Bag" aria-hidden="true">
+    <div class="cart-drawer-header">
+      <h3>YOUR VELORA BAG (<span id="drawerBagCount">0</span>)</h3>
+      <button class="drawer-close-btn" id="cartCloseBtn" aria-label="Close bag">&times;</button>
+    </div>
+    <div class="cart-shipping-bar">&#10022; Free Shipping Across India &bull; COD + UPI Eligible</div>
+    <div class="cart-items-body" id="cartItemsContainer" data-lenis-prevent></div>
+    <div class="cart-drawer-footer">
+      <div class="promo-row">
+        <input type="text" id="promoCodeInput" placeholder="Promo code (try VELORA10)" />
+        <button type="button" id="applyPromoBtn">Apply</button>
+      </div>
+      <div class="cart-summary-row"><span>Subtotal</span><strong id="cartSubtotal">₹0</strong></div>
+      <div class="cart-summary-row" id="discountRow" style="display:none;color:#15803d;"><span>Welcome Privilege (10% OFF)</span><strong id="cartDiscount">-₹0</strong></div>
+      <div class="cart-summary-row cart-total-row"><span>Total Payable</span><span id="cartGrandTotal">₹0</span></div>
+      <div class="cart-cta-stack">
+        <button type="button" class="btn-magnetic btn-gold" id="whatsappCheckoutBtn"><span class="btn-text">Order via WhatsApp &rarr;</span></button>
+        <button type="button" class="btn-magnetic btn-maroon" id="expressCheckoutBtn"><span class="btn-text">Pay via UPI / COD &mdash; Coming Soon</span></button>
+      </div>
+    </div>
+  </aside>
+
+  <div class="qv-modal" id="quickViewModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="qv-dialog" data-lenis-prevent>
+      <button class="qv-close" id="qvCloseBtn" aria-label="Close quick view">&times;</button>
+      <div class="qv-media"><img id="qvImage" src="" alt="" /></div>
+      <div class="qv-content">
+        <span class="badge-shimmer" id="qvBadge">Best Seller</span>
+        <h3 class="qv-title" id="qvTitle">Product Name</h3>
+        <div class="product-price-box">
+          <span class="price-now" id="qvPrice" style="font-size:1.35rem;">₹4,999</span>
+          <span class="price-mrp" id="qvMrp">₹6,999</span>
+        </div>
+        <p class="qv-desc" id="qvDesc"></p>
+        <div>
+          <span class="finish-label" style="color:var(--maroon-800);display:block;margin-bottom:0.45rem;">Select Finish:</span>
+          <div class="qv-finishes" id="qvFinishes"></div>
+        </div>
+        <p style="font-size:0.78rem;color:var(--ink-muted);" id="qvDimensions"></p>
+        <div style="display:flex;gap:0.75rem;margin-top:0.5rem;">
+          <button type="button" class="btn-magnetic btn-gold" id="qvAddToCartBtn" style="flex:1;"><span class="btn-text">Add to Bag</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="velora-toast" id="veloraToast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="https://unpkg.com/split-type@0.3.4/umd/index.min.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/animations.js"></script>
+  <script>
+    (function () {
+      const grid = document.getElementById('shopCatalogGrid');
+      const countLabel = document.getElementById('shopResultCount');
+      const priceInput = document.getElementById('priceRangeInput');
+      const priceLabel = document.getElementById('maxPriceLabel');
+      const sortSelect = document.getElementById('shopSortSelect');
+      let selectedCat = 'all';
+      let maxPrice = 10000;
+
+      function renderShop() {
+        let list = VELORA_PRODUCTS.filter((p) => (selectedCat === 'all' || p.category === selectedCat) && p.price <= maxPrice);
+        if (sortSelect.value === 'price-asc') list.sort((a, b) => a.price - b.price);
+        if (sortSelect.value === 'price-desc') list.sort((a, b) => b.price - a.price);
+
+        countLabel.textContent = `Showing ${list.length} product${list.length === 1 ? '' : 's'}`;
+        grid.innerHTML = list.map((p) => `
+          <article class="product-card">
+            <div class="product-media">
+              <div class="product-top-bar"><span class="badge-shimmer">${p.badge}</span></div>
+              <a href="product.html?id=${p.id}" class="product-media-link" aria-label="View ${p.name}">
+                <img src="${p.image}" alt="${p.name}" class="product-img-main" loading="lazy" />
+                <img src="${p.hoverImage}" alt="${p.name}" class="product-img-hover" loading="lazy" />
+              </a>
+              <div class="product-quick-actions">
+                <button type="button" class="btn-quick-view" data-qv="${p.id}">Quick View</button>
+              </div>
+            </div>
+            <div class="product-body">
+              <h3 class="product-title"><a href="product.html?id=${p.id}">${p.name}</a></h3>
+              <div class="product-footer-row">
+                <div class="product-price-box">
+                  <span class="price-now">${formatINR(p.price)}</span>
+                  <span class="price-mrp">${formatINR(p.mrp)}</span>
+                </div>
+                <button type="button" class="btn-add-cart" data-add="${p.id}">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+        `).join('');
+        if (typeof window.bindVeloraCardTilt === 'function') window.bindVeloraCardTilt();
+      }
+
+      document.getElementById('shopCatFilters').addEventListener('change', (e) => {
+        selectedCat = e.target.value;
+        renderShop();
+      });
+      priceInput.addEventListener('input', (e) => {
+        maxPrice = Number(e.target.value);
+        priceLabel.textContent = formatINR(maxPrice);
+        renderShop();
+      });
+      sortSelect.addEventListener('change', renderShop);
+      document.getElementById('resetShopFilters').addEventListener('click', () => {
+        selectedCat = 'all';
+        maxPrice = 10000;
+        priceInput.value = 10000;
+        priceLabel.textContent = '₹10,000';
+        sortSelect.value = 'featured';
+        document.querySelector('input[name="cat"][value="all"]').checked = true;
+        renderShop();
+      });
+      renderShop();
+    })();
+  </script>
+</body>
+</html>
+
+
+
+
