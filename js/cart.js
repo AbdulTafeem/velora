@@ -52,18 +52,18 @@
     }
   }
 
-    function getFinishSwatchStyle(finishName) {
-  if (f.includes('silver')) return 'background:linear-gradient(135deg,#f8fafc,#94a3b8);';
-  if (f.includes('gold')) return 'background:linear-gradient(135deg,#f3e5ab,#d4af37);';
-  if (f.includes('black') || f.includes('obsidian')) return 'background:linear-gradient(135deg,#27272a,#09090b);';
-  if (f.includes('teak') || f.includes('walnut') || f.includes('wood')) return 'background:linear-gradient(135deg,#8b5a2b,#3e2723);';
-    const f = finishName.toLowerCase();
-    if (f.includes('Silver') || f.includes('brass')) return 'background:linear-gradient(135deg,#f8fafc,#94a3b8);';
-    if (f.includes('chrome') || f.includes('steel')) return 'background:linear-gradient(135deg,#f4f4f5,#a1a1aa);';
-    if (f.includes('Natural Teak Wood')) return 'background:linear-gradient(135deg,#fafaf9 50%,#1c1917 50%);';
-    if (f.includes('maroon')) return 'background:linear-gradient(135deg,#0d0d10,#0d0d10);';
+      function formatINR(amount) {
+    return '₹' + Number(amount || 0).toLocaleString('en-IN');
+  }
+
+  function getFinishSwatchStyle(finishName) {
+    const f = String(finishName || '').toLowerCase();
+    if (f.includes('gold') || f.includes('champagne') || f.includes('brass')) return 'background:linear-gradient(135deg,#f3e5ab,#d4af37);';
+    if (f.includes('silver') || f.includes('chrome') || f.includes('steel')) return 'background:linear-gradient(135deg,#f8fafc,#94a3b8);';
+    if (f.includes('teak') || f.includes('walnut') || f.includes('wood')) return 'background:linear-gradient(135deg,#8b5a2b,#3e2723);';
+    if (f.includes('maroon')) return 'background:linear-gradient(135deg,#5a0b18,#2b050b);';
     if (f.includes('olive')) return 'background:linear-gradient(135deg,#4d5d3b,#2c3621);';
-    return 'background:linear-gradient(135deg,#27272a,#0d0d10);';
+    return 'background:linear-gradient(135deg,#27272a,#09090b);';
   }
   function showToast(message) {
     if (!toastEl) return;
@@ -480,6 +480,7 @@
   renderProducts();
   renderCart();
 })();
+
 
 
 
