@@ -2432,3 +2432,12 @@
 .product-card:hover .product-img-main, .product-card:active .product-img-main { opacity: 1 !important; visibility: visible !important; }
 
 .product-card:hover .product-img-main, .product-card:active .product-img-main { opacity: 1 !important; visibility: visible !important; } .product-card:hover .product-img-hover, .product-card:active .product-img-hover { opacity: 0 !important; }
+
+/* === VELORA FULL-SITE UI AUDIT POLISH === */
+html, body { max-width: 100%; overflow-x: clip; }
+.product-card:hover .product-img-main,
+.product-card:active .product-img-main { opacity: 1 !important; visibility: visible !important; transform: scale(1.04) !important; }
+.product-card:hover .product-img-hover,
+.product-card:active .product-img-hover { opacity: 0 !important; }
+.product-title a { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.price-mrp { text-decoration: line-through; opacity: 0.6; font-size: 0.85em; margin-left: 0.4rem; }

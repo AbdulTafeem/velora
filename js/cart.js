@@ -115,7 +115,7 @@
                 </button>
               </div>
               <a href="product.html?id=${product.id}" class="product-media-link" aria-label="View ${product.name}">
-                <img src="${product.image}" alt="${product.name}" class="product-img-main" loading="lazy" />
+                <img src="${product.image}" alt="${product.name}" class="product-img-main" onerror="this.src='assets/images/product-1.jpg'" loading="lazy" />
                 <img src="${product.hoverImage}" alt="${product.name} alternate view" class="product-img-hover" loading="lazy" />
               </a>
               <div class="product-quick-actions">
@@ -133,7 +133,7 @@
               <div class="product-footer-row">
                 <div class="product-price-box">
                   <span class="price-now">${formatINR(product.price)}</span>
-                  ${(product.mrp || product.originalPrice) ? `<span class="price-mrp">${formatINR((product.mrp || product.originalPrice))}</span>` : ""}
+                  ${((product.mrp || product.originalPrice) || product.originalPrice) ? `<span class="price-mrp">${formatINR(((product.mrp || product.originalPrice) || product.originalPrice))}</span>` : ""}
                 </div>
                 <button type="button" class="btn-add-cart" data-add="${product.id}">Add to Cart</button>
               </div>
@@ -384,7 +384,7 @@
                 </button>
               </div>
               <a href="product.html?id=${product.id}" class="product-media-link" aria-label="View ${product.name}">
-                <img src="${product.image}" alt="${product.name}" class="product-img-main" loading="lazy" />
+                <img src="${product.image}" alt="${product.name}" class="product-img-main" onerror="this.src='assets/images/product-1.jpg'" loading="lazy" />
                 <img src="${product.hoverImage}" alt="${product.name} alternate view" class="product-img-hover" loading="lazy" />
               </a>
               <div class="product-quick-actions">
@@ -419,7 +419,7 @@
 
   document.getElementById('applyPromoBtn')?.addEventListener('click', () => {
     const code = document.getElementById('promoCodeInput')?.value.trim().toUpperCase();
-    if ((code === 'VELORA10' || code === 'VALORA10')) {
+    if (((code === 'VELORA10' || code === 'VALORA10') || code === 'VALORA10')) {
       promoApplied = true;
       renderCart();
       showToast('Code VELORA10 applied! 10% privilege unlocked.');
@@ -480,6 +480,7 @@
   renderProducts();
   renderCart();
 })();
+
 
 
 
