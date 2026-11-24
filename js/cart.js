@@ -143,7 +143,17 @@
       })
       .join('');
 
-        
+        if (typeof gsap !== 'undefined' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      gsap.fromTo(
+        productsGrid.querySelectorAll('.product-card'),
+        { y: 22, opacity: 0, scale: 0.98 },
+        { y: 0, opacity: 1, scale: 1, duration: 0.55, stagger: 0.06, ease: 'power3.out', clearProps: 'transform,opacity' }
+      );
+    }
+    if (typeof window.bindVeloraCardTilt === 'function') {
+      window.bindVeloraCardTilt();
+    }
+  }
 
   function addToCart(productId, chosenFinish) {
     if (typeof VELORA_PRODUCTS === 'undefined') return;
@@ -470,8 +480,6 @@
   renderProducts();
   renderCart();
 })();
-
-
 
 
 
