@@ -433,22 +433,30 @@
 
 
 
-/* === HAUTE-COUTURE ROYAL VELVET RED-CARPET CURTAIN REVEAL === */
+/* === TRUE HAUTE-COUTURE SILK-VELVET ARCHITECTURAL PRELOADER === */
 .preloader { background: transparent !important; overflow: hidden !important; }
 .preloader::before { display: none !important; }
 .curtain-panel {
-  position: absolute; top: 0; bottom: 0; width: 50.5%; z-index: 1;
-  background:
-    radial-gradient(ellipse at 50% 35%, rgba(212, 175, 55, 0.14) 0%, transparent 65%),
-    repeating-linear-gradient(90deg, rgba(16, 2, 5, 0.42) 0px, rgba(88, 12, 26, 0.18) 28px, rgba(22, 3, 7, 0.45) 56px),
-    linear-gradient(180deg, #3f0711 0%, #240409 55%, #140205 100%);
+  position: absolute; top: 0; bottom: 0; width: 50%; z-index: 1;
+  background: radial-gradient(circle at 50% 42%, #480814 0%, #230309 62%, #110104 100%);
   will-change: transform;
-  transition: transform 0.85s cubic-bezier(0.76, 0, 0.24, 1);
+  transition: transform 0.95s cubic-bezier(0.83, 0, 0.17, 1);
 }
-.curtain-left { left: 0; border-right: 1px solid rgba(212, 175, 55, 0.55); box-shadow: inset -18px 0 40px rgba(0, 0, 0, 0.55); }
-.curtain-right { right: 0; border-left: 1px solid rgba(212, 175, 55, 0.55); box-shadow: inset 18px 0 40px rgba(0, 0, 0, 0.55); }
-.preloader.is-parting .curtain-left { transform: translate3d(-102%, 0, 0); }
-.preloader.is-parting .curtain-right { transform: translate3d(102%, 0, 0); }
-.preloader-logo-wrap { z-index: 3; transition: opacity 0.38s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1); }
-.preloader.is-parting .preloader-logo-wrap { opacity: 0; transform: scale(0.96) translateY(-8px); }
+.curtain-left { left: 0; background-position: 100% 42%; background-size: 200% 100%; border-right: none; box-shadow: none; }
+.curtain-right { right: 0; background-position: 0% 42%; background-size: 200% 100%; border-left: none; box-shadow: none; }
+.preloader.is-parting .curtain-left { transform: translate3d(-101%, 0, 0); border-right: 1px solid rgba(212, 175, 55, 0.45); }
+.preloader.is-parting .curtain-right { transform: translate3d(101%, 0, 0); border-left: 1px solid rgba(212, 175, 55, 0.45); }
+.preloader-frame {
+  position: absolute; inset: 24px; z-index: 2; pointer-events: none;
+  border: 1px solid rgba(212, 175, 55, 0.24);
+  transition: opacity 0.4s ease, transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.preloader.is-parting .preloader-frame { opacity: 0; transform: scale(1.03); }
+.preloader-crest path { stroke-dasharray: 220; stroke-dashoffset: 220; animation: crestDraw 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+@keyframes crestDraw { to { stroke-dashoffset: 0; } }
+.preloader-brand { animation: brandSettle 0.75s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes brandSettle { from { opacity: 0; letter-spacing: 0.38em; transform: translateY(6px); } to { opacity: 1; letter-spacing: 0.24em; transform: translateY(0); } }
+.preloader-logo-wrap { z-index: 3; transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1); }
+.preloader.is-parting .preloader-logo-wrap { opacity: 0; transform: translateY(-10px); }
+
 
