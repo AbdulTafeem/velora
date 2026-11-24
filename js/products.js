@@ -169,7 +169,7 @@ const VELORA_DEFAULT_SHEET_CSV = "https://docs.google.com/spreadsheets/d/1yskAN_
       .then(csvText => {
         const lines = csvText.split(/\r?\n/).filter(l => l.trim());
         if (lines.length < 2) return;
-        const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+        const headers = lines[0].split(",").map(h => h.replace(/^"|"$/g, "").trim().toLowerCase());
         const sheetItems = lines.slice(1).map((line, i) => {
           const cols = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/^"|"$/g, '').trim());
           const row = {};
@@ -182,7 +182,7 @@ const VELORA_DEFAULT_SHEET_CSV = "https://docs.google.com/spreadsheets/d/1yskAN_
             category: row.category || 'clothes-racks',
             room: row.room || 'Bedroom',
             price,
-            originalPrice: Number((row.mrp || '').replace(/[^0-9]/g, '')) || Math.round(price * 1.25),
+            mrp: Number((row.mrp || '').replace(/[^0-9]/g, '')) || Math.round(price * 1.25),
             badge: row.badge || 'NEW ARRIVAL',
             image: row.image || 'assets/images/product-1.jpg',
             hoverImage: row.hoverimage || row.image || 'assets/images/product-1.jpg',
@@ -202,6 +202,8 @@ const VELORA_DEFAULT_SHEET_CSV = "https://docs.google.com/spreadsheets/d/1yskAN_
       .catch(() => {});
   } catch (e) {}
 })();
+
+
 
 
 
