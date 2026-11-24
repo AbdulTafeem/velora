@@ -2311,3 +2311,106 @@
 .scroll-progress-bar {
   background: linear-gradient(90deg, #94a3b8, #f8fafc, #d4af37) !important;
 }
+
+/* ==========================================================================
+   ROYAL MAROON & CHAMPAGNE GOLD — EDITORIAL LUXURY POLISH
+   ========================================================================== */
+
+/* 1. Satin Champagne Gold Wordmark Shimmer & Velvet Contrast */
+.hero-wordmark {
+  background: linear-gradient(
+    118deg,
+    #d4af37 0%,
+    #f7e7b4 32%,
+    #e5c158 52%,
+    #fff3cd 72%,
+    #c59b27 100%
+  ) !important;
+  background-size: 200% auto !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  filter: drop-shadow(0 6px 26px rgba(212, 175, 55, 0.24));
+  animation: champagneGlow 6s linear infinite;
+}
+
+@keyframes champagneGlow {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+/* 2. Refined Glassmorphic Hero Caption & Soft Luxury Shadows */
+.hero-slide-caption {
+  background: rgba(34, 4, 10, 0.84) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(212, 175, 55, 0.35) !important;
+  box-shadow: 0 20px 44px rgba(15, 2, 5, 0.45) !important;
+}
+
+.product-card {
+  border: 1px solid rgba(90, 11, 24, 0.09) !important;
+  box-shadow: 0 8px 26px rgba(43, 5, 11, 0.04) !important;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.45s ease, border-color 0.35s ease !important;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(212, 175, 55, 0.55) !important;
+  box-shadow: 0 24px 50px rgba(43, 5, 11, 0.12) !important;
+}
+
+/* 3. Tactile Finish Pills & Metallic Color Dots (Gold, Silver, Black, Wood) */
+.finish-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.4rem !important;
+  border: 1px solid rgba(90, 11, 24, 0.16) !important;
+  transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+.finish-pill:hover {
+  border-color: #5a0b18 !important;
+  transform: translateY(-1px);
+}
+
+.finish-pill.is-active {
+  background: linear-gradient(135deg, #5a0b18 0%, #36060e 100%) !important;
+  color: #fdfbf7 !important;
+  border-color: #d4af37 !important;
+  box-shadow: 0 6px 16px rgba(90, 11, 24, 0.22) !important;
+}
+
+.swatch-dot {
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.45), 0 1px 3px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* 4. Architectural Material Pills in Spotlight */
+.spotlight-specs-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin: 1.35rem 0 1.75rem;
+}
+
+.spotlight-spec-pill {
+  padding: 0.45rem 0.9rem;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  background: rgba(212, 175, 55, 0.08);
+  color: #f7e7b4;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-radius: 2px;
+}
+
+/* 5. Crisp Satin Gold Button Glow */
+.btn-gold {
+  box-shadow: 0 10px 26px rgba(212, 175, 55, 0.28) !important;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease !important;
+}
+
+.btn-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 34px rgba(212, 175, 55, 0.42) !important;
+}
