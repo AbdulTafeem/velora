@@ -52,9 +52,7 @@
     }
   }
 
-      function formatINR(amount) {
-    return '₹' + Number(amount || 0).toLocaleString('en-IN');
-  }
+      function formatINR(amount) { return '₹' + Number(amount || 0).toLocaleString('en-IN'); } window.formatINR = formatINR;
 
   function getFinishSwatchStyle(finishName) {
     const f = String(finishName || '').toLowerCase();
@@ -480,6 +478,7 @@
   renderProducts();
   renderCart();
 })();
+
 
 
 

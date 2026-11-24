@@ -2443,7 +2443,7 @@ html, body { max-width: 100%; overflow-x: clip; }
 .price-mrp { text-decoration: line-through; opacity: 0.6; font-size: 0.85em; margin-left: 0.4rem; }
 
 /* === VELORA FLAGSHIP LUXURY TYPOGRAPHY, TEXT & MOTION POLISH === */
-0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
 
 :root {
   --font-display: 'Cormorant Garamond', Georgia, serif;
@@ -2559,7 +2559,7 @@ footer, .site-footer { margin-top: 0 !important; border-top: 1px solid rgba(212,
 
 
 /* === ZERO-JITTER GPU REVEALS & SECTION SPACING === */
-.velora-reveal { opacity: 0; transform: translate3d(0, 16px, 0); transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1), transform 0.55s cubic-bezier(0.22, 1, 0.36, 1); }
+.velora-reveal { opacity: 1; transform: translate3d(0, 16px, 0); transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1), transform 0.55s cubic-bezier(0.22, 1, 0.36, 1); }
 .velora-reveal.is-revealed { opacity: 1; transform: translate3d(0, 0, 0); }
 #why-velora.why-section { padding-top: 5.5rem !important; padding-bottom: 5rem !important; min-height: auto !important; overflow: visible !important; }
 #why-velora .why-header { margin-bottom: 3rem !important; padding-top: 0.5rem !important; }
@@ -2567,4 +2567,5 @@ footer, .site-footer { margin-top: 0 !important; border-top: 1px solid rgba(212,
 
 
 #shopCatalogGrid { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)) !important; gap: 1.5rem !important; opacity: 1 !important; visibility: visible !important; min-height: 320px; }
+
 
