@@ -19,7 +19,7 @@ const VELORA_PRODUCTS = [
     price: 3499,
     mrp: 3999, originalPrice: 3999,
     badge: 'Best Seller',
-    badgeType: 'Silver',
+    badgeType: (row.stock !== undefined && row.stock !== '' && Number(String(row.stock).replace(/[^0-9]/g, '')) <= 4) ? 'maroon' : 'Silver',
     image: 'assets/images/product-5.jpg',
     hoverImage: 'assets/images/product-1-hover.jpg',
     finishes: ['Mirror Chrome', 'Brushed Silver', 'Matte Black'],
@@ -34,7 +34,7 @@ const VELORA_PRODUCTS = [
     price: 3499,
     mrp: 3999, originalPrice: 3999,
     badge: 'New Release',
-    badgeType: 'Silver',
+    badgeType: (row.stock !== undefined && row.stock !== '' && Number(String(row.stock).replace(/[^0-9]/g, '')) <= 4) ? 'maroon' : 'Silver',
     image: 'assets/images/product-2.jpg',
     hoverImage: 'assets/images/product-1-hover.jpg',
     finishes: ['Satin Steel', 'Brushed Silver'],
@@ -64,7 +64,7 @@ const VELORA_PRODUCTS = [
     price: 3999,
     mrp: 3999, originalPrice: 3999,
     badge: 'Popular',
-    badgeType: 'Silver',
+    badgeType: (row.stock !== undefined && row.stock !== '' && Number(String(row.stock).replace(/[^0-9]/g, '')) <= 4) ? 'maroon' : 'Silver',
     image: 'assets/images/product-3.jpg',
     hoverImage: 'assets/images/decor-lamp.jpg',
     finishes: ['Matte Black', 'Brushed Silver'],
@@ -94,7 +94,7 @@ const VELORA_PRODUCTS = [
     price: 3499,
     mrp: 3999, originalPrice: 3999,
     badge: 'Signature',
-    badgeType: 'Silver',
+    badgeType: (row.stock !== undefined && row.stock !== '' && Number(String(row.stock).replace(/[^0-9]/g, '')) <= 4) ? 'maroon' : 'Silver',
     image: 'assets/images/spotlight-tstand.jpg',
     hoverImage: 'assets/images/product-5.jpg',
     finishes: ['Natural Teak Wood / Matte Black', 'Smoked Walnut Wood / Brushed Silver'],
@@ -109,7 +109,7 @@ const VELORA_PRODUCTS = [
     price: 3499,
     mrp: 3999, originalPrice: 3999,
     badge: 'Ready to Ship',
-    badgeType: 'Silver',
+    badgeType: (row.stock !== undefined && row.stock !== '' && Number(String(row.stock).replace(/[^0-9]/g, '')) <= 4) ? 'maroon' : 'Silver',
     image: 'assets/images/decor-lamp.jpg',
     hoverImage: 'assets/images/product-3.jpg',
     finishes: ['Warm 2700K Bronze', 'Matte Black'],
@@ -163,7 +163,7 @@ const VELORA_DEFAULT_SHEET_CSV = "https://docs.google.com/spreadsheets/d/1yskAN_
           const cols = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/^"|"$/g, '').trim());
           const row = {};
           headers.forEach((h, idx) => row[h] = cols[idx] || '');
-          if (!row.name || !row.price) return null;
+          if (!row.name || !row.price) return null; if ((row.status || '').trim().toLowerCase() === 'hide' || (row.status || '').trim().toLowerCase() === 'draft') return null;
           const price = Number(String(row.price).replace(/[^0-9]/g, '')) || 3499;
           const mrp = Number(String(row.mrp || '').replace(/[^0-9]/g, '')) || null;
           return {
@@ -174,8 +174,8 @@ const VELORA_DEFAULT_SHEET_CSV = "https://docs.google.com/spreadsheets/d/1yskAN_
             price: price,
             mrp: mrp,
             originalPrice: mrp,
-            badge: row.badge || 'Best Seller',
-            badgeType: 'Silver',
+            stock: row.stock !== undefined && row.stock !== '' ? Number(String(row.stock).replace(/[^0-9]/g, '')) : 12, status: (row.status || 'Active').trim().toLowerCase(), material: row.material || '304-Grade Stainless Steel & Kiln-Dried Solid Wood', delivery: row.delivery || 'Complimentary insured doorstep delivery across India within 4–6 business days. Cash on Delivery & UPI accepted.', badge: (row.stock !== undefined && row.stock !== '' && Number(String(row.stock).replace(/[^0-9]/g, '')) === 0) ? 'Sold Out' : ((row.stock !== undefined && row.stock !== '' && Number(String(row.stock).replace(/[^0-9]/g, '')) <= 4) ? ('Only ' + Number(String(row.stock).replace(/[^0-9]/g, '')) + ' Left') : (row.badge || 'Best Seller')),
+            badgeType: (row.stock !== undefined && row.stock !== '' && Number(String(row.stock).replace(/[^0-9]/g, '')) <= 4) ? 'maroon' : 'Silver',
             image: row.image || 'assets/images/product-1.jpg',
             hoverImage: row.hoverimage || row.image || 'assets/images/product-1.jpg',
             finishes: row.finishes ? row.finishes.split('|').map(s => s.trim()).filter(Boolean) : ['Brushed Silver', 'Brushed Gold', 'Matte Black'],
@@ -190,5 +190,6 @@ const VELORA_DEFAULT_SHEET_CSV = "https://docs.google.com/spreadsheets/d/1yskAN_
       });
   } catch (e) {}
 })();
+
 
 

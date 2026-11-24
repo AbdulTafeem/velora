@@ -135,7 +135,7 @@
                   <span class="price-now">${formatINR(product.price)}</span>
                   ${((product.mrp || product.originalPrice) || product.originalPrice) ? `<span class="price-mrp">${formatINR(((product.mrp || product.originalPrice) || product.originalPrice))}</span>` : ""}
                 </div>
-                <button type="button" class="btn-add-cart" data-add="${product.id}">Add to Cart</button>
+                ${product.stock === 0 ? `<button type="button" class="btn-add-cart" disabled style="opacity:0.5;cursor:not-allowed;">Sold Out</button>` : `<button type="button" class="btn-add-cart" data-add="${product.id}">Add to Cart</button>`}
               </div>
             </div>
           </article>
@@ -395,7 +395,7 @@
               <h3 class="product-title"><a href="product.html?id=${product.id}">${product.name}</a></h3>
               <div class="product-footer-row">
                 <div class="product-price-box"><span class="price-now">${formatINR(product.price)}</span></div>
-                <button type="button" class="btn-add-cart" data-add="${product.id}">Add to Cart</button>
+                ${product.stock === 0 ? `<button type="button" class="btn-add-cart" disabled style="opacity:0.5;cursor:not-allowed;">Sold Out</button>` : `<button type="button" class="btn-add-cart" data-add="${product.id}">Add to Cart</button>`}
               </div>
             </div>
           </article>
@@ -480,6 +480,7 @@
   renderProducts();
   renderCart();
 })();
+
 
 
 
