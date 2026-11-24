@@ -168,6 +168,24 @@
     }
   }
 
+    // Subtle Mouse 3D Perspective Parallax on Hero Arch (Desktop only)
+  const heroSectionEl = document.querySelector('.hero-section');
+  const heroArchWrapEl = document.querySelector('.hero-arch-wrap');
+  if (heroSectionEl && heroArchWrapEl && window.matchMedia('(hover: hover) and (pointer: fine)').matches && !prefersReducedMotion && typeof gsap !== 'undefined') {
+    const moveX = gsap.quickTo(heroArchWrapEl, 'x', { duration: 0.8, ease: 'power3.out' });
+    const moveY = gsap.quickTo(heroArchWrapEl, 'y', { duration: 0.8, ease: 'power3.out' });
+    heroSectionEl.addEventListener('mousemove', (e) => {
+      const rect = heroSectionEl.getBoundingClientRect();
+      const nx = ((e.clientX - rect.left) / rect.width - 0.5) * 18;
+      const ny = ((e.clientY - rect.top) / rect.height - 0.5) * 14;
+      moveX(nx);
+      moveY(ny);
+    });
+    heroSectionEl.addEventListener('mouseleave', () => {
+      moveX(0);
+      moveY(0);
+    });
+  }
   // 4. HERO SHOWCASE SLIDER
   const heroSlides = document.querySelectorAll('.hero-slide');
   const heroDots = document.querySelectorAll('.hero-dot');
@@ -457,6 +475,19 @@
             invalidateOnRefresh: true
           }
         });
+        const colFill = document.getElementById('collectionsProgressFill');
+        if (colFill) {
+          gsap.to(colFill, {
+            scaleX: 1,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: collectionsSection,
+              start: 'top top',
+              end: () => `+=${Math.abs(getScrollAmount())}`,
+              scrub: 0.5
+            }
+          });
+        }
       });
     }
 
@@ -533,6 +564,7 @@
     window.addEventListener('load', () => ScrollTrigger.refresh());
   }
 })();
+
 
 
 

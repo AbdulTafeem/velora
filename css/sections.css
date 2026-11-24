@@ -2034,3 +2034,164 @@
 [class*="scroll-indicator"] {
   display: none !important;
 }
+
+
+/* ==========================================================================
+   ULTRA-LUXURY UI DETAILS & SILKY MOTION POLISH
+   ========================================================================== */
+
+/* Subtle Ambient Gold Halo Behind Hero Arch */
+.hero-visual {
+  position: relative;
+}
+
+.hero-visual::before {
+  content: '';
+  position: absolute;
+  inset: 8% 6%;
+  border-radius: 240px 240px 12px 12px;
+  background: radial-gradient(circle at 50% 45%, rgba(212, 175, 55, 0.22) 0%, rgba(90, 11, 24, 0) 70%);
+  filter: blur(28px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-arch-wrap {
+  position: relative;
+  z-index: 1;
+}
+
+/* Smooth Ken Burns Zoom on Active Hero Slide */
+.hero-slide img {
+  transition: transform 6.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.9s ease;
+  transform: scale(1.06);
+}
+
+.hero-slide.is-active img {
+  transform: scale(1);
+}
+
+/* Diagonal Metallic Sheen Sweep on All Luxury Buttons */
+.btn-magnetic {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.35s var(--ease-luxury), box-shadow 0.4s var(--ease-luxury), border-color 0.35s ease;
+}
+
+.btn-magnetic::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 75%;
+  height: 100%;
+  background: linear-gradient(115deg, transparent 0%, rgba(255, 255, 255, 0.35) 50%, transparent 100%);
+  transform: skewX(-20deg);
+  transition: left 0.75s var(--ease-luxury);
+  pointer-events: none;
+}
+
+.btn-magnetic:hover::after {
+  left: 145%;
+}
+
+/* Product Media Smooth Image Crossfade & Subtle Zoom */
+.product-media {
+  overflow: hidden;
+  background: #f4ece0;
+}
+
+.product-img-main,
+.product-img-hover {
+  transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.55s ease !important;
+}
+
+.product-card:hover .product-img-hover {
+  transform: scale(1.045);
+}
+
+/* Room Cards Editorial Glass Overlay & Smooth Zoom */
+.room-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.room-card::after {
+  content: '';
+  position: absolute;
+  inset: 10px;
+  border: 1px solid rgba(212, 175, 55, 0.32);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.45s var(--ease-luxury);
+}
+
+.room-card:hover::after {
+  opacity: 1;
+}
+
+.room-overlay {
+  transition: transform 0.45s var(--ease-luxury);
+}
+
+.room-card:hover .room-overlay {
+  transform: translateY(-4px);
+}
+
+/* Pinned Collections Live Progress Track */
+.collections-progress-wrap {
+  width: 100%;
+  max-width: 320px;
+  height: 2px;
+  background: rgba(212, 175, 55, 0.18);
+  margin-top: 1.5rem;
+  overflow: hidden;
+  display: none;
+}
+
+@media (min-width: 769px) {
+  .collections-progress-wrap {
+    display: block;
+  }
+}
+
+.collections-progress-fill {
+  width: 100%;
+  height: 100%;
+  background: var(--grad-gold);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+/* Refined Why-Velora & Testimonial Card Hover Depth */
+.why-card,
+.testimonial-card {
+  background: var(--surface-card);
+  border: 1px solid rgba(43, 5, 11, 0.08) !important;
+  transition: transform 0.45s var(--ease-luxury), box-shadow 0.45s var(--ease-luxury), border-color 0.4s ease;
+}
+
+.why-card:hover,
+.testimonial-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(212, 175, 55, 0.45) !important;
+  box-shadow: 0 22px 48px rgba(43, 5, 11, 0.09);
+}
+
+/* Silky Drawer & Quick-View Modal Entrance */
+.cart-drawer {
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+.qv-modal {
+  transition: opacity 0.4s ease, visibility 0.4s ease !important;
+}
+
+.qv-dialog {
+  transform: translateY(20px) scale(0.97);
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+.qv-modal.is-open .qv-dialog {
+  transform: translateY(0) scale(1);
+}
