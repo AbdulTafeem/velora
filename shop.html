@@ -354,7 +354,7 @@
         (function loopParallax() {
           px += (tx - px) * 0.08;
           py += (ty - py) * 0.08;
-          roomBg.style.transform = 	ranslate3d(px, px, 0) scale(1.03);
+          roomBg.style.transform = 'translate3d(' + px.toFixed(1) + 'px, ' + py.toFixed(1) + 'px, 0) scale(1.03)';
           requestAnimationFrame(loopParallax);
         })();
       } })();
@@ -362,6 +362,7 @@
 
 </body>
 </html>
+
 
 
 
