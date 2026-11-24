@@ -2428,3 +2428,5 @@
   transform: scale(1.045) !important;
   transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1) !important;
 }
+
+.product-card:hover .product-img-main, .product-card:active .product-img-main { opacity: 1 !important; visibility: visible !important; }
