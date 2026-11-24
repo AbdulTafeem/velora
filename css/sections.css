@@ -2416,3 +2416,5 @@
 }
 
 #bestSellersGrid, #shopCatalogGrid, .products-grid, .product-card { opacity: 1 !important; visibility: visible !important; }
+
+.bestsellers-layout { display: grid; grid-template-columns: 1fr 320px; gap: 2rem; align-items: start; } @media (max-width: 960px) { .bestsellers-layout { grid-template-columns: 1fr; } } #productsGrid, .products-grid { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)) !important; gap: 1.5rem !important; width: 100% !important; opacity: 1 !important; visibility: visible !important; }
