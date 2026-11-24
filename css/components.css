@@ -496,3 +496,15 @@
 .preloader.is-closing .preloader-logo-wrap,
 .preloader.is-closing .preloader-seam { opacity: 1 !important; transform: none !important; transition: opacity 0.35s ease 0.12s !important; }
 
+
+/* === MOBILE PHONE OPTIMIZATION (<= 640px) === */
+@media (max-width: 640px) {
+  .preloader-frame { inset: 12px !important; }
+  .pf-stamp { font-size: 0.48rem !important; letter-spacing: 0.24em !important; padding: 0 8px !important; }
+  .preloader-logo-wrap { padding: 1rem 1.25rem !important; }
+  .preloader-brand { font-size: 1.95rem !important; }
+  .preloader-crest { width: 54px !important; }
+  .preloader-bar { width: 140px !important; }
+  .whatsapp-float { bottom: 1rem !important; right: 1rem !important; padding: 0.78rem !important; border-radius: 50% !important; }
+}
+
