@@ -2626,71 +2626,111 @@
 }
 
 
-/* ==========================================================================
-   UNIVERSAL PRELOADER & DIAMOND PLATINUM OVERRIDE (ZERO MAROON / ZERO GOLD)
-   ========================================================================== */
-[id*="load" i],
-[class*="load" i] {
-  background-color: #070709 !important;
-  background-image: radial-gradient(circle at 50% 42%, #1d1d24 0%, #0b0b0e 55%, #050507 100%) !important;
-}
 
-[id*="load" i] *,
-[class*="load" i] * {
-  color: #f8fafc !important;
-}
-
-[id*="load" i] h1,
-[id*="load" i] .wordmark-text,
-[class*="load" i] h1,
-[class*="load" i] .wordmark-text,
-[class*="load" i] [class*="title" i],
-[class*="load" i] [class*="logo" i] {
-  background: linear-gradient(115deg, #cbd5e1 0%, #ffffff 35%, #e2e8f0 55%, #ffffff 78%, #94a3b8 100%) !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  color: transparent !important;
-  filter: drop-shadow(0 4px 24px rgba(255, 255, 255, 0.35)) !important;
-}
-
-[id*="load" i] svg path,
-[id*="load" i] svg rect,
-[id*="load" i] svg polygon,
-[class*="load" i] svg path,
-[class*="load" i] svg rect,
-[class*="load" i] svg polygon {
-  stroke: #ffffff !important;
-}
 
 /* ==========================================================================
-   CLEAN SEAMLESS PRELOADER (ZERO INNER BLACK BOXES)
+   FINAL FLAGSHIP AUDIT: PRECISION PRELOADER, ARCHITECTURAL DETAILS & MOTION
    ========================================================================== */
-[id*="load" i] *,
-[class*="load" i] * {
+
+/* 1. Precision Preloader Styling (Zero Side-Effects on Other Elements) */
+.velora-preloader,
+#veloraPreloader {
+  background: radial-gradient(circle at 50% 42%, #1d1d24 0%, #0b0b0e 58%, #050507 100%) !important;
+}
+
+.velora-preloader *,
+#veloraPreloader * {
   background-color: transparent !important;
-  background-image: none !important;
   box-shadow: none !important;
 }
 
-/* Re-apply seamless gradient text ONLY to the VELORA wordmark */
-.preloader-wordmark,
+.velora-preloader .preloader-wordmark,
 .velora-preloader .wordmark-text,
-[id*="load" i] h1,
-[class*="load" i] h1 {
+#veloraPreloader .preloader-wordmark,
+#veloraPreloader .wordmark-text {
   background: linear-gradient(115deg, #cbd5e1 0%, #ffffff 35%, #e2e8f0 55%, #ffffff 78%, #94a3b8 100%) !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
   color: transparent !important;
-  filter: drop-shadow(0 2px 20px rgba(255, 255, 255, 0.3)) !important;
+  filter: drop-shadow(0 2px 22px rgba(255, 255, 255, 0.32)) !important;
 }
 
-/* Restore crisp silver progress line */
-.preloader-line,
-.preloader-bar {
+.velora-preloader .preloader-line,
+#veloraPreloader .preloader-line {
   background: rgba(255, 255, 255, 0.16) !important;
 }
 
-.preloader-line-fill,
-.preloader-progress {
+.velora-preloader .preloader-line-fill,
+#veloraPreloader .preloader-line-fill {
   background: linear-gradient(90deg, #94a3b8, #ffffff, #cbd5e1) !important;
+}
+
+/* 2. Architectural Studio Coordinates & Hairline Detailing in Hero */
+.hero-section::after {
+  content: 'CRAFTED IN INDIA  ·  304 STEEL & SEASONED SOLID WOOD';
+  position: absolute;
+  bottom: 1.35rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.65rem;
+  letter-spacing: 0.28em;
+  color: rgba(226, 232, 240, 0.45);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 2;
+}
+
+@media (max-width: 768px) {
+  .hero-section::after {
+    display: none;
+  }
+}
+
+/* 3. Crisp Platinum Hairline Dividers & Tactile Swatch Rings */
+.finish-pill {
+  border: 1px solid rgba(15, 15, 18, 0.16) !important;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+.finish-pill:hover {
+  border-color: #0c0c0e !important;
+  transform: translateY(-1px);
+}
+
+.finish-pill.is-active {
+  background: linear-gradient(135deg, #18181c 0%, #09090b 100%) !important;
+  color: #ffffff !important;
+  border-color: #09090b !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18) !important;
+}
+
+/* 4. Architectural Spec Pills in Spotlight Section */
+.spotlight-specs-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin: 1.35rem 0 1.75rem;
+}
+
+.spotlight-spec-pill {
+  padding: 0.45rem 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.04);
+  color: #f1f5f9;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-radius: 2px;
+}
+
+/* 5. Ultra-Clean Card & Image Crispness */
+.product-img-main,
+.product-img-hover,
+.collection-card img,
+.room-card img {
+  filter: none !important;
+}
+
+.site-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.14) !important;
 }
