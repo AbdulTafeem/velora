@@ -86,7 +86,7 @@
     if (!productsGrid || typeof VELORA_PRODUCTS === 'undefined') return;
 
     const filtered = VELORA_PRODUCTS.filter((p) => {
-      const matchCat = activeCategory === 'all' || p.category === activeCategory;
+      const matchCat = activeCategory === 'all' || (p.category === activeCategory || p.category.replace(/s$/, "") === activeCategory.replace(/s$/, ""));
       const q = searchQuery.trim().toLowerCase();
       const matchSearch =
         !q ||
@@ -476,6 +476,7 @@
   renderProducts();
   renderCart();
 })();
+
 
 
 
