@@ -19,7 +19,7 @@ const VELORA_PRODUCTS = [
     price: 4999,
     mrp: null,
     badge: 'Best Seller',
-    badgeType: 'gold',
+    badgeType: 'Silver',
     image: 'assets/images/product-5.jpg',
     hoverImage: 'assets/images/product-1-hover.jpg',
     finishes: ['Mirror Chrome', 'Brushed Silver', 'Matte Black'],
@@ -34,7 +34,7 @@ const VELORA_PRODUCTS = [
     price: 5499,
     mrp: null,
     badge: 'New Release',
-    badgeType: 'gold',
+    badgeType: 'Silver',
     image: 'assets/images/product-2.jpg',
     hoverImage: 'assets/images/product-1-hover.jpg',
     finishes: ['Satin Steel', 'Brushed Silver'],
@@ -64,7 +64,7 @@ const VELORA_PRODUCTS = [
     price: 3999,
     mrp: null,
     badge: 'Popular',
-    badgeType: 'gold',
+    badgeType: 'Silver',
     image: 'assets/images/product-3.jpg',
     hoverImage: 'assets/images/decor-lamp.jpg',
     finishes: ['Matte Black', 'Brushed Silver'],
@@ -82,7 +82,7 @@ const VELORA_PRODUCTS = [
     badgeType: 'maroon',
     image: 'assets/images/product-1.jpg',
     hoverImage: 'assets/images/spotlight-tstand.jpg',
-    finishes: ['Olive Velvet / Steel', 'Maroon Velvet / Gold'],
+    finishes: ['Olive Velvet / Steel', 'Maroon Velvet / Silver'],
     dimensions: '46cm H x 44cm W x 42cm D',
     description: 'Bent 6mm brushed stainless steel frame paired with a high-density foam seat upholstered in stain-resistant cotton velvet. Tested to 120kg.'
   },
@@ -94,7 +94,7 @@ const VELORA_PRODUCTS = [
     price: 7499,
     mrp: null,
     badge: 'Signature',
-    badgeType: 'gold',
+    badgeType: 'Silver',
     image: 'assets/images/spotlight-tstand.jpg',
     hoverImage: 'assets/images/product-5.jpg',
     finishes: ['Natural Teak Wood / Matte Black', 'Smoked Walnut Wood / Brushed Silver'],
@@ -109,7 +109,7 @@ const VELORA_PRODUCTS = [
     price: 3499,
     mrp: null,
     badge: 'Ready to Ship',
-    badgeType: 'gold',
+    badgeType: 'Silver',
     image: 'assets/images/decor-lamp.jpg',
     hoverImage: 'assets/images/product-3.jpg',
     finishes: ['Warm 2700K Bronze', 'Matte Black'],
@@ -136,5 +136,6 @@ const VELORA_PRODUCTS = [
 function formatINR(amount) {
   return '₹' + Number(amount).toLocaleString('en-IN');
 }
+
 
 

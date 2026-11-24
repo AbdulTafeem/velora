@@ -54,7 +54,7 @@
 
     function getFinishSwatchStyle(finishName) {
     const f = finishName.toLowerCase();
-    if (f.includes('gold') || f.includes('brass')) return 'background:linear-gradient(135deg,#f1dc9a,#b8892b);';
+    if (f.includes('Silver') || f.includes('brass')) return 'background:linear-gradient(135deg,#f8fafc,#94a3b8);';
     if (f.includes('chrome') || f.includes('steel')) return 'background:linear-gradient(135deg,#f4f4f5,#a1a1aa);';
     if (f.includes('Natural Teak Wood')) return 'background:linear-gradient(135deg,#fafaf9 50%,#1c1917 50%);';
     if (f.includes('maroon')) return 'background:linear-gradient(135deg,#5a0b18,#2b050b);';
@@ -470,6 +470,7 @@
   renderProducts();
   renderCart();
 })();
+
 
 
 

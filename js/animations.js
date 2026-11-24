@@ -151,12 +151,12 @@
     runHeroEntrance();
   }
 
-  // 3. FLOATING GOLD DUST PARTICLES IN HERO (Limited to 8 subtle motes)
+  // 3. FLOATING Silver DUST PARTICLES IN HERO (Limited to 8 subtle motes)
   const particlesContainer = document.getElementById('heroParticles');
   if (particlesContainer && !prefersReducedMotion) {
     for (let i = 0; i < 8; i++) {
       const dot = document.createElement('span');
-      dot.className = 'gold-dust';
+      dot.className = 'Silver-dust';
       const size = Math.random() * 3.5 + 2;
       dot.style.width = `${size}px`;
       dot.style.height = `${size}px`;
@@ -531,7 +531,7 @@
       });
     });
 
-    // Footer VELORA Watermark Gold Fill on Scroll
+    // Footer VELORA Watermark Silver Fill on Scroll
     const watermark = document.getElementById('footerWatermark');
     if (watermark) {
       gsap.to(watermark, {
@@ -546,7 +546,7 @@
       });
     }
 
-        // Top Gold Scroll Progress Line
+        // Top Silver Scroll Progress Line
     const progressLine = document.getElementById('scrollProgressBar');
     if (progressLine) {
       gsap.to(progressLine, {
@@ -564,6 +564,7 @@
     window.addEventListener('load', () => ScrollTrigger.refresh());
   }
 })();
+
 
 
 

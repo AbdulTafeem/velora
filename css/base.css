@@ -1,14 +1,14 @@
 ﻿:root {
-  --maroon-950: #1B0307;
-  --maroon-900: #2B050B;
+  --maroon-950: #09090b;
+  --maroon-900: #0c0c0e;
   --maroon-800: #3D0710;
-  --maroon-700: #5A0B18;
+  --maroon-700: #18181c;
   --maroon-600: #7A1022;
   --gold-200: #F8ECC2;
-  --gold-300: #F1DC9A;
+  --gold-300: #f8fafc;
   --gold-400: #E3C66F;
-  --gold-500: #D4AF37;
-  --gold-600: #B8892B;
+  --gold-500: #cbd5e1;
+  --gold-600: #94a3b8;
   --gold-700: #7A5410;
   --cream: #FBF5EC;
   --cream-dark: #F2E7D5;
@@ -16,11 +16,11 @@
   --white: #FFFDF8;
   --ink: #1A1A1A;
   --ink-muted: #58504B;
-  --border-gold: rgba(212, 175, 55, 0.32);
-  --border-dark: rgba(43, 5, 11, 0.1);
-  --grad-gold: linear-gradient(135deg, #F1DC9A 0%, #D4AF37 50%, #B8892B 100%);
-  --grad-gold-hover: linear-gradient(135deg, #F8ECC2 0%, #E3C66F 50%, #D4AF37 100%);
-  --grad-velvet: radial-gradient(circle at 30% 20%, #5A0B18 0%, #3D0710 45%, #2B050B 100%);
+  --border-gold: rgba(203, 213, 225, 0.32);
+  --border-dark: rgba(18, 18, 22, 0.1);
+  --grad-gold: linear-gradient(135deg, #f8fafc 0%, #cbd5e1 50%, #94a3b8 100%);
+  --grad-gold-hover: linear-gradient(135deg, #F8ECC2 0%, #E3C66F 50%, #cbd5e1 100%);
+  --grad-velvet: radial-gradient(circle at 30% 20%, #18181c 0%, #3D0710 45%, #0c0c0e 100%);
   --font-wordmark: 'Cinzel', Georgia, serif;
   --font-display: 'Cormorant Garamond', Georgia, serif;
   --font-italic: 'Cormorant Garamond', Georgia, serif;
@@ -35,9 +35,9 @@
   --container-max: 1380px;
   --gutter: clamp(1.25rem, 3vw, 3rem);
   --section-py: clamp(4.5rem, 8vw, 8.5rem);
-  --shadow-soft: 0 14px 36px rgba(43, 5, 11, 0.06);
+  --shadow-soft: 0 14px 36px rgba(18, 18, 22, 0.06);
   --shadow-luxury: 0 24px 60px rgba(27, 3, 7, 0.3);
-  --shadow-gold: 0 10px 28px rgba(212, 175, 55, 0.22);
+  --shadow-gold: 0 10px 28px rgba(203, 213, 225, 0.22);
   --ease-luxury: cubic-bezier(0.22, 1, 0.36, 1);
   --z-cursor: 9999;
   --z-preloader: 9000;
@@ -75,7 +75,7 @@ ul, ol { list-style: none; }
 
 /* Shimmer reserved exclusively for Hero VELORA wordmark */
 .shimmer-gold {
-  background: linear-gradient(110deg, #B8892B 15%, #F8ECC2 38%, #D4AF37 52%, #F1DC9A 68%, #B8892B 85%);
+  background: linear-gradient(110deg, #94a3b8 15%, #F8ECC2 38%, #cbd5e1 52%, #f8fafc 68%, #94a3b8 85%);
   background-size: 220% auto; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
   animation: goldShimmer 5.5s linear infinite;
 }
@@ -95,7 +95,7 @@ ul, ol { list-style: none; }
 .section-eyebrow-lined::before, .section-eyebrow-lined::after { content: ''; width: 24px; height: 1px; background: var(--gold-600); }
 
 .section-title { font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 500; letter-spacing: 0.015em; line-height: 1.12; }
-.gold-divider { width: 100%; height: 1px; border: 0; background: linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.35) 50%, transparent 100%); }
+.gold-divider { width: 100%; height: 1px; border: 0; background: linear-gradient(90deg, transparent 0%, rgba(203, 213, 225, 0.35) 50%, transparent 100%); }
 
 ::-webkit-scrollbar { width: 7px; }
 ::-webkit-scrollbar-track { background: var(--maroon-950); }
@@ -104,4 +104,5 @@ ul, ol { list-style: none; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
+
 
