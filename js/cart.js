@@ -53,6 +53,10 @@
   }
 
     function getFinishSwatchStyle(finishName) {
+  if (f.includes('silver')) return 'background:linear-gradient(135deg,#f8fafc,#94a3b8);';
+  if (f.includes('gold')) return 'background:linear-gradient(135deg,#f3e5ab,#d4af37);';
+  if (f.includes('black') || f.includes('obsidian')) return 'background:linear-gradient(135deg,#27272a,#09090b);';
+  if (f.includes('teak') || f.includes('walnut') || f.includes('wood')) return 'background:linear-gradient(135deg,#8b5a2b,#3e2723);';
     const f = finishName.toLowerCase();
     if (f.includes('Silver') || f.includes('brass')) return 'background:linear-gradient(135deg,#f8fafc,#94a3b8);';
     if (f.includes('chrome') || f.includes('steel')) return 'background:linear-gradient(135deg,#f4f4f5,#a1a1aa);';
@@ -451,7 +455,7 @@
   });
 
   document.getElementById('spotlightWaBtn')?.addEventListener('click', () => {
-    const msg = `Hello VELORA! I want to order the Carrara Solid Wood Base T-Stand (${spotlightFinish}) - ₹7,499.`;
+    const msg = `Hello VELORA! I want to order the Teak & Solid Wood Base T-Stand (${spotlightFinish}) - ₹7,499.`;
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
   });
 
@@ -470,6 +474,8 @@
   renderProducts();
   renderCart();
 })();
+
+
 
 
 

@@ -186,7 +186,7 @@ const VELORA_DEFAULT_SHEET_CSV = "https://docs.google.com/spreadsheets/d/1yskAN_
             badge: row.badge || 'NEW ARRIVAL',
             image: row.image || 'assets/images/product-1.jpg',
             hoverImage: row.hoverimage || row.image || 'assets/images/product-1.jpg',
-            finishes: row.finishes ? row.finishes.split('|').map(s => s.trim()) : ['Teak & Brushed Silver', 'Walnut & Matte Obsidian'],
+            finishes: row.finishes ? row.finishes.split('|').map(s => s.trim()) : ['Brushed Gold, Sterling Silver & Matte Black', 'Walnut & Matte Obsidian'],
             dimensions: row.dimensions || '165 cm (H) x 110 cm (W) x 42 cm (D)',
             material: row.material || '304-Grade Brushed Steel & Kiln-Dried Solid Wood',
             weightCapacity: '85 kg',
@@ -203,4 +203,5 @@ const VELORA_DEFAULT_SHEET_CSV = "https://docs.google.com/spreadsheets/d/1yskAN_
       .catch(() => {});
   } catch (e) {}
 })();
+
 
