@@ -7,14 +7,14 @@
   const bar = document.getElementById('preloaderProgress');
   if (preloader) {
     if (bar) {
-      bar.style.transition = 'transform 0.68s cubic-bezier(0.22, 1, 0.36, 1)';
+      bar.style.transition = 'transform 0.82s cubic-bezier(0.22, 1, 0.36, 1)';
       requestAnimationFrame(() => { bar.style.transform = 'scaleX(1)'; });
     }
     setTimeout(() => {
       preloader.classList.add('is-parting');
       preloader.style.pointerEvents = 'none';
       setTimeout(() => { preloader.style.display = 'none'; }, 880);
-    }, 700);
+    }, 860);
   }
 
   // 2. Smooth anchor scrolling (native hardware-accelerated)
@@ -98,6 +98,7 @@
 
 /* Lightweight Hero Slider & Navbar Scroll */
 (function(){ var slides = document.querySelectorAll('.hero-slide'); var dots = document.querySelectorAll('.hero-dot'); var idx = 0; function showSlide(n){ if(!slides.length) return; idx = (n + slides.length) % slides.length; slides.forEach(function(s,i){ s.classList.toggle('is-active', i === idx); }); dots.forEach(function(d,i){ d.classList.toggle('is-active', i === idx); }); } document.getElementById('heroNextBtn')?.addEventListener('click', function(){ showSlide(idx + 1); }); document.getElementById('heroPrevBtn')?.addEventListener('click', function(){ showSlide(idx - 1); }); dots.forEach(function(d,i){ d.addEventListener('click', function(){ showSlide(i); }); }); var hdr = document.querySelector('.site-header'); window.addEventListener('scroll', function(){ if(hdr) hdr.classList.toggle('is-scrolled', window.scrollY > 30); }, { passive: true }); })();
+
 
 
 
