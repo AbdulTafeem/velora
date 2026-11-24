@@ -148,64 +148,46 @@ function formatINR(amount) {
 // ============================================================================
 const VELORA_DEFAULT_SHEET_CSV = "https://docs.google.com/spreadsheets/d/1yskAN_jSn2RRHHkt64wO0h4y855tGC2TdPm4NpKJFmM/gviz/tq?tqx=out:csv&sheet=Sheet1"; // Paste published Google Sheet CSV URL here for global live sync
 
+
 (function initVeloraLiveCatalog() {
   try {
-    // 1. Check if admin studio saved local preview products
-    const localSaved = localStorage.getItem('velora_custom_products_v1');
-    if (localSaved && typeof VELORA_PRODUCTS !== 'undefined') {
-      const parsed = JSON.parse(localSaved);
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        VELORA_PRODUCTS.length = 0;
-        VELORA_PRODUCTS.push(...parsed);
-      }
-    }
-
-    // 2. Fetch live rows from Google Sheet CSV if configured
-    const sheetUrl = (typeof VELORA_GOOGLE_SHEET_CSV !== 'undefined' && VELORA_GOOGLE_SHEET_CSV) || localStorage.getItem('velora_google_sheet_csv') || VELORA_DEFAULT_SHEET_CSV;
-    if (!sheetUrl || typeof VELORA_PRODUCTS === 'undefined') return;
-
-    fetch(sheetUrl + "&cb=" + Date.now(), { cache: "no-store" })
-      .then(res => res.text())
-      .then(csvText => {
-        const lines = csvText.split(/\r?\n/).filter(l => l.trim());
+    localStorage.removeItem('velora_custom_products_v1');
+    const url = 'https://docs.google.com/spreadsheets/d/1yskAN_jSn2RRHHkt64wO0h4y855tGC2TdPm4NpKJFmM/gviz/tq?tqx=out:csv&sheet=Sheet1&cb=' + Date.now();
+    fetch(url, { cache: 'no-store' })
+      .then(r => r.text())
+      .then(csv => {
+        const lines = csv.split(/\r?\n/).filter(l => l.trim());
         if (lines.length < 2) return;
-        const headers = lines[0].split(",").map(h => h.replace(/^"|"$/g, "").trim().toLowerCase());
-        const sheetItems = lines.slice(1).map((line, i) => {
+        const headers = lines[0].split(',').map(h => h.replace(/^"|"$/g, '').trim().toLowerCase());
+        const items = lines.slice(1).map((line, i) => {
           const cols = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/^"|"$/g, '').trim());
           const row = {};
           headers.forEach((h, idx) => row[h] = cols[idx] || '');
           if (!row.name || !row.price) return null;
-          const price = Number(String(row.price).replace(/[^0-9]/g, "")) || 3499;
+          const price = Number(String(row.price).replace(/[^0-9]/g, '')) || 3499;
+          const mrp = Number(String(row.mrp || '').replace(/[^0-9]/g, '')) || null;
           return {
-            id: row.id || ('velora-sheet-' + (i + 1)),
+            id: 'vel-0' + (i + 1),
             name: row.name,
-            category: row.category || 'clothes-racks',
+            category: row.category || 'clothes-rack',
             room: row.room || 'Bedroom',
-            price,
-            mrp: Number((row.mrp || '').replace(/[^0-9]/g, '')) || Math.round(price * 1.25),
-            badge: row.badge || 'NEW ARRIVAL',
+            price: price,
+            mrp: mrp,
+            originalPrice: mrp,
+            badge: row.badge || 'Best Seller',
+            badgeType: 'Silver',
             image: row.image || 'assets/images/product-1.jpg',
-            hoverImage: row.hoverimage || row.image || 'assets/images/product-1.jpg',
-            finishes: row.finishes ? row.finishes.split('|').map(s => s.trim()) : ['Teak & Brushed Silver', 'Walnut & Matte Obsidian'],
-            dimensions: row.dimensions || '165 cm (H) x 110 cm (W) x 42 cm (D)',
-            material: row.material || '304-Grade Brushed Steel & Kiln-Dried Solid Wood',
-            weightCapacity: '85 kg',
-            description: row.description || 'Hand-finished solid wood base paired with 304-grade brushed steel frame.'
+            hoverImage: row.image || 'assets/images/product-1.jpg',
+            finishes: row.finishes ? row.finishes.split('|').map(s => s.trim()).filter(Boolean) : ['Brushed Silver', 'Brushed Gold', 'Matte Black'],
+            dimensions: row.dimensions || '165cm H x 140cm W x 42cm D',
+            description: row.description || 'Handcrafted 304-grade stainless steel and seasoned solid wood architectural piece.'
           };
         }).filter(Boolean);
-
-        if (sheetItems.length > 0) {
-          if (sheetItems.length > 0) { VELORA_PRODUCTS.length = 0; VELORA_PRODUCTS.push(...sheetItems); window.dispatchEvent(new Event("velora:catalogUpdated")); }
+        if (items.length > 0 && typeof VELORA_PRODUCTS !== 'undefined') {
+          VELORA_PRODUCTS.length = 0;
+          VELORA_PRODUCTS.push(...items);
           window.dispatchEvent(new Event('velora:catalogUpdated'));
         }
-      })
-      .catch(() => {});
+      });
   } catch (e) {}
 })();
-
-
-
-
-
-
-
