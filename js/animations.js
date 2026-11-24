@@ -7,9 +7,9 @@
 
   // 1. LENIS BUTTERY SMOOTH SCROLL
   let lenis = null;
-  if (typeof Lenis !== 'undefined' && !prefersReducedMotion) {
+  if (false && typeof Lenis !== 'undefined' && !prefersReducedMotion) {
     lenis = new Lenis({
-      duration: 0.65,
+      duration: 0.35,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true
     });
@@ -106,7 +106,7 @@
         opacity: 0,
         rotateX: -30,
         stagger: 0.045,
-        duration: 0.95,
+        duration: 0.48,
         ease: 'power4.out'
       });
     }
@@ -116,7 +116,7 @@
         y: 26,
         opacity: 0,
         stagger: 0.11,
-        duration: 0.85,
+        duration: 0.42,
         delay: 0.12,
         ease: 'power3.out'
       });
@@ -127,7 +127,7 @@
         y: 36,
         opacity: 0,
         scale: 0.96,
-        duration: 1.1,
+        duration: 0.52,
         delay: 0.2,
         ease: 'power3.out'
       });
@@ -141,9 +141,9 @@
         runHeroEntrance();
       }
     });
-    tl.to(preloaderProgress, { scaleX: 1, duration: 0.8, ease: 'power2.inOut' })
-      .to('.preloader-logo-wrap', { y: -22, opacity: 0, duration: 0.4, ease: 'power2.in' })
-      .to(preloader, { yPercent: -100, duration: 0.8, ease: 'power4.inOut' }, '-=0.12');
+    tl.to(preloaderProgress, { scaleX: 1, duration: 0.25, ease: 'power2.out' })
+      .to('.preloader-logo-wrap', { y: -22, opacity: 0, duration: 0.2, ease: 'power2.out' })
+      .to(preloader, { yPercent: -100, duration: 0.35, ease: 'power3.out' }, '-=0.12');
   } else if (preloader) {
     preloader.style.display = 'none';
     runHeroEntrance();
@@ -391,10 +391,10 @@
         gsap.from(splitLines.lines, {
           yPercent: 100,
           opacity: 0,
-          duration: 0.85,
+          duration: 0.42,
           stagger: 0.08,
           ease: 'power3.out',
-          scrollTrigger: { trigger: heading, start: 'top 88%', once: true }
+          scrollTrigger: { trigger: heading, start: 'top 95%', once: true }
         });
       });
     }
@@ -407,9 +407,9 @@
         {
           clipPath: 'inset(0% 0% 0% 0%)',
           opacity: 1,
-          duration: 1.05,
+          duration: 0.48,
           ease: 'power3.out',
-          scrollTrigger: { trigger: el, start: 'top 86%', once: true }
+          scrollTrigger: { trigger: el, start: 'top 95%', once: true }
         }
       );
     });
@@ -447,11 +447,11 @@
     // Category icons stagger
     if (document.querySelector('.category-strip')) {
       gsap.from('.category-card', {
-        scrollTrigger: { trigger: '.category-strip', start: 'top 86%' },
+        scrollTrigger: { trigger: '.category-strip', start: 'top 95%' },
         y: 24,
         opacity: 0,
         stagger: 0.07,
-        duration: 0.65,
+        duration: 0.35,
         ease: 'power3.out'
       });
     }
@@ -471,7 +471,7 @@
             start: 'top top',
             end: () => `+=${Math.abs(getScrollAmount())}`,
             pin: true,
-            scrub: 1,
+            scrub: 0.35,
             invalidateOnRefresh: true
           }
         });
@@ -494,11 +494,11 @@
     // Why Velora cards stagger
     if (document.querySelector('.pillars-grid')) {
       gsap.from('.why-card', {
-        scrollTrigger: { trigger: '.pillars-grid', start: 'top 84%' },
+        scrollTrigger: { trigger: '.pillars-grid', start: 'top 95%' },
         y: 30,
         opacity: 0,
         stagger: 0.08,
-        duration: 0.75,
+        duration: 0.38,
         ease: 'power3.out'
       });
     }
@@ -524,7 +524,7 @@
         val: target,
         duration: 2,
         ease: 'power2.out',
-        scrollTrigger: { trigger: counter, start: 'top 88%', once: true },
+        scrollTrigger: { trigger: counter, start: 'top 95%', once: true },
         onUpdate: () => {
           counter.textContent = Math.floor(obj.val).toLocaleString('en-IN') + suffix;
         }
@@ -541,7 +541,7 @@
           trigger: '.footer-watermark-wrap',
           start: 'top 92%',
           end: 'bottom 98%',
-          scrub: 0.8
+          scrub: 0.2
         }
       });
     }
@@ -574,5 +574,6 @@
 
 /* veloraFooterObserver */
 (function(){ var f = document.querySelector('footer, .site-footer'); if (f && 'IntersectionObserver' in window) { new IntersectionObserver(function(entries){ entries.forEach(function(e){ if (e.isIntersecting) { f.classList.add('is-visible'); if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh(); } }); }, { threshold: 0.15 }).observe(f); } })();
+
 
 
