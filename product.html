@@ -288,7 +288,7 @@
       }
 
       document.getElementById('pdpWaBtn').onclick = () => {
-        const msg = 'Hello VELORA! I want to order: ' + product.name + ' (' + chosenFinish + ') - ' + formatINR(product.price);
+        const msg = '*VELORA — Direct Order Request*\n\n1. ' + product.name + ' (' + chosenFinish + ') x1 - ' + formatINR(product.price) + '\n\n*Total:* ' + formatINR(product.price) + '\n*Shipping:* Free Insured Pan-India Delivery\n\n*Delivery Details (Please fill):*\n• Name: \n• City & Pincode: \n• Payment Mode (UPI / COD): ';
         window.open('https://wa.me/918284029319?text=' + encodeURIComponent(msg), '_blank', 'noopener');
       };
     }
@@ -298,6 +298,7 @@
   <script src="js/luxury-polish.js" defer></script>
 </body>
 </html>
+
 
 
 

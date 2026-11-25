@@ -434,7 +434,7 @@
     }
     const lines = cart.map((item, i) => `${i + 1}. ${item.name} (${item.finish}) x${item.qty} - ${formatINR(item.price * item.qty)}`);
     const total = cartGrandTotalEl?.textContent || '';
-    const msg = `Hello VELORA! I would like to place an order:\n\n${lines.join('\n')}\n\nTotal: ${total}\nShipping: Free Across India`;
+    const msg = `*VELORA — New Order Request*\n\n${lines.join('\n')}\n\n*Total:* ${total}\n*Shipping:* Free Insured Pan-India Delivery\n\n*Delivery Details (Please fill):*\n• Name: \n• City & Pincode: \n• Payment Mode (UPI / COD): `;
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
   });
 
@@ -457,7 +457,7 @@
   });
 
   document.getElementById('spotlightWaBtn')?.addEventListener('click', () => {
-    const msg = `Hello VELORA! I want to order the Teak & Solid Wood Base T-Stand (${spotlightFinish}) - ₹3,999.`;
+    const msg = `*VELORA — Direct Order Request*\n\n1. Teak & Solid Wood Base T-Stand (${spotlightFinish}) x1 - ₹3,999\n\n*Total:* ₹3,999\n*Shipping:* Free Insured Pan-India Delivery\n\n*Delivery Details (Please fill):*\n• Name: \n• City & Pincode: \n• Payment Mode (UPI / COD): `;
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
   });
 
@@ -479,6 +479,7 @@
   renderProducts();
   renderCart();
 })();
+
 
 
 
