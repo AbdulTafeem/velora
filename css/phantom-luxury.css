@@ -1,36 +1,34 @@
 ﻿/* ==========================================================================
-   VELORA — PANTONE PHANTOM NOIR, WARM ALABASTER & BRUSHED CHAMPAGNE EDITION
+   VELORA — OBSIDIAN BLACK, ROYAL MAROON RED, GOLD, SILVER & CREAM WHITE
    ========================================================================== */
 :root {
-  --phantom-950: #0B0809;
-  --phantom-900: #130E10;
-  --phantom-850: #1B1316;
-  --phantom-800: #25191D;
-  --alabaster: #F7F3EC;
-  --travertine: #EFE8DC;
-  --porcelain: #FCFBF8;
-  --champagne-300: #EAD7B0;
-  --champagne-400: #D6BC88;
-  --champagne-500: #C2A164;
-  --champagne-600: #9E7E43;
-  --ink-noir: #141011;
-  --ink-stone: #5C534E;
+  --obsidian-950: #090506;
+  --obsidian-900: #12090B;
+  --maroon-royal: #4E0916;
+  --maroon-deep: #2B040B;
+  --gold-light: #EFE0BA;
+  --gold-pure: #D4AF37;
+  --gold-antique: #A88438;
+  --silver-bright: #E4E7EC;
+  --silver-brushed: #B8C0CA;
+  --silver-hairline: rgba(200, 208, 218, 0.34);
+  --cream-white: #F8F4EC;
+  --cream-card: #FFFDF9;
+  --ink-noir: #140D0F;
 }
 
-/* 1. Base Surfaces & Typography Refinement */
-body {
-  background-color: var(--alabaster) !important;
+/* 1. Cream White Surfaces */
+body,
+.section-cream {
+  background-color: var(--cream-white) !important;
   color: var(--ink-noir) !important;
 }
-.section-cream {
-  background-color: var(--alabaster) !important;
-}
 
-/* 2. Phantom Noir Architectural Surfaces (Hero, Announcement, Spotlight, Footer) */
+/* 2. Obsidian Black + Deep Maroon Red Radial Depth (Hero, Spotlight, Footer) */
 .announcement-bar {
-  background: var(--phantom-950) !important;
-  color: var(--champagne-300) !important;
-  border-bottom: 1px solid rgba(194, 161, 100, 0.22) !important;
+  background: linear-gradient(90deg, #090506 0%, #26040A 50%, #090506 100%) !important;
+  color: var(--gold-light) !important;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.28) !important;
   letter-spacing: 0.11em !important;
   text-transform: uppercase;
   font-size: 0.67rem !important;
@@ -40,48 +38,48 @@ body {
 .site-footer,
 .section-dark {
   background:
-    radial-gradient(ellipse 75% 65% at 74% 38%, rgba(194, 161, 100, 0.09) 0%, transparent 65%),
-    radial-gradient(circle at 20% 80%, #1F1518 0%, #120D0F 52%, #0B0809 100%) !important;
-  color: var(--alabaster) !important;
+    radial-gradient(ellipse 68% 62% at 72% 40%, rgba(110, 14, 32, 0.55) 0%, rgba(56, 7, 16, 0.35) 45%, transparent 75%),
+    radial-gradient(circle at 18% 82%, #3B0610 0%, #170407 52%, #090506 100%) !important;
+  color: var(--cream-white) !important;
 }
 
-/* Subtle Architectural Grid Hairline Overlay in Hero */
+/* Fine Brushed Silver Architectural Grid in Hero */
 .hero-section::before {
   content: "";
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(to right, rgba(214, 188, 136, 0.045) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(214, 188, 136, 0.045) 1px, transparent 1px);
-  background-size: 96px 96px;
+    linear-gradient(to right, rgba(200, 208, 218, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(200, 208, 218, 0.045) 1px, transparent 1px);
+  background-size: 92px 92px;
   mask-image: radial-gradient(circle at 50% 45%, black 35%, transparent 82%);
   -webkit-mask-image: radial-gradient(circle at 50% 45%, black 35%, transparent 82%);
   pointer-events: none;
 }
 
-/* 3. Minimal Editorial Header (Replaces Boxy Black Active Pill) */
+/* 3. Cream White Header -> Obsidian & Maroon Scrolled State with Gold + Silver Accents */
 .site-header,
 .navbar {
-  background: rgba(247, 243, 236, 0.94) !important;
+  background: rgba(248, 244, 236, 0.96) !important;
   backdrop-filter: blur(16px) !important;
   -webkit-backdrop-filter: blur(16px) !important;
-  border-bottom: 1px solid rgba(20, 16, 17, 0.08) !important;
+  border-bottom: 1px solid rgba(78, 9, 22, 0.14) !important;
 }
 .site-header.is-scrolled .navbar {
-  background: rgba(14, 10, 11, 0.92) !important;
-  border-bottom: 1px solid rgba(194, 161, 100, 0.25) !important;
+  background: linear-gradient(90deg, rgba(11, 6, 7, 0.95) 0%, rgba(43, 4, 11, 0.94) 50%, rgba(11, 6, 7, 0.95) 100%) !important;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.32) !important;
 }
 .nav-link {
   position: relative;
   background: transparent !important;
   color: var(--ink-noir) !important;
-  font-size: 0.78rem !important;
+  font-size: 0.77rem !important;
   letter-spacing: 0.08em !important;
   text-transform: uppercase;
   padding: 0.55rem 0.85rem !important;
 }
 .site-header.is-scrolled .nav-link {
-  color: var(--alabaster) !important;
+  color: var(--cream-white) !important;
 }
 .nav-link::after {
   content: "";
@@ -90,135 +88,135 @@ body {
   bottom: 4px;
   width: 0;
   height: 1.5px;
-  background: var(--champagne-500);
+  background: linear-gradient(90deg, var(--silver-brushed), var(--gold-pure));
   transform: translateX(-50%);
   transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .nav-link:hover::after,
 .nav-link.is-active::after {
-  width: 22px;
+  width: 24px;
 }
 .nav-link.is-active {
-  color: var(--champagne-600) !important;
-  font-weight: 600 !important;
+  color: var(--maroon-royal) !important;
+  font-weight: 700 !important;
 }
 .site-header.is-scrolled .nav-link.is-active {
-  color: var(--champagne-300) !important;
+  color: var(--gold-light) !important;
 }
 .action-badge {
-  background: var(--phantom-900) !important;
-  color: var(--champagne-300) !important;
-  border: 1px solid var(--champagne-500) !important;
+  background: var(--maroon-royal) !important;
+  color: var(--gold-light) !important;
+  border: 1px solid var(--silver-brushed) !important;
 }
 
-/* 4. Hero Typography & Brushed Champagne Buttons */
-.hero-kicker {
-  color: var(--champagne-400) !important;
-  letter-spacing: 0.32em !important;
+/* 4. Gold Title + Brushed Silver Eyebrows & Secondary Buttons */
+.hero-kicker,
+.section-eyebrow {
+  color: var(--silver-bright) !important;
+  letter-spacing: 0.3em !important;
   font-size: 0.68rem !important;
 }
 .hero-title {
-  background: linear-gradient(125deg, #EAD7B0 0%, #C2A164 48%, #F5E8CA 100%) !important;
+  background: linear-gradient(125deg, #F3E4BF 0%, #D4AF37 48%, #B28B38 100%) !important;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   letter-spacing: 0.14em !important;
 }
+.hero-tagline {
+  color: var(--silver-bright) !important;
+}
 .hero-desc {
-  color: rgba(247, 243, 236, 0.76) !important;
-  font-weight: 300 !important;
-  line-height: 1.75 !important;
+  color: rgba(248, 244, 236, 0.8) !important;
 }
 .btn-gold {
-  background: linear-gradient(135deg, #EAD7B0 0%, #C2A164 55%, #A68548 100%) !important;
-  color: var(--phantom-950) !important;
-  border: 1px solid rgba(234, 215, 176, 0.5) !important;
+  background: linear-gradient(135deg, #F3E4BF 0%, #D4AF37 52%, #A88438 100%) !important;
+  color: var(--obsidian-950) !important;
+  border: 1px solid rgba(243, 228, 191, 0.65) !important;
   letter-spacing: 0.14em !important;
   font-size: 0.72rem !important;
   border-radius: 3px !important;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45) !important;
 }
 .btn-outline-gold {
-  border: 1px solid rgba(214, 188, 136, 0.38) !important;
-  color: var(--champagne-300) !important;
-  background: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid var(--silver-hairline) !important;
+  color: var(--silver-bright) !important;
+  background: rgba(255, 255, 255, 0.03) !important;
   letter-spacing: 0.14em !important;
   font-size: 0.72rem !important;
   border-radius: 3px !important;
 }
 .btn-outline-gold:hover {
-  background: rgba(194, 161, 100, 0.12) !important;
-  border-color: var(--champagne-400) !important;
+  border-color: var(--gold-pure) !important;
+  color: var(--gold-light) !important;
+  background: rgba(78, 9, 22, 0.35) !important;
 }
 
-/* 5. Double-Bezel Gallery Arch Frame & Seamless Studio Image Blending */
+/* 5. Double-Bezel Arch: Silver Inner Hairline + Gold Outer Frame + Cream Matting */
 .hero-arch-frame {
   padding: 10px !important;
   border-radius: 236px 236px 6px 6px !important;
-  border: 1px solid rgba(214, 188, 136, 0.42) !important;
-  background: linear-gradient(180deg, rgba(214, 188, 136, 0.14) 0%, rgba(11, 8, 9, 0.65) 100%) !important;
+  border: 1px solid rgba(212, 175, 55, 0.55) !important;
+  background: linear-gradient(180deg, rgba(200, 208, 218, 0.16) 0%, rgba(43, 4, 11, 0.65) 55%, rgba(9, 5, 6, 0.85) 100%) !important;
   box-shadow:
-    0 34px 90px rgba(0, 0, 0, 0.72),
-    inset 0 0 0 1px rgba(247, 243, 236, 0.08) !important;
+    0 34px 90px rgba(0, 0, 0, 0.75),
+    inset 0 0 0 1px rgba(200, 208, 218, 0.28) !important;
 }
 .hero-arch-inner {
   border-radius: 226px 226px 3px 3px !important;
-  background: radial-gradient(circle at 50% 42%, #FAF7F2 0%, #EDE5D8 100%) !important;
-}
-.hero-arch-inner::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  box-shadow: inset 0 0 38px rgba(20, 16, 17, 0.14);
-  pointer-events: none;
+  background: radial-gradient(circle at 50% 42%, #FFFDF9 0%, #EFE8DC 100%) !important;
 }
 .hero-floating-tag {
-  background: rgba(14, 10, 11, 0.88) !important;
+  background: linear-gradient(135deg, rgba(14, 7, 9, 0.92), rgba(56, 7, 16, 0.9)) !important;
   backdrop-filter: blur(14px) !important;
   -webkit-backdrop-filter: blur(14px) !important;
-  border: 1px solid rgba(214, 188, 136, 0.34) !important;
+  border: 1px solid rgba(212, 175, 55, 0.45) !important;
+  box-shadow: inset 0 0 0 1px rgba(200, 208, 218, 0.15) !important;
   border-radius: 4px !important;
 }
 .hero-floating-tag .tag-label {
-  color: var(--champagne-400) !important;
+  color: var(--silver-bright) !important;
   letter-spacing: 0.22em !important;
   font-size: 0.6rem !important;
 }
+.hero-floating-tag .tag-price {
+  color: var(--gold-light) !important;
+}
 
-/* 6. Minimal Editorial Cards & Filter Pills */
+/* 6. Cream White Cards with Silver + Gold Metallic Borders & Maroon CTAs */
 .product-card {
-  background: var(--porcelain) !important;
-  border: 1px solid rgba(20, 16, 17, 0.09) !important;
+  background: var(--cream-card) !important;
+  border: 1px solid rgba(184, 192, 202, 0.48) !important;
   border-radius: 6px !important;
 }
 .product-card:hover {
-  border-color: rgba(194, 161, 100, 0.65) !important;
-  box-shadow: 0 22px 48px rgba(14, 10, 11, 0.1) !important;
+  border-color: var(--gold-pure) !important;
+  box-shadow: 0 20px 44px rgba(43, 4, 11, 0.13) !important;
 }
 .filter-pill.is-active,
 .filter-tab.is-active,
 .btn-add-cart,
 .btn-maroon {
-  background: var(--phantom-900) !important;
-  color: var(--champagne-300) !important;
-  border: 1px solid rgba(194, 161, 100, 0.5) !important;
+  background: linear-gradient(135deg, #4E0916 0%, #1B0408 100%) !important;
+  color: var(--gold-light) !important;
+  border: 1px solid rgba(212, 175, 55, 0.55) !important;
   letter-spacing: 0.1em !important;
 }
 .filter-pill:hover,
 .btn-add-cart:hover {
-  background: var(--phantom-800) !important;
-  border-color: var(--champagne-400) !important;
+  background: linear-gradient(135deg, #630C1C 0%, #26050B 100%) !important;
+  border-color: var(--silver-bright) !important;
 }
 
-/* 7. Velvet Preloader Matched to Phantom Noir + Champagne */
+/* 7. Silk-Velvet Curtain Preloader: Deep Maroon-Red & Obsidian Black Pleats */
 .curtain-panel {
   background:
     repeating-linear-gradient(
       90deg,
-      rgba(0, 0, 0, 0.42) 0px,
-      rgba(255, 255, 255, 0.03) 20px,
-      rgba(0, 0, 0, 0.35) 42px,
-      rgba(194, 161, 100, 0.04) 58px,
-      rgba(0, 0, 0, 0.44) 76px
+      rgba(5, 2, 3, 0.52) 0px,
+      rgba(130, 18, 40, 0.18) 20px,
+      rgba(9, 4, 6, 0.45) 42px,
+      rgba(212, 175, 55, 0.05) 58px,
+      rgba(5, 2, 3, 0.55) 76px
     ),
-    radial-gradient(circle at 50% 42%, #24181C 0%, #120D0F 62%, #080607 100%) !important;
+    radial-gradient(circle at 50% 42%, #580A19 0%, #29040B 58%, #090506 100%) !important;
 }
