@@ -237,3 +237,17 @@ const VELORA_PRODUCTS = [
 
 
 
+
+/* Live Hero Showcase Price & Name Sync from Google Sheet */
+window.addEventListener('velora:catalogUpdated', () => {
+  if (typeof VELORA_PRODUCTS === 'undefined' || !VELORA_PRODUCTS.length) return;
+  const heroCards = document.querySelectorAll('.hero-slide, .hero-showcase-card, .hero-product-card');
+  heroCards.forEach((card, idx) => {
+    const prod = VELORA_PRODUCTS[idx];
+    if (!prod) return;
+    const titleEl = card.querySelector('h3, .hero-card-title, .slide-title');
+    const priceEl = card.querySelector('.hero-card-price, .slide-price, span:last-child');
+    if (titleEl && titleEl.textContent.trim().length > 3) titleEl.textContent = prod.name;
+    if (priceEl && priceEl.textContent.includes('₹')) priceEl.textContent = '₹' + Number(prod.price).toLocaleString('en-IN');
+  });
+});
