@@ -232,22 +232,33 @@ const VELORA_PRODUCTS = [
   } catch (e) {}
 })();
 
-
-
-
-
-
-
-/* Live Hero Showcase Price & Name Sync from Google Sheet */
+/* Live Hero Showcase & Spotlight Sync from Google Sheet */
 window.addEventListener('velora:catalogUpdated', () => {
   if (typeof VELORA_PRODUCTS === 'undefined' || !VELORA_PRODUCTS.length) return;
-  const heroCards = document.querySelectorAll('.hero-slide, .hero-showcase-card, .hero-product-card');
-  heroCards.forEach((card, idx) => {
-    const prod = VELORA_PRODUCTS[idx];
-    if (!prod) return;
-    const titleEl = card.querySelector('h3, .hero-card-title, .slide-title');
-    const priceEl = card.querySelector('.hero-card-price, .slide-price, span:last-child');
-    if (titleEl && titleEl.textContent.trim().length > 3) titleEl.textContent = prod.name;
-    if (priceEl && priceEl.textContent.includes('₹')) priceEl.textContent = '₹' + Number(prod.price).toLocaleString('en-IN');
+  const byId = id => VELORA_PRODUCTS.find(p => p.id === id);
+  const slideMap = [
+    { idx: 0, prod: byId('vel-06') || VELORA_PRODUCTS[5] },
+    { idx: 1, prod: byId('vel-01') || VELORA_PRODUCTS[0] },
+    { idx: 2, prod: byId('vel-04') || VELORA_PRODUCTS[3] }
+  ];
+  slideMap.forEach(({ idx, prod }) => {
+    const slide = document.querySelector('.hero-slide[data-slide="' + idx + '"]');
+    if (!slide || !prod) return;
+    const titleEl = slide.querySelector('strong');
+    const priceEl = slide.querySelector('.tag-price');
+    const imgEl = slide.querySelector('img');
+    if (titleEl) titleEl.textContent = prod.name;
+    if (priceEl) priceEl.textContent = '₹' + Number(prod.price).toLocaleString('en-IN');
+    if (imgEl && prod.image) imgEl.src = prod.image;
   });
+  const spotProd = byId('vel-06') || VELORA_PRODUCTS[5];
+  if (spotProd) {
+    const spotTitle = document.querySelector('.spotlight-details .section-title');
+    const spotPrice = document.querySelector('.spotlight-price');
+    const spotBtn = document.querySelector('#spotlightAddBtn .btn-text');
+    const fmt = '₹' + Number(spotProd.price).toLocaleString('en-IN');
+    if (spotTitle) spotTitle.textContent = spotProd.name;
+    if (spotPrice) spotPrice.textContent = fmt;
+    if (spotBtn) spotBtn.textContent = 'Add to Bag — ' + fmt;
+  }
 });
