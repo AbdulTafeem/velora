@@ -1,107 +1,117 @@
 ﻿/* ==========================================================================
-   VELORA — OBSIDIAN BLACK, ROYAL MAROON RED, GOLD, SILVER & CREAM WHITE
+   VELORA — APPLE-PRECISION 4K EDITORIAL LUXURY
+   Palette: Obsidian Black • Royal Maroon Red • Brushed Gold • Silver • Cream
    ========================================================================== */
 :root {
-  --obsidian-950: #090506;
-  --obsidian-900: #12090B;
-  --maroon-royal: #4E0916;
+  --obsidian-950: #080506;
+  --obsidian-900: #11090B;
+  --maroon-royal: #540A18;
   --maroon-deep: #2B040B;
-  --gold-light: #EFE0BA;
+  --gold-light: #F3E5C0;
   --gold-pure: #D4AF37;
   --gold-antique: #A88438;
-  --silver-bright: #E4E7EC;
-  --silver-brushed: #B8C0CA;
-  --silver-hairline: rgba(200, 208, 218, 0.34);
-  --cream-white: #F8F4EC;
+  --silver-bright: #E5E8EE;
+  --silver-brushed: #B9C1CC;
+  --cream-white: #F8F5EE;
   --cream-card: #FFFDF9;
-  --ink-noir: #140D0F;
+  --ink-noir: #120C0E;
 }
 
-/* 1. Cream White Surfaces */
-body,
-.section-cream {
+/* 1. 4K Optical Clarity & Cream White Base */
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+body, .section-cream {
   background-color: var(--cream-white) !important;
   color: var(--ink-noir) !important;
 }
 
-/* 2. Obsidian Black + Deep Maroon Red Radial Depth (Hero, Spotlight, Footer) */
-.announcement-bar {
-  background: linear-gradient(90deg, #090506 0%, #26040A 50%, #090506 100%) !important;
-  color: var(--gold-light) !important;
-  border-bottom: 1px solid rgba(212, 175, 55, 0.28) !important;
-  letter-spacing: 0.11em !important;
-  text-transform: uppercase;
-  font-size: 0.67rem !important;
+/* 2. Seamless Apple-Precision Preloader (Zero Stripes, Zero Line Cutting Text) */
+.preloader-seam {
+  display: none !important;
 }
-.hero-section,
-.spotlight-section,
-.site-footer,
-.section-dark {
+.curtain-panel {
   background:
-    radial-gradient(ellipse 68% 62% at 72% 40%, rgba(110, 14, 32, 0.55) 0%, rgba(56, 7, 16, 0.35) 45%, transparent 75%),
-    radial-gradient(circle at 18% 82%, #3B0610 0%, #170407 52%, #090506 100%) !important;
-  color: var(--cream-white) !important;
+    radial-gradient(circle at 50% 42%, #590B1A 0%, #2B040B 56%, #090506 100%) !important;
+  box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.72) !important;
+  transition: transform 0.95s cubic-bezier(0.77, 0, 0.175, 1) !important;
+}
+.preloader.is-parting .curtain-left {
+  transform: translate3d(-101%, 0, 0) !important;
+  border-right: 1px solid rgba(212, 175, 55, 0.45) !important;
+}
+.preloader.is-parting .curtain-right {
+  transform: translate3d(101%, 0, 0) !important;
+  border-left: 1px solid rgba(212, 175, 55, 0.45) !important;
+}
+.preloader-frame {
+  border: 1px solid rgba(200, 208, 218, 0.22) !important;
+}
+.pf-corner {
+  border-color: var(--gold-pure) !important;
+}
+.pf-stamp {
+  color: var(--silver-bright) !important;
+  letter-spacing: 0.34em !important;
+  background: transparent !important;
+}
+.preloader-logo-wrap {
+  animation: appleHeroReveal 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes appleHeroReveal {
+  from { opacity: 0; transform: translateY(12px) scale(0.985); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* Fine Brushed Silver Architectural Grid in Hero */
-.hero-section::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(to right, rgba(200, 208, 218, 0.045) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(200, 208, 218, 0.045) 1px, transparent 1px);
-  background-size: 92px 92px;
-  mask-image: radial-gradient(circle at 50% 45%, black 35%, transparent 82%);
-  -webkit-mask-image: radial-gradient(circle at 50% 45%, black 35%, transparent 82%);
-  pointer-events: none;
+/* 3. Clean Cream White Header & Crisp Nav Typography (Fixes Invisible HOME Text) */
+header.site-header,
+header.site-header .navbar {
+  background: rgba(248, 245, 238, 0.94) !important;
+  backdrop-filter: blur(20px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+  border-bottom: 1px solid rgba(18, 12, 14, 0.08) !important;
 }
-
-/* 3. Cream White Header -> Obsidian & Maroon Scrolled State with Gold + Silver Accents */
-.site-header,
-.navbar {
-  background: rgba(248, 244, 236, 0.96) !important;
-  backdrop-filter: blur(16px) !important;
-  -webkit-backdrop-filter: blur(16px) !important;
-  border-bottom: 1px solid rgba(78, 9, 22, 0.14) !important;
+header.site-header.is-scrolled .navbar {
+  background: rgba(12, 6, 8, 0.92) !important;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.28) !important;
 }
-.site-header.is-scrolled .navbar {
-  background: linear-gradient(90deg, rgba(11, 6, 7, 0.95) 0%, rgba(43, 4, 11, 0.94) 50%, rgba(11, 6, 7, 0.95) 100%) !important;
-  border-bottom: 1px solid rgba(212, 175, 55, 0.32) !important;
-}
-.nav-link {
+header.site-header .navbar .nav-link,
+header.site-header .navbar .nav-link.is-active {
   position: relative;
   background: transparent !important;
   color: var(--ink-noir) !important;
-  font-size: 0.77rem !important;
-  letter-spacing: 0.08em !important;
+  font-size: 0.76rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.09em !important;
   text-transform: uppercase;
   padding: 0.55rem 0.85rem !important;
 }
-.site-header.is-scrolled .nav-link {
+header.site-header .navbar .nav-link.is-active {
+  color: var(--maroon-royal) !important;
+  font-weight: 700 !important;
+}
+header.site-header.is-scrolled .navbar .nav-link {
   color: var(--cream-white) !important;
 }
-.nav-link::after {
+header.site-header.is-scrolled .navbar .nav-link.is-active {
+  color: var(--gold-light) !important;
+}
+header.site-header .navbar .nav-link::after {
   content: "";
   position: absolute;
   left: 50%;
-  bottom: 4px;
+  bottom: 3px;
   width: 0;
   height: 1.5px;
   background: linear-gradient(90deg, var(--silver-brushed), var(--gold-pure));
   transform: translateX(-50%);
   transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.nav-link:hover::after,
-.nav-link.is-active::after {
-  width: 24px;
-}
-.nav-link.is-active {
-  color: var(--maroon-royal) !important;
-  font-weight: 700 !important;
-}
-.site-header.is-scrolled .nav-link.is-active {
-  color: var(--gold-light) !important;
+header.site-header .navbar .nav-link:hover::after,
+header.site-header .navbar .nav-link.is-active::after {
+  width: 22px;
 }
 .action-badge {
   background: var(--maroon-royal) !important;
@@ -109,114 +119,131 @@ body,
   border: 1px solid var(--silver-brushed) !important;
 }
 
-/* 4. Gold Title + Brushed Silver Eyebrows & Secondary Buttons */
-.hero-kicker,
-.section-eyebrow {
+/* 4. Announcement Bar + Obsidian & Royal Maroon Hero Stage */
+.announcement-bar {
+  background: linear-gradient(90deg, #080506 0%, #29040B 50%, #080506 100%) !important;
+  color: var(--gold-light) !important;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.24) !important;
+  font-size: 0.66rem !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase;
+}
+.hero-section,
+.spotlight-section,
+.site-footer,
+.section-dark {
+  background:
+    radial-gradient(ellipse 62% 58% at 72% 44%, rgba(116, 15, 34, 0.58) 0%, rgba(52, 6, 15, 0.32) 48%, transparent 78%),
+    radial-gradient(circle at 18% 85%, #38050F 0%, #140407 52%, #080506 100%) !important;
+  color: var(--cream-white) !important;
+}
+
+/* Apple-Level Negative Space: Clean Hero Left Column */
+.hero-kicker {
   color: var(--silver-bright) !important;
-  letter-spacing: 0.3em !important;
+  letter-spacing: 0.32em !important;
   font-size: 0.68rem !important;
 }
 .hero-title {
-  background: linear-gradient(125deg, #F3E4BF 0%, #D4AF37 48%, #B28B38 100%) !important;
+  background: linear-gradient(125deg, #F6E9C8 0%, #D4AF37 50%, #B38B39 100%) !important;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
-  letter-spacing: 0.14em !important;
+  letter-spacing: 0.15em !important;
 }
 .hero-tagline {
   color: var(--silver-bright) !important;
 }
 .hero-desc {
-  color: rgba(248, 244, 236, 0.8) !important;
+  color: rgba(248, 245, 238, 0.78) !important;
+  font-weight: 300 !important;
+  line-height: 1.75 !important;
 }
+.hero-pillars {
+  display: none !important;
+}
+
+/* Brushed Gold Primary + Silver Hairline Secondary CTAs */
 .btn-gold {
-  background: linear-gradient(135deg, #F3E4BF 0%, #D4AF37 52%, #A88438 100%) !important;
+  background: linear-gradient(135deg, #F5E7C4 0%, #D4AF37 52%, #A88438 100%) !important;
   color: var(--obsidian-950) !important;
-  border: 1px solid rgba(243, 228, 191, 0.65) !important;
-  letter-spacing: 0.14em !important;
+  border: 1px solid rgba(245, 231, 196, 0.7) !important;
+  border-radius: 4px !important;
+  letter-spacing: 0.13em !important;
   font-size: 0.72rem !important;
-  border-radius: 3px !important;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45) !important;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.42) !important;
 }
 .btn-outline-gold {
-  border: 1px solid var(--silver-hairline) !important;
+  border: 1px solid rgba(200, 208, 218, 0.36) !important;
   color: var(--silver-bright) !important;
   background: rgba(255, 255, 255, 0.03) !important;
-  letter-spacing: 0.14em !important;
+  border-radius: 4px !important;
+  letter-spacing: 0.13em !important;
   font-size: 0.72rem !important;
-  border-radius: 3px !important;
 }
 .btn-outline-gold:hover {
   border-color: var(--gold-pure) !important;
   color: var(--gold-light) !important;
-  background: rgba(78, 9, 22, 0.35) !important;
+  background: rgba(84, 10, 24, 0.35) !important;
 }
 
-/* 5. Double-Bezel Arch: Silver Inner Hairline + Gold Outer Frame + Cream Matting */
+/* 5. Gallery-Grade Arch Showcase (Studio Vignette + Breathing Room) */
 .hero-arch-frame {
-  padding: 10px !important;
-  border-radius: 236px 236px 6px 6px !important;
-  border: 1px solid rgba(212, 175, 55, 0.55) !important;
-  background: linear-gradient(180deg, rgba(200, 208, 218, 0.16) 0%, rgba(43, 4, 11, 0.65) 55%, rgba(9, 5, 6, 0.85) 100%) !important;
+  padding: 9px !important;
+  border-radius: 236px 236px 8px 8px !important;
+  border: 1px solid rgba(212, 175, 55, 0.52) !important;
+  background: linear-gradient(180deg, rgba(200, 208, 218, 0.18) 0%, rgba(43, 4, 11, 0.65) 60%, rgba(8, 5, 6, 0.88) 100%) !important;
   box-shadow:
-    0 34px 90px rgba(0, 0, 0, 0.75),
-    inset 0 0 0 1px rgba(200, 208, 218, 0.28) !important;
+    0 36px 90px rgba(0, 0, 0, 0.75),
+    inset 0 0 0 1px rgba(200, 208, 218, 0.25) !important;
 }
 .hero-arch-inner {
-  border-radius: 226px 226px 3px 3px !important;
-  background: radial-gradient(circle at 50% 42%, #FFFDF9 0%, #EFE8DC 100%) !important;
+  border-radius: 227px 227px 4px 4px !important;
+  background: radial-gradient(circle at 50% 45%, #FFFFFF 0%, #F3EDE2 78%, #E6DDD0 100%) !important;
+}
+.hero-arch-inner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 12px 34px rgba(18, 12, 14, 0.12), inset 0 -24px 40px rgba(18, 12, 14, 0.16);
+  pointer-events: none;
+}
+.hero-slide img {
+  padding: 1.25rem 1.25rem 4.5rem 1.25rem !important;
+  object-fit: contain !important;
+  background: transparent !important;
 }
 .hero-floating-tag {
-  background: linear-gradient(135deg, rgba(14, 7, 9, 0.92), rgba(56, 7, 16, 0.9)) !important;
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
-  border: 1px solid rgba(212, 175, 55, 0.45) !important;
-  box-shadow: inset 0 0 0 1px rgba(200, 208, 218, 0.15) !important;
-  border-radius: 4px !important;
+  background: rgba(12, 6, 8, 0.86) !important;
+  backdrop-filter: blur(18px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(150%) !important;
+  border: 1px solid rgba(212, 175, 55, 0.42) !important;
+  border-radius: 6px !important;
 }
 .hero-floating-tag .tag-label {
   color: var(--silver-bright) !important;
   letter-spacing: 0.22em !important;
-  font-size: 0.6rem !important;
+  font-size: 0.58rem !important;
 }
 .hero-floating-tag .tag-price {
   color: var(--gold-light) !important;
 }
 
-/* 6. Cream White Cards with Silver + Gold Metallic Borders & Maroon CTAs */
+/* 6. Cream White Catalog Cards with Silver & Gold Hairlines */
 .product-card {
   background: var(--cream-card) !important;
-  border: 1px solid rgba(184, 192, 202, 0.48) !important;
-  border-radius: 6px !important;
+  border: 1px solid rgba(185, 193, 204, 0.48) !important;
+  border-radius: 8px !important;
 }
 .product-card:hover {
   border-color: var(--gold-pure) !important;
-  box-shadow: 0 20px 44px rgba(43, 4, 11, 0.13) !important;
+  box-shadow: 0 22px 46px rgba(43, 4, 11, 0.12) !important;
 }
 .filter-pill.is-active,
 .filter-tab.is-active,
 .btn-add-cart,
 .btn-maroon {
-  background: linear-gradient(135deg, #4E0916 0%, #1B0408 100%) !important;
+  background: linear-gradient(135deg, #540A18 0%, #170407 100%) !important;
   color: var(--gold-light) !important;
   border: 1px solid rgba(212, 175, 55, 0.55) !important;
-  letter-spacing: 0.1em !important;
-}
-.filter-pill:hover,
-.btn-add-cart:hover {
-  background: linear-gradient(135deg, #630C1C 0%, #26050B 100%) !important;
-  border-color: var(--silver-bright) !important;
-}
-
-/* 7. Silk-Velvet Curtain Preloader: Deep Maroon-Red & Obsidian Black Pleats */
-.curtain-panel {
-  background:
-    repeating-linear-gradient(
-      90deg,
-      rgba(5, 2, 3, 0.52) 0px,
-      rgba(130, 18, 40, 0.18) 20px,
-      rgba(9, 4, 6, 0.45) 42px,
-      rgba(212, 175, 55, 0.05) 58px,
-      rgba(5, 2, 3, 0.55) 76px
-    ),
-    radial-gradient(circle at 50% 42%, #580A19 0%, #29040B 58%, #090506 100%) !important;
 }
