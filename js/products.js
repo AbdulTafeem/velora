@@ -187,7 +187,7 @@ const VELORA_PRODUCTS = [
           const st = (row.status || 'active').trim().toLowerCase();
           if (st === 'hide' || st === 'draft') return null;
 
-          const price = Number(String(row.price).replace(/[^0-9]/g, '')) || 3499;
+          const rawPriceStr = String(row.price ?? '').replace(/[^0-9]/g, ''); const price = rawPriceStr !== '' ? Number(rawPriceStr) : 3499;
           const rawMrp = Number(String(row.mrp || '').replace(/[^0-9]/g, ''));
           const mrp = rawMrp > price ? rawMrp : null;
           const hasStock = row.stock !== undefined && row.stock !== '';
@@ -231,6 +231,7 @@ const VELORA_PRODUCTS = [
       .catch(() => {});
   } catch (e) {}
 })();
+
 
 
 
