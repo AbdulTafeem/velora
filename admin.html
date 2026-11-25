@@ -85,7 +85,7 @@
       </p>
       <div class="btn-row">
         <a href="https://docs.google.com/spreadsheets/d/1yskAN_jSn2RRHHkt64wO0h4y855tGC2TdPm4NpKJFmM/edit" target="_blank" rel="noopener" class="btn btn-gold">Open Google Sheet &#8599;</a>
-        <button type="button" class="btn btn-outline" id="copyFullTsvBtn">Copy Full Catalog for Sheet</button>
+        <button type="button" class="btn btn-outline" id="copyFullTsvBtn">Copy Full Catalog for Sheet</button><button type="button" class="btn btn-outline" id="exportJsBtn">Download products.js</button>
       </div>
     </div>
 
@@ -135,9 +135,18 @@
             <label>Badge Tag</label>
             <input type="text" id="pBadge" value="New Release" placeholder="Best Seller / New Release" />
           </div>
-          <div class="field full">
-            <label>Product Image URL or Path *</label>
-            <input type="text" id="pImg1" required placeholder="assets/images/product-1.jpg or Google Drive / https image link" />
+                    <div class="field full">
+            <label>Product Photo (Upload from Device or Paste URL) *</label>
+            <div id="dropZone" style="border:1.5px dashed rgba(184,137,43,0.65);border-radius:10px;padding:0.9rem;background:#fbf6ed;display:flex;align-items:center;gap:0.9rem;cursor:pointer;margin-bottom:0.55rem;">
+              <img id="pImgPreview" src="assets/images/product-1.jpg" alt="Preview" style="width:58px;height:64px;object-fit:cover;border-radius:8px;border:1px solid rgba(59,9,18,0.18);background:#fff;flex-shrink:0;" />
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:0.8rem;font-weight:700;color:#2b050b;">Click or Drag &amp; Drop Photo Here</div>
+                <div id="uploadHint" style="font-size:0.7rem;color:#6b4c52;margin-top:0.15rem;">Supports JPG, PNG, WEBP &bull; Auto-optimized for fast loading</div>
+              </div>
+              <span class="mini-btn" style="background:#2b050b;color:#f3dfb0;border:none;padding:0.48rem 0.85rem;">Choose File</span>
+              <input type="file" id="pImgFile" accept="image/*" style="display:none;" />
+            </div>
+            <input type="text" id="pImg1" required placeholder="Or paste image URL / assets/images/product-1.jpg" />
           </div>
           <div class="field full">
             <label>Finishes (Separated by | )</label>
@@ -201,7 +210,56 @@
 
       function saveItems() {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-        renderList();
+              const dropZone = document.getElementById('dropZone');
+      const fileInput = document.getElementById('pImgFile');
+      const urlInput = document.getElementById('pImg1');
+      const previewImg = document.getElementById('pImgPreview');
+      const uploadHint = document.getElementById('uploadHint');
+
+      function processUploadedImage(file) {
+        if (!file || !file.type.startsWith('image/')) { notify('Please select a valid image file (JPG, PNG, WEBP).'); return; }
+        const reader = new FileReader();
+        reader.onload = function (ev) {
+          const img = new Image();
+          img.onload = function () {
+            const maxDim = 900;
+            let w = img.width, h = img.height;
+            if (w > maxDim || h > maxDim) {
+              if (w > h) { h = Math.round(h * (maxDim / w)); w = maxDim; }
+              else { w = Math.round(w * (maxDim / h)); h = maxDim; }
+            }
+            const canvas = document.createElement('canvas');
+            canvas.width = w; canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, w, h);
+            const dataUrl = canvas.toDataURL('image/webp', 0.82);
+            urlInput.value = dataUrl;
+            previewImg.src = dataUrl;
+            uploadHint.textContent = '✓ Uploaded "' + file.name + '" (' + Math.round(dataUrl.length / 1024) + ' KB optimized)';
+            notify('Photo uploaded & optimized!');
+          };
+          img.src = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+
+      dropZone?.addEventListener('click', () => fileInput?.click());
+      fileInput?.addEventListener('change', (e) => { if (e.target.files[0]) processUploadedImage(e.target.files[0]); });
+      dropZone?.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.style.borderColor = '#2b050b'; });
+      dropZone?.addEventListener('dragleave', () => { dropZone.style.borderColor = 'rgba(184,137,43,0.65)'; });
+      dropZone?.addEventListener('drop', (e) => { e.preventDefault(); dropZone.style.borderColor = 'rgba(184,137,43,0.65)'; if (e.dataTransfer.files[0]) processUploadedImage(e.dataTransfer.files[0]); });
+      urlInput?.addEventListener('input', () => { if (urlInput.value.trim()) previewImg.src = urlInput.value.trim(); });
+
+      document.getElementById('exportJsBtn')?.addEventListener('click', () => {
+        const jsOut = 'const VELORA_PRODUCTS = ' + JSON.stringify(items, null, 2) + ';\n';
+        const blob = new Blob([jsOut], { type: 'application/javascript' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'products.js';
+        a.click();
+        notify('Downloaded updated products.js!');
+      });
+      renderList();
       }
 
       function toSheetRow(p) {
@@ -260,7 +318,7 @@
           document.getElementById('pRoom').value = p.room;
           document.getElementById('pStock').value = p.stock ?? 12;
           document.getElementById('pBadge').value = p.badge || '';
-          document.getElementById('pImg1').value = p.image;
+          document.getElementById('pImg1').value = p.image; document.getElementById('pImgPreview').src = p.image;
           document.getElementById('pFinishes').value = (p.finishes || []).join(' | ');
           document.getElementById('pMaterial').value = p.material || '';
           document.getElementById('pDim').value = p.dimensions || '';
@@ -270,7 +328,7 @@
       });
 
       document.getElementById('cancelEditBtn').addEventListener('click', () => {
-        document.getElementById('productForm').reset();
+        document.getElementById('productForm').reset(); document.getElementById('pImgPreview').src = 'assets/images/product-1.jpg'; document.getElementById('uploadHint').textContent = 'Supports JPG, PNG, WEBP • Auto-optimized for fast loading';
         document.getElementById('editIndex').value = '-1';
         document.getElementById('formHeading').textContent = 'Add New Product';
         document.getElementById('submitBtn').textContent = '+ Save Product to Catalog';
@@ -333,8 +391,58 @@
         setTimeout(() => location.reload(), 650);
       });
 
+            const dropZone = document.getElementById('dropZone');
+      const fileInput = document.getElementById('pImgFile');
+      const urlInput = document.getElementById('pImg1');
+      const previewImg = document.getElementById('pImgPreview');
+      const uploadHint = document.getElementById('uploadHint');
+
+      function processUploadedImage(file) {
+        if (!file || !file.type.startsWith('image/')) { notify('Please select a valid image file (JPG, PNG, WEBP).'); return; }
+        const reader = new FileReader();
+        reader.onload = function (ev) {
+          const img = new Image();
+          img.onload = function () {
+            const maxDim = 900;
+            let w = img.width, h = img.height;
+            if (w > maxDim || h > maxDim) {
+              if (w > h) { h = Math.round(h * (maxDim / w)); w = maxDim; }
+              else { w = Math.round(w * (maxDim / h)); h = maxDim; }
+            }
+            const canvas = document.createElement('canvas');
+            canvas.width = w; canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, w, h);
+            const dataUrl = canvas.toDataURL('image/webp', 0.82);
+            urlInput.value = dataUrl;
+            previewImg.src = dataUrl;
+            uploadHint.textContent = '✓ Uploaded "' + file.name + '" (' + Math.round(dataUrl.length / 1024) + ' KB optimized)';
+            notify('Photo uploaded & optimized!');
+          };
+          img.src = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+
+      dropZone?.addEventListener('click', () => fileInput?.click());
+      fileInput?.addEventListener('change', (e) => { if (e.target.files[0]) processUploadedImage(e.target.files[0]); });
+      dropZone?.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.style.borderColor = '#2b050b'; });
+      dropZone?.addEventListener('dragleave', () => { dropZone.style.borderColor = 'rgba(184,137,43,0.65)'; });
+      dropZone?.addEventListener('drop', (e) => { e.preventDefault(); dropZone.style.borderColor = 'rgba(184,137,43,0.65)'; if (e.dataTransfer.files[0]) processUploadedImage(e.dataTransfer.files[0]); });
+      urlInput?.addEventListener('input', () => { if (urlInput.value.trim()) previewImg.src = urlInput.value.trim(); });
+
+      document.getElementById('exportJsBtn')?.addEventListener('click', () => {
+        const jsOut = 'const VELORA_PRODUCTS = ' + JSON.stringify(items, null, 2) + ';\n';
+        const blob = new Blob([jsOut], { type: 'application/javascript' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'products.js';
+        a.click();
+        notify('Downloaded updated products.js!');
+      });
       renderList();
     })();
   </script>
 </body>
 </html>
+
