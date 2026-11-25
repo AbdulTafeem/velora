@@ -15,7 +15,7 @@
     setTimeout(() => {
       preloader.classList.add('is-parting'); document.body.classList.add('velora-loaded');
       preloader.style.pointerEvents = 'none';
-      setTimeout(() => { preloader.style.display = 'none'; }, 880);
+      setTimeout(() => { preloader.style.display = 'none'; }, 1220);
     }, delayMs);
   }
   if (preloader) {
@@ -173,6 +173,7 @@
   document.getElementById('reviewPrevBtn')?.addEventListener('click', function(){ if(track) track.scrollBy({ left: -340, behavior: 'smooth' }); });
   document.getElementById('reviewNextBtn')?.addEventListener('click', function(){ if(track) track.scrollBy({ left: 340, behavior: 'smooth' }); });
 })();
+
 
 
 
