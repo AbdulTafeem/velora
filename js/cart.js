@@ -3,7 +3,7 @@
    VELORA — E-COMMERCE STORE, CART, QUICK-VIEW & WHATSAPP ENGINE (js/cart.js)
    ========================================================================== */
 (function () {
-  const WHATSAPP_NUMBER = '919876543210'; // Replace with your business WhatsApp number
+  const WHATSAPP_NUMBER = '918284029319'; // Replace with your business WhatsApp number
 
   function safeReadStorage(key) {
     try {
@@ -479,6 +479,7 @@
   renderProducts();
   renderCart();
 })();
+
 
 
 
