@@ -13,7 +13,7 @@
       requestAnimationFrame(() => { bar.style.transform = 'scaleX(1)'; });
     }
     setTimeout(() => {
-      preloader.classList.add('is-parting');
+      preloader.classList.add('is-parting'); document.body.classList.add('velora-loaded');
       preloader.style.pointerEvents = 'none';
       setTimeout(() => { preloader.style.display = 'none'; }, 880);
     }, delayMs);
@@ -173,5 +173,6 @@
   document.getElementById('reviewPrevBtn')?.addEventListener('click', function(){ if(track) track.scrollBy({ left: -340, behavior: 'smooth' }); });
   document.getElementById('reviewNextBtn')?.addEventListener('click', function(){ if(track) track.scrollBy({ left: 340, behavior: 'smooth' }); });
 })();
+
 
 

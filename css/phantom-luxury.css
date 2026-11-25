@@ -28,42 +28,27 @@ body, .section-cream {
   color: var(--ink-noir) !important;
 }
 
-/* 2. Seamless Apple-Precision Preloader (Zero Stripes, Zero Line Cutting Text) */
-.preloader-seam {
-  display: none !important;
-}
-.curtain-panel {
-  background:
-    radial-gradient(circle at 50% 42%, #590B1A 0%, #2B040B 56%, #090506 100%) !important;
-  box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.72) !important;
-  transition: transform 0.95s cubic-bezier(0.77, 0, 0.175, 1) !important;
-}
-.preloader.is-parting .curtain-left {
-  transform: translate3d(-101%, 0, 0) !important;
-  border-right: 1px solid rgba(212, 175, 55, 0.45) !important;
-}
-.preloader.is-parting .curtain-right {
-  transform: translate3d(101%, 0, 0) !important;
-  border-left: 1px solid rgba(212, 175, 55, 0.45) !important;
-}
-.preloader-frame {
-  border: 1px solid rgba(200, 208, 218, 0.22) !important;
-}
-.pf-corner {
-  border-color: var(--gold-pure) !important;
-}
-.pf-stamp {
-  color: var(--silver-bright) !important;
-  letter-spacing: 0.34em !important;
-  background: transparent !important;
-}
-.preloader-logo-wrap {
-  animation: appleHeroReveal 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-@keyframes appleHeroReveal {
-  from { opacity: 0; transform: translateY(12px) scale(0.985); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
-}
+/* 2. High-End 3-Stage Choreographed Preloader */
+.preloader { background: transparent !important; overflow: hidden !important; }
+.preloader-seam { display: none !important; }
+.curtain-panel { box-shadow: inset 0 0 140px rgba(0,0,0,0.78) !important; transition: transform 0.92s cubic-bezier(0.76,0,0.24,1) !important; }
+.curtain-left { left: 0; width: 50.2% !important; background: radial-gradient(circle at 100% 45%, #5A0B1A 0%, #2B040B 52%, #090506 100%) !important; }
+.curtain-right { right: 0; width: 50.2% !important; background: radial-gradient(circle at 0% 45%, #5A0B1A 0%, #2B040B 52%, #090506 100%) !important; }
+.preloader-frame { inset: 28px !important; border: 1px solid rgba(200,208,218,0.16) !important; transition: opacity 0.32s ease !important; }
+.pf-corner { width: 18px !important; height: 18px !important; border-color: #D4AF37 !important; }
+.pf-stamp { color: #E5E8EE !important; font-size: 0.62rem !important; letter-spacing: 0.36em !important; }
+.preloader-logo-wrap { animation: none !important; transition: opacity 0.32s cubic-bezier(0.22,1,0.36,1), transform 0.38s cubic-bezier(0.22,1,0.36,1) !important; }
+.preloader-crest { width: 64px !important; margin-bottom: 0.65rem !important; filter: drop-shadow(0 6px 20px rgba(212,175,55,0.38)) !important; }
+.preloader-crest path { animation: crestDraw 0.65s cubic-bezier(0.22,1,0.36,1) forwards !important; }
+.preloader-crest rect { opacity: 1 !important; animation: none !important; }
+.preloader-brand { animation: opticalFocusIn 0.7s cubic-bezier(0.22,1,0.36,1) both !important; }
+.preloader-tagline { color: #E5E8EE !important; letter-spacing: 0.16em !important; animation: opticalFocusIn 0.7s 0.08s cubic-bezier(0.22,1,0.36,1) both !important; }
+@keyframes opticalFocusIn { from { opacity: 0; filter: blur(6px); transform: translateY(6px); } to { opacity: 1; filter: blur(0); transform: translateY(0); } }
+.preloader.is-parting .preloader-logo-wrap, .preloader.is-parting .preloader-frame { opacity: 0 !important; transform: scale(0.96) !important; }
+.preloader.is-parting .curtain-left { transform: translate3d(-101%,0,0) !important; border-right: 1px solid rgba(212,175,55,0.65) !important; box-shadow: 20px 0 60px rgba(0,0,0,0.85) !important; transition-delay: 0.16s !important; }
+.preloader.is-parting .curtain-right { transform: translate3d(101%,0,0) !important; border-left: 1px solid rgba(212,175,55,0.65) !important; box-shadow: -20px 0 60px rgba(0,0,0,0.85) !important; transition-delay: 0.16s !important; }
+.hero-section .hero-arch-frame { transform: scale(1.035); opacity: 0.85; transition: transform 1.25s cubic-bezier(0.22,1,0.36,1) 0.25s, opacity 1s ease 0.25s; }
+body.velora-loaded .hero-section .hero-arch-frame { transform: scale(1); opacity: 1; }
 
 /* 3. Clean Cream White Header & Crisp Nav Typography (Fixes Invisible HOME Text) */
 header.site-header,
@@ -247,3 +232,4 @@ header.site-header .navbar .nav-link.is-active::after {
   color: var(--gold-light) !important;
   border: 1px solid rgba(212, 175, 55, 0.55) !important;
 }
+
