@@ -171,7 +171,7 @@
 
       <div class="filter-group">
         <h4>Max Price: <span id="maxPriceLabel">₹4,000</span></h4>
-        <input type="range" id="priceRangeInput" min="3500" max="4000" step="500" value="4000" style="width:100%;accent-color:var(--maroon-900);cursor:pointer;" />
+        <input type="range" id="priceRangeInput" min="0" max="25000" step="100" value="25000" style="width:100%;accent-color:var(--maroon-900);cursor:pointer;" />
       </div>
 
       <button type="button" class="btn-magnetic btn-maroon" id="resetShopFilters" style="width:100%;padding-block:0.7rem;">
@@ -303,7 +303,7 @@
       const priceLabel = document.getElementById('maxPriceLabel');
       const sortSelect = document.getElementById('shopSortSelect');
       const formatINR = window.formatINR || function(a){ return '₹' + Number(a || 0).toLocaleString('en-IN'); }; let selectedCat = 'all';
-      let maxPrice = 4000;
+      let maxPrice = 25000;
 
       function renderShop() {
         let list = VELORA_PRODUCTS.filter((p) => (selectedCat === 'all' || p.category === selectedCat || p.category.replace(/s$/,'') === selectedCat.replace(/s$/,'')) && p.price <= maxPrice);
@@ -341,14 +341,29 @@
       sortSelect.addEventListener('change', renderShop);
       document.getElementById('resetShopFilters').addEventListener('click', () => {
         selectedCat = 'all';
-        maxPrice = 4000;
-        priceInput.value = 4000;
+        maxPrice = 25000;
+        priceInput.value = maxPrice;
         priceLabel.textContent = '₹4,000';
         sortSelect.value = 'featured';
         document.querySelector('input[name="cat"][value="all"]').checked = true;
         renderShop();
       });
-      renderShop(); window.addEventListener('velora:catalogUpdated', renderShop);
+            function syncPriceBounds() {
+        if (typeof VELORA_PRODUCTS === 'undefined' || !VELORA_PRODUCTS.length) return;
+        const highest = Math.max(5000, ...VELORA_PRODUCTS.map((p) => Number(p.price) || 0));
+        const ceil = Math.ceil(highest / 500) * 500;
+        const wasAtMax = Number(priceInput.value) >= Number(priceInput.max);
+        priceInput.min = 0;
+        priceInput.max = ceil;
+        if (wasAtMax || maxPrice > ceil) {
+          maxPrice = ceil;
+          priceInput.value = ceil;
+          if (priceLabel) priceLabel.textContent = formatINR(ceil);
+        }
+      }
+      syncPriceBounds();
+      renderShop();
+      window.addEventListener('velora:catalogUpdated', () => { syncPriceBounds(); renderShop(); });
       // Spatial Room Parallax + Lighting Mood Switcher
       const roomBg = document.querySelector('.shop-room-bg');
       document.querySelectorAll('.mood-pill').forEach((btn) => {
@@ -379,6 +394,7 @@
   <script src="js/luxury-polish.js" defer></script>
 </body>
 </html>
+
 
 
 

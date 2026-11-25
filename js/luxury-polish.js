@@ -155,3 +155,5 @@
   }
   window.addEventListener('velora:catalogUpdated', () => setTimeout(runAll, 80));
 })();
+document.getElementById('newsletterForm')?.addEventListener('submit', (e) => { e.preventDefault(); const inp = document.getElementById('newsletterEmail'); if (inp) inp.value = ''; const t = document.getElementById('veloraToast'); if (t) { t.textContent = 'Welcome to VELORA Privé — use code VELORA10 for 10% OFF.'; t.classList.add('is-visible'); setTimeout(() => t.classList.remove('is-visible'), 3600); } });
+

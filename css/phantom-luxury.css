@@ -235,5 +235,7 @@ header.site-header .navbar .nav-link.is-active::after {
   color: var(--gold-light) !important;
   border: 1px solid rgba(212, 175, 55, 0.55) !important;
 }
-
+header.site-header.is-scrolled .brand-wordmark { color: #F3E5C0 !important; }
+header.site-header.is-scrolled .icon-btn { color: #F8F5EE !important; }
+header.site-header.is-scrolled .mobile-menu-btn span { background: #F3E5C0 !important; }
 
