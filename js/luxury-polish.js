@@ -65,3 +65,93 @@
     });
   }
 })();
+
+// 5. Flagship Atelier Details: Dynamic Save Pills, Card Swatch Selection & Cart VIP Bar
+(() => {
+  const enhanceCards = () => {
+    document.querySelectorAll('.product-card').forEach(card => {
+      // Interactive finish dots on cards
+      const dots = card.querySelectorAll('.finish-dot, .swatch-dot');
+      dots.forEach(dot => {
+        if (dot.dataset.swatchBound) return;
+        dot.dataset.swatchBound = '1';
+        dot.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dots.forEach(d => d.classList.remove('is-selected'));
+          dot.classList.add('is-selected');
+          const label = dot.getAttribute('title') || dot.dataset.finish;
+          const meta = card.querySelector('.product-meta, .card-meta, .product-room');
+          if (label && meta) {
+            const base = meta.dataset.baseText || meta.textContent.split('•')[0].trim();
+            meta.dataset.baseText = base;
+            meta.textContent = base + ' • ' + label;
+          }
+        });
+      });
+
+      // Dynamic Savings Pill next to MRP
+      const priceBox = card.querySelector('.product-price-box');
+      if (priceBox && !priceBox.querySelector('.velora-save-pill')) {
+        const nowEl = priceBox.querySelector('.price-now');
+        const mrpEl = priceBox.querySelector('.price-mrp');
+        if (nowEl && mrpEl) {
+          const now = Number(nowEl.textContent.replace(/[^0-9]/g, ''));
+          const mrp = Number(mrpEl.textContent.replace(/[^0-9]/g, ''));
+          if (mrp > now && now > 0) {
+            const pct = Math.round(((mrp - now) / mrp) * 100);
+            const pill = document.createElement('span');
+            pill.className = 'velora-save-pill';
+            pill.textContent = pct + '% OFF';
+            priceBox.appendChild(pill);
+          }
+        }
+      }
+    });
+  };
+
+  // Inject VIP Free Shipping Banner inside Cart Drawer
+  const injectCartVip = () => {
+    const cartFooter = document.querySelector('.cart-footer, #cartDrawer .drawer-footer');
+    if (cartFooter && !cartFooter.querySelector('.velora-cart-vip')) {
+      const vip = document.createElement('div');
+      vip.className = 'velora-cart-vip';
+      vip.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span>&#10022; <strong>Complimentary Insured Pan-India Delivery</strong></span>
+          <span style="font-weight:700;color:#7c5812;">UNLOCKED</span>
+        </div>
+        <div class="velora-vip-bar"><div class="velora-vip-fill"></div></div>
+      `;
+      cartFooter.insertBefore(vip, cartFooter.firstChild);
+    }
+  };
+
+  // Inject Atelier Craftsmanship Strip on Product Detail Page (product.html)
+  const injectPdpTrust = () => {
+    const pdpActions = document.querySelector('.pdp-actions, .pdp-details');
+    if (pdpActions && !document.querySelector('.velora-atelier-trust')) {
+      const strip = document.createElement('div');
+      strip.className = 'velora-atelier-trust';
+      strip.innerHTML = `
+        <div class="velora-trust-cell"><strong>304-Grade Steel</strong><span>Anti-Rust Architectural Finish</span></div>
+        <div class="velora-trust-cell"><strong>5-Year Warranty</strong><span>Structural Craftsmanship Guarantee</span></div>
+        <div class="velora-trust-cell"><strong>Insured Transit</strong><span>24–48 Hr Pan-India Dispatch</span></div>
+      `;
+      pdpActions.appendChild(strip);
+    }
+  };
+
+  const runAll = () => {
+    enhanceCards();
+    injectCartVip();
+    injectPdpTrust();
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', runAll);
+  } else {
+    runAll();
+  }
+  window.addEventListener('velora:catalogUpdated', () => setTimeout(runAll, 80));
+})();

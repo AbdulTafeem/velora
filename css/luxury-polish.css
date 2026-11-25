@@ -122,3 +122,98 @@ header.is-scrolled, .site-header.is-scrolled, .navbar.is-scrolled {
     scroll-behavior: auto !important;
   }
 }
+
+/* ==========================================================================
+   VELORA — FLAGSHIP ATELIER DETAILS, TABULAR PRICING & SWATCH INTERACTIONS
+   ========================================================================== */
+.price-now, .price-mrp, .tag-price, .spotlight-price, #qvPrice, #qvMrp {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+/* Dynamic Discount Pill */
+.velora-save-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(212, 175, 55, 0.16);
+  color: #7c5812;
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  margin-left: 0.45rem;
+  vertical-align: middle;
+}
+
+/* Interactive Card Swatch Active State */
+.finish-dot, .swatch-dot, [data-finish] {
+  cursor: pointer;
+  transition: transform 0.25s var(--velora-ease), box-shadow 0.25s var(--velora-ease);
+}
+.finish-dot:hover, .swatch-dot:hover, [data-finish]:hover {
+  transform: scale(1.22);
+}
+.finish-dot.is-selected, .swatch-dot.is-selected {
+  box-shadow: 0 0 0 2px #fffdf9, 0 0 0 3.5px #3b0912 !important;
+  transform: scale(1.18);
+}
+
+/* Cart Drawer VIP Shipping & Trust Banner */
+.velora-cart-vip {
+  background: linear-gradient(135deg, rgba(59, 9, 18, 0.06), rgba(212, 175, 55, 0.14));
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+  margin-bottom: 0.85rem;
+  font-size: 0.72rem;
+  color: #2b050b;
+}
+.velora-vip-bar {
+  height: 4px;
+  background: rgba(59, 9, 18, 0.12);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-top: 0.45rem;
+}
+.velora-vip-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #b8892b, #d4af37);
+  border-radius: 99px;
+  transition: width 0.5s var(--velora-ease);
+}
+
+/* Product Detail Atelier Spec Strip */
+.velora-atelier-trust {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.65rem;
+  margin-top: 1.25rem;
+  padding-top: 1.15rem;
+  border-top: 1px solid rgba(59, 9, 18, 0.12);
+}
+.velora-trust-cell {
+  background: #fbf6ed;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: 10px;
+  padding: 0.65rem 0.7rem;
+  text-align: center;
+}
+.velora-trust-cell strong {
+  display: block;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #3b0912;
+  margin-bottom: 0.15rem;
+}
+.velora-trust-cell span {
+  font-size: 0.66rem;
+  color: #6b4c52;
+}
+@media (max-width: 540px) {
+  .velora-atelier-trust { grid-template-columns: 1fr; }
+}
