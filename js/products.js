@@ -158,7 +158,7 @@ const VELORA_PRODUCTS = [
 
 (function initVeloraLiveCatalog() {
   try {
-    localStorage.removeItem('velora_custom_products_v1');
+    const adminDraft = JSON.parse(localStorage.getItem('velora_custom_products_v1') || 'null'); if (Array.isArray(adminDraft) && adminDraft.length > 0) { VELORA_PRODUCTS.splice(0, VELORA_PRODUCTS.length, ...adminDraft); window.dispatchEvent(new Event('velora:catalogUpdated')); return; }
     const url = 'https://docs.google.com/spreadsheets/d/1yskAN_jSn2RRHHkt64wO0h4y855tGC2TdPm4NpKJFmM/gviz/tq?tqx=out:csv&sheet=Sheet1&cb=' + Date.now();
     fetch(url, { cache: 'no-store' })
       .then((r) => r.text())
@@ -231,3 +231,4 @@ const VELORA_PRODUCTS = [
       .catch(() => {});
   } catch (e) {}
 })();
+
