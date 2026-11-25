@@ -275,3 +275,18 @@ header.is-scrolled, .site-header.is-scrolled, .navbar.is-scrolled {
   align-items: center;
   gap: 0.35rem;
 }
+
+/* Exact Root-Cause Fix: Stop .product-card translateY hover-edge bounce while keeping smooth image zoom */
+.product-card {
+  transform: none !important;
+  contain: layout style !important;
+  transition: box-shadow 0.4s var(--velora-ease), border-color 0.35s var(--velora-ease) !important;
+}
+.product-card:hover {
+  transform: none !important;
+  box-shadow: 0 18px 42px rgba(43, 5, 11, 0.12) !important;
+  border-color: rgba(212, 175, 55, 0.55) !important;
+}
+.product-card:hover .product-img-main {
+  transform: scale(1.038) !important;
+}
