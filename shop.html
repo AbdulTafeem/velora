@@ -296,36 +296,44 @@
   <script src="js/animations.js"></script>
   <script>
     (function () {
+      const Store = window.VeloraStore;
+      const formatINR = Store.formatINR;
       const grid = document.getElementById('shopCatalogGrid');
       const countLabel = document.getElementById('shopResultCount');
       const priceInput = document.getElementById('priceRangeInput');
       const priceLabel = document.getElementById('maxPriceLabel');
       const sortSelect = document.getElementById('shopSortSelect');
-      const formatINR = window.formatINR || function(a){ return '₹' + Number(a || 0).toLocaleString('en-IN'); }; let selectedCat = 'all';
+      let selectedCat = 'all';
       let maxPrice = 25000;
 
       function renderShop() {
-        let list = VELORA_PRODUCTS.filter((p) => (selectedCat === 'all' || p.category === selectedCat || p.category.replace(/s$/,'') === selectedCat.replace(/s$/,'')) && p.price <= maxPrice);
+        const catState = window.VELORA_CATALOG_STATE || { status: 'ready' };
+        if (catState.status === 'loading') {
+          if (countLabel) countLabel.textContent = 'Loading collection...';
+          grid.innerHTML = Store.renderSkeletonCards(6);
+          return;
+        }
+        if (catState.status === 'error') {
+          if (countLabel) countLabel.textContent = 'Catalog unavailable';
+          grid.innerHTML = Store.renderCatalogError(catState.error);
+          return;
+        }
+
+        const catalog = Store.getCatalog();
+        const targetSlug = selectedCat === 'all' ? 'all' : Store.normalizeCategory(selectedCat);
+        let list = catalog.filter((p) => (targetSlug === 'all' || Store.normalizeCategory(p.category) === targetSlug) && p.price <= maxPrice);
         if (sortSelect.value === 'price-asc') list.sort((a, b) => a.price - b.price);
         if (sortSelect.value === 'price-desc') list.sort((a, b) => b.price - a.price);
 
-        const allSpan = document.getElementById('allPiecesCount'); if (allSpan) allSpan.textContent = VELORA_PRODUCTS.length; countLabel.textContent = 'Showing ' + list.length + ' product' + (list.length === 1 ? '' : 's');
-        grid.innerHTML = list.map((p) => `
-          <article class="product-card">
-            <div class="product-media">
-              <div class="product-top-bar"><span class="badge-shimmer">${p.badge}</span></div>
-              <a href="product.html?id=${p.id}" class="product-media-link" aria-label="View ${p.name}">
-                <img src="${p.image}" alt="${p.name}" class="product-img-main" loading="lazy" />
-                <img src="${p.hoverImage}" alt="${p.name}" class="product-img-hover" loading="lazy" />
-              </a>
-              <div class="product-quick-actions">
-                <button type="button" class="btn-quick-view" data-qv="${p.id}">Quick View</button>
-              </div>
-            </div>
-            <div class="product-body"><div class="product-meta-row"><span class="product-room-tag">${p.room} &bull; ${p.finishes.length} Finishes</span><span class="product-mini-swatches">${p.finishes.map(f => `<span class="mini-swatch" title="${f}" style="background:${/gold|brass/i.test(f)?'#d4af37':/silver|chrome|steel/i.test(f)?'#cbd5e1':/teak|walnut|wood/i.test(f)?'#8b5a2b':'#18181b'}"></span>`).join("")}</span></div><h3 class="product-title"><a href="product.html?id=${p.id}">${p.name}</a></h3><div class="product-footer-row"><div class="product-price-box"><span class="price-now">${formatINR(p.price)}</span>${p.mrp ? `<span class="price-mrp">${formatINR(p.mrp)}</span>` : ""}</div>${p.stock === 0 ? `<button type="button" class="btn-add-cart" disabled style="opacity:0.5;cursor:not-allowed;">Sold Out</button>` : `<button type="button" class="btn-add-cart" data-add="${p.id}">Add to Cart</button>`}</div></div>
-          </article>
-        `).join('');
-        if (typeof window.bindVeloraCardTilt === 'function') window.bindVeloraCardTilt();
+        const allSpan = document.getElementById('allPiecesCount');
+        if (allSpan) allSpan.textContent = catalog.length;
+        countLabel.textContent = 'Showing ' + list.length + ' product' + (list.length === 1 ? '' : 's');
+
+        if (!list.length) {
+          grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem 1rem;">No pieces matched your active filters.</div>';
+          return;
+        }
+        grid.innerHTML = list.map((p) => Store.renderProductCard(p)).join('');
       }
 
       document.getElementById('shopCatFilters').addEventListener('change', (e) => {
@@ -338,18 +346,11 @@
         renderShop();
       });
       sortSelect.addEventListener('change', renderShop);
-      document.getElementById('resetShopFilters').addEventListener('click', () => {
-        selectedCat = 'all';
-        maxPrice = 25000;
-        priceInput.value = maxPrice;
-        priceLabel.textContent = '₹4,000';
-        sortSelect.value = 'featured';
-        document.querySelector('input[name="cat"][value="all"]').checked = true;
-        renderShop();
-      });
-            function syncPriceBounds() {
-        if (typeof VELORA_PRODUCTS === 'undefined' || !VELORA_PRODUCTS.length) return;
-        const highest = Math.max(5000, ...VELORA_PRODUCTS.map((p) => Number(p.price) || 0));
+
+      function syncPriceBounds() {
+        const catalog = Store.getCatalog();
+        if (!catalog.length) return;
+        const highest = Math.max(5000, ...catalog.map((p) => Number(p.price) || 0));
         const ceil = Math.ceil(highest / 500) * 500;
         const wasAtMax = Number(priceInput.value) >= Number(priceInput.max);
         priceInput.min = 0;
@@ -360,10 +361,28 @@
           if (priceLabel) priceLabel.textContent = formatINR(ceil);
         }
       }
+
+      document.getElementById('resetShopFilters').addEventListener('click', () => {
+        selectedCat = 'all';
+        const ceil = Number(priceInput.max) || 25000;
+        maxPrice = ceil;
+        priceInput.value = ceil;
+        priceLabel.textContent = formatINR(ceil);
+        sortSelect.value = 'featured';
+        const allRadio = document.querySelector('input[name="cat"][value="all"]');
+        if (allRadio) allRadio.checked = true;
+        renderShop();
+      });
+
       syncPriceBounds();
       renderShop();
-      window.addEventListener('velora:catalogUpdated', () => { syncPriceBounds(); renderShop(); });
-      // Spatial Room Parallax + Lighting Mood Switcher
+      window.addEventListener('velora:catalogLoading', renderShop);
+      window.addEventListener('velora:catalogError', renderShop);
+      window.addEventListener('velora:catalogUpdated', () => {
+        syncPriceBounds();
+        renderShop();
+      });
+
       const roomBg = document.querySelector('.shop-room-bg');
       document.querySelectorAll('.mood-pill').forEach((btn) => {
         btn.addEventListener('click', () => {
@@ -375,19 +394,7 @@
           if (btn.dataset.mood === 'evening') roomBg.classList.add('mood-evening');
         });
       });
-      if (roomBg && window.matchMedia('(pointer: fine)').matches) {
-        let px = 0, py = 0, tx = 0, ty = 0;
-        window.addEventListener('mousemove', (e) => {
-          tx = ((e.clientX / window.innerWidth) - 0.5) * -18;
-          ty = ((e.clientY / window.innerHeight) - 0.5) * -12;
-        }, { passive: true });
-        (function loopParallax() {
-          px += (tx - px) * 0.08;
-          py += (ty - py) * 0.08;
-          roomBg.style.transform = 'translate3d(' + px.toFixed(1) + 'px, ' + py.toFixed(1) + 'px, 0) scale(1.03)';
-          requestAnimationFrame(loopParallax);
-        })();
-      } })();
+    })();
   </script>
 
   <script src="js/luxury-polish.js" defer></script>
@@ -395,6 +402,7 @@
   <script src="js/billing-helpers.js" defer></script>
 </body>
 </html>
+
 
 
 

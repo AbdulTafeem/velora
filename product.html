@@ -211,17 +211,64 @@
   <script src="js/animations.js"></script>
     <script>
     function renderProductDetail() {
-      const formatINR = window.formatINR || function(a){ return '₹' + Number(a || 0).toLocaleString('en-IN'); };
-      const params = new URLSearchParams(window.location.search);
-      const id = params.get('id') || 'vel-01';
-      const product = (typeof VELORA_PRODUCTS !== 'undefined' && VELORA_PRODUCTS.find((p) => p.id === id)) || VELORA_PRODUCTS[0];
-      if (!product) return;
-      let chosenFinish = product.finishes[0];
+      const Store = window.VeloraStore;
+      const formatINR = Store.formatINR;
+      const escapeHtml = Store.escapeHtml;
+      const catState = window.VELORA_CATALOG_STATE || { status: 'ready' };
+      const titleEl = document.getElementById('pdpTitle');
+      const descEl = document.getElementById('pdpDesc');
+      const addBtn = document.getElementById('pdpAddBtn');
+      const waBtn = document.getElementById('pdpWaBtn');
 
+      if (catState.status === 'loading') {
+        document.title = 'Loading Piece | VELORA India';
+        if (titleEl) titleEl.textContent = 'Loading Architectural Piece...';
+        if (descEl) descEl.textContent = 'Fetching live specifications, finishes, and availability...';
+        return;
+      }
+
+      if (catState.status === 'error') {
+        document.title = 'Unable to Load Product | VELORA India';
+        if (titleEl) titleEl.textContent = 'Unable to Load Product';
+        if (descEl) {
+          descEl.innerHTML = escapeHtml(catState.error || 'Please check your connection.') +
+            ' <button type="button" class="btn-magnetic btn-maroon" style="margin-top:1rem;" onclick="window.reloadVeloraCatalog && window.reloadVeloraCatalog()"><span class="btn-text">Retry</span></button>';
+        }
+        return;
+      }
+
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+      const catalog = Store.getCatalog();
+      const product = id ? Store.getProductById(id) : catalog[0];
+
+      if (!product) {
+        document.title = 'Product Not Found | VELORA India';
+        const crumb = document.getElementById('pdpCrumbName');
+        if (crumb) crumb.textContent = 'Not Found';
+        const badge = document.getElementById('pdpBadge');
+        if (badge) badge.textContent = 'Unavailable';
+        if (titleEl) titleEl.textContent = 'Product Not Found';
+        const priceEl = document.getElementById('pdpPrice');
+        if (priceEl) priceEl.textContent = '';
+        const mrpEl = document.getElementById('pdpMrp');
+        if (mrpEl) mrpEl.style.display = 'none';
+        if (descEl) {
+          descEl.innerHTML = 'The requested piece could not be found or may have been archived.<br/><br/><a href="shop.html" class="btn-magnetic btn-maroon" style="display:inline-flex;text-decoration:none;"><span class="btn-text">Browse Full Catalog &rarr;</span></a>';
+        }
+        if (addBtn) addBtn.style.display = 'none';
+        if (waBtn) waBtn.style.display = 'none';
+        return;
+      }
+
+      if (addBtn) addBtn.style.display = '';
+      if (waBtn) waBtn.style.display = '';
+
+      let chosenFinish = product.finishes[0];
       document.title = product.name + ' | VELORA India';
       document.getElementById('pdpCrumbName').textContent = product.name;
       document.getElementById('pdpBadge').textContent = product.badge;
-      document.getElementById('pdpTitle').textContent = product.name;
+      titleEl.textContent = product.name;
       document.getElementById('pdpPrice').textContent = formatINR(product.price);
       const mrpEl = document.getElementById('pdpMrp');
       if (mrpEl) {
@@ -232,8 +279,8 @@
           mrpEl.style.display = 'none';
         }
       }
-      document.getElementById('pdpDesc').textContent = product.description;
-      document.getElementById('pdpDims').textContent = product.dimensions + ' • ' + (product.material || 'Heavy-Gauge Steel & Solid Wood') + ' • Engineered for 45kg distributed load.';
+      descEl.textContent = product.description;
+      document.getElementById('pdpDims').textContent = product.dimensions + ' • ' + (product.material || '304-Grade Steel & Solid Wood');
       const delEl = document.getElementById('pdpDelivery');
       if (delEl && product.delivery) delEl.textContent = product.delivery + ' • Cash on Delivery & UPI accepted.';
 
@@ -245,8 +292,10 @@
       thumbsEl.innerHTML = '';
       [product.image, product.hoverImage].filter(Boolean).forEach((src, i) => {
         const btn = document.createElement('button');
+        btn.type = 'button';
         btn.className = 'pdp-thumb ' + (i === 0 ? 'is-active' : '');
-        btn.innerHTML = '<img src="' + src + '" alt="View ' + (i + 1) + '" />';
+        btn.setAttribute('aria-label', 'View image ' + (i + 1));
+        btn.innerHTML = '<img src="' + escapeHtml(src) + '" alt="' + escapeHtml(product.name) + ' view ' + (i + 1) + '" />';
         btn.addEventListener('click', () => {
           mainImg.src = src;
           document.querySelectorAll('.pdp-thumb').forEach((t) => t.classList.remove('is-active'));
@@ -259,6 +308,7 @@
       finishesEl.innerHTML = '';
       product.finishes.forEach((f, i) => {
         const b = document.createElement('button');
+        b.type = 'button';
         b.className = 'qv-finish-btn ' + (i === 0 ? 'is-active' : '');
         b.textContent = f;
         b.addEventListener('click', () => {
@@ -269,7 +319,6 @@
         finishesEl.appendChild(b);
       });
 
-      const addBtn = document.getElementById('pdpAddBtn');
       if (product.stock === 0) {
         addBtn.disabled = true;
         addBtn.style.opacity = '0.5';
@@ -287,19 +336,22 @@
         };
       }
 
-      document.getElementById('pdpWaBtn').onclick = () => {
+      waBtn.onclick = () => {
         const msg = '*VELORA — Direct Order Request*\n\n1. ' + product.name + ' (' + chosenFinish + ') x1 - ' + formatINR(product.price) + '\n\n*Total:* ' + formatINR(product.price) + '\n*Shipping:* Free Insured Pan-India Delivery\n\n*Delivery Details (Please fill):*\n• Name: \n• City & Pincode: \n• Payment Mode (UPI / COD): ';
-        window.open('https://wa.me/918284029319?text=' + encodeURIComponent(msg), '_blank', 'noopener');
+        window.open('https://wa.me/918284029319?text=' + encodeURIComponent(msg), '_blank', 'noopener,noreferrer');
       };
     }
     renderProductDetail();
+    window.addEventListener('velora:catalogLoading', renderProductDetail);
     window.addEventListener('velora:catalogUpdated', renderProductDetail);
+    window.addEventListener('velora:catalogError', renderProductDetail);
   </script>
   <script src="js/luxury-polish.js" defer></script>
   <script src="js/checkout-billing.js" defer></script>
   <script src="js/billing-helpers.js" defer></script>
 </body>
 </html>
+
 
 
 

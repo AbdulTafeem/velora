@@ -102,8 +102,22 @@
   }
 
   function renderProducts() {
+    if (!productsGrid) return;
+    const catState = window.VELORA_CATALOG_STATE || { status: 'ready' };
+    if (catState.status === 'loading') {
+      productsGrid.innerHTML = Store.renderSkeletonCards(6);
+      return;
+    }
+    if (catState.status === 'error') {
+      productsGrid.innerHTML = Store.renderCatalogError(catState.error);
+      return;
+    }
+
     const catalog = Store.getCatalog();
-    if (!productsGrid || !catalog.length) return;
+    if (!catalog.length) {
+      productsGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem 1rem;color:var(--ink-muted);">No products available right now.</div>';
+      return;
+    }
 
     const wishlist = Store.getWishlist();
     const targetSlug = activeCategory === 'all' ? 'all' : Store.normalizeCategory(activeCategory);
@@ -126,7 +140,7 @@
     }
 
     productsGrid.innerHTML = filtered
-      .map((product) => buildProductCardHtml(product, wishlist.includes(product.id), ''))
+      .map((product) => Store.renderProductCard(product, { isWishlisted: wishlist.includes(product.id) }))
       .join('');
   }
 
@@ -429,6 +443,8 @@
     }
   };
 
+  window.addEventListener('velora:catalogLoading', renderProducts);
+  window.addEventListener('velora:catalogError', renderProducts);
   window.addEventListener('velora:catalogUpdated', () => {
     syncSpotlightFinishes();
     renderProducts();
@@ -439,3 +455,4 @@
   renderProducts();
   renderCart();
 })();
+
