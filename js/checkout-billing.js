@@ -8,6 +8,15 @@
 
   const fmt = (n) => '₹' + Number(n || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 });
 
+  function escapeHtml(val) {
+    return String(val == null ? '' : val)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
   function getCartState() {
     let items = [];
     try { items = JSON.parse(localStorage.getItem('velora_cart') || '[]'); } catch (e) {}
@@ -128,15 +137,6 @@
 
     document.getElementById('vcCloseBtn').onclick = () => document.getElementById('veloraCheckoutModal').classList.remove('is-open');
     document.getElementById('invCloseBtn').onclick = () => {
-      
-  function escapeHtml(val) {
-    return String(val == null ? '' : val)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
-  }
 const __invEl = document.getElementById('veloraInvoiceModal');
       if (__invEl) {
         __invEl.classList.remove('is-open');
@@ -260,15 +260,6 @@ const __invEl = document.getElementById('veloraInvoiceModal');
     `;
 
     document.getElementById('invWhatsappBtn').onclick = () => {
-      
-  function escapeHtml(val) {
-    return String(val == null ? '' : val)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
-  }
 const itemLines = order.items.map((it, i) => `${i + 1}. ${escapeHtml(it.name)} (${escapeHtml(it.finish)}) x${it.qty} - ${fmt(it.price * it.qty)}`).join('\n');
       const waMsg = `*VELORA — Confirmed Order & Invoice (${escapeHtml(order.orderId)})*\n\n${itemLines}\n\n*Grand Total:* ${fmt(order.grandTotal)} (Incl. GST)\n*Payment Mode:* ${order.customer.paymentMode}\n*Customer:* ${escapeHtml(order.customer.name)} (${escapeHtml(order.customer.phone)})\n*Address:* ${escapeHtml(order.customer.address)}, ${escapeHtml(order.customer.cityState)} - ${escapeHtml(order.customer.pincode)}`;
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waMsg)}`, '_blank', 'noopener,noreferrer');
@@ -281,15 +272,7 @@ const itemLines = order.items.map((it, i) => `${i + 1}. ${escapeHtml(it.name)} (
       __invEl.style.zIndex = '10050';
       __invEl.scrollTop = 0;
     }
-    setTimeout(() => { 
-  function escapeHtml(val) {
-    return String(val == null ? '' : val)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
-  }
+    setTimeout(() => {
 window.dispatchEvent(new Event('storage')); }, 200);
   }
 
@@ -315,15 +298,6 @@ window.dispatchEvent(new Event('storage')); }, 200);
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    
-  function escapeHtml(val) {
-    return String(val == null ? '' : val)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
-  }
 const expBtn = document.getElementById('expressCheckoutBtn');
     if (expBtn) {
       const clone = expBtn.cloneNode(true);
@@ -333,6 +307,7 @@ const expBtn = document.getElementById('expressCheckoutBtn');
     }
   });
 })();
+
 
 
 
