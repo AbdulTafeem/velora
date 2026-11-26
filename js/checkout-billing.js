@@ -181,7 +181,7 @@
       btn.disabled = false;
       btn.textContent = 'Confirm Order & Generate Tax Invoice →';
       document.getElementById('veloraCheckoutModal').classList.remove('is-open');
-      renderInvoice(payload); if (window.VeloraBilling && window.VeloraBilling.__autoModal && typeof window.VeloraBilling.openInvoiceModal === 'function') { window.VeloraBilling.openInvoiceModal(payload); }
+      renderInvoice(payload); const invModal = document.getElementById('veloraInvoiceModal'); if (invModal) invModal.classList.add('is-open'); if (window.VeloraBilling && window.VeloraBilling.__autoModal && typeof window.VeloraBilling.openInvoiceModal === 'function') { window.VeloraBilling.openInvoiceModal(payload); }
     });
   }
 
@@ -285,6 +285,7 @@
     }
   });
 })();
+
 
 
 
