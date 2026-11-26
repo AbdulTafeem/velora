@@ -4,7 +4,7 @@
 (() => {
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // 1. Broken Image Auto-Recovery (protects against typos in Google Sheet URLs)
+  // 1. Broken Image Auto-Recovery
   const attachImgGuard = (root = document) => {
     root.querySelectorAll('img').forEach(img => {
       if (img.dataset.guardAttached) return;
@@ -66,31 +66,10 @@
   }
 })();
 
-// 5. Flagship Atelier Details: Dynamic Save Pills, Card Swatch Selection & Cart VIP Bar
+// 5. Atelier Card Savings Pill & Cart Free-Shipping Banner
 (() => {
   const enhanceCards = () => {
     document.querySelectorAll('.product-card').forEach(card => {
-      // Interactive finish dots on cards
-      const dots = card.querySelectorAll('.finish-dot, .swatch-dot');
-      dots.forEach(dot => {
-        if (dot.dataset.swatchBound) return;
-        dot.dataset.swatchBound = '1';
-        dot.addEventListener('click', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          dots.forEach(d => d.classList.remove('is-selected'));
-          dot.classList.add('is-selected');
-          const label = dot.getAttribute('title') || dot.dataset.finish;
-          const meta = card.querySelector('.product-meta, .card-meta, .product-room');
-          if (label && meta) {
-            const base = meta.dataset.baseText || meta.textContent.split('•')[0].trim();
-            meta.dataset.baseText = base;
-            meta.textContent = base + ' • ' + label;
-          }
-        });
-      });
-
-      // Dynamic Savings Pill next to MRP
       const priceBox = card.querySelector('.product-price-box');
       if (priceBox && !priceBox.querySelector('.velora-save-pill')) {
         const nowEl = priceBox.querySelector('.price-now');
@@ -110,7 +89,6 @@
     });
   };
 
-  // Inject VIP Free Shipping Banner inside Cart Drawer
   const injectCartVip = () => {
     const cartFooter = document.querySelector('.cart-footer, #cartDrawer .drawer-footer');
     if (cartFooter && !cartFooter.querySelector('.velora-cart-vip')) {
@@ -127,25 +105,9 @@
     }
   };
 
-  // Inject Atelier Craftsmanship Strip on Product Detail Page (product.html)
-  const injectPdpTrust = () => {
-    const pdpActions = document.querySelector('.pdp-actions, .pdp-details');
-    if (pdpActions && !document.querySelector('.velora-atelier-trust')) {
-      const strip = document.createElement('div');
-      strip.className = 'velora-atelier-trust';
-      strip.innerHTML = `
-        <div class="velora-trust-cell"><strong>304-Grade Steel</strong><span>Anti-Rust Architectural Finish</span></div>
-        <div class="velora-trust-cell"><strong>5-Year Warranty</strong><span>Structural Craftsmanship Guarantee</span></div>
-        <div class="velora-trust-cell"><strong>Insured Transit</strong><span>24–48 Hr Pan-India Dispatch</span></div>
-      `;
-      pdpActions.appendChild(strip);
-    }
-  };
-
   const runAll = () => {
     enhanceCards();
     injectCartVip();
-    injectPdpTrust();
   };
 
   if (document.readyState === 'loading') {
@@ -155,5 +117,24 @@
   }
   window.addEventListener('velora:catalogUpdated', () => setTimeout(runAll, 80));
 })();
-document.getElementById('newsletterForm')?.addEventListener('submit', (e) => { e.preventDefault(); const inp = document.getElementById('newsletterEmail'); if (inp) inp.value = ''; const t = document.getElementById('veloraToast'); if (t) { t.textContent = 'Welcome to VELORA Privé — use code VELORA10 for 10% OFF.'; t.classList.add('is-visible'); setTimeout(() => t.classList.remove('is-visible'), 3600); } });
 
+document.getElementById('newsletterForm')?.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const inp = document.getElementById('newsletterEmail');
+  const fb = document.getElementById('newsletterFeedback');
+  const email = inp ? inp.value.trim() : '';
+  if (!email) return;
+  try {
+    const saved = JSON.parse(localStorage.getItem('velora_newsletter') || '[]');
+    if (!saved.includes(email)) saved.push(email);
+    localStorage.setItem('velora_newsletter', JSON.stringify(saved));
+  } catch (err) {}
+  if (inp) inp.value = '';
+  if (fb) fb.textContent = 'Subscribed! Apply code VELORA10 at checkout for 10% OFF.';
+  const t = document.getElementById('veloraToast');
+  if (t) {
+    t.textContent = 'Welcome to VELORA Privé — use code VELORA10 for 10% OFF.';
+    t.classList.add('is-visible');
+    setTimeout(() => t.classList.remove('is-visible'), 3600);
+  }
+});
