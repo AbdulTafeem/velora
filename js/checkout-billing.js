@@ -128,7 +128,16 @@
 
     document.getElementById('vcCloseBtn').onclick = () => document.getElementById('veloraCheckoutModal').classList.remove('is-open');
     document.getElementById('invCloseBtn').onclick = () => {
-      const __invEl = document.getElementById('veloraInvoiceModal');
+      
+  function escapeHtml(val) {
+    return String(val == null ? '' : val)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+const __invEl = document.getElementById('veloraInvoiceModal');
       if (__invEl) {
         __invEl.classList.remove('is-open');
         __invEl.style.display = 'none';
@@ -251,7 +260,16 @@
     `;
 
     document.getElementById('invWhatsappBtn').onclick = () => {
-      const itemLines = order.items.map((it, i) => `${i + 1}. ${escapeHtml(it.name)} (${escapeHtml(it.finish)}) x${it.qty} - ${fmt(it.price * it.qty)}`).join('\n');
+      
+  function escapeHtml(val) {
+    return String(val == null ? '' : val)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+const itemLines = order.items.map((it, i) => `${i + 1}. ${escapeHtml(it.name)} (${escapeHtml(it.finish)}) x${it.qty} - ${fmt(it.price * it.qty)}`).join('\n');
       const waMsg = `*VELORA — Confirmed Order & Invoice (${escapeHtml(order.orderId)})*\n\n${itemLines}\n\n*Grand Total:* ${fmt(order.grandTotal)} (Incl. GST)\n*Payment Mode:* ${order.customer.paymentMode}\n*Customer:* ${escapeHtml(order.customer.name)} (${escapeHtml(order.customer.phone)})\n*Address:* ${escapeHtml(order.customer.address)}, ${escapeHtml(order.customer.cityState)} - ${escapeHtml(order.customer.pincode)}`;
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waMsg)}`, '_blank', 'noopener,noreferrer');
     };
@@ -263,7 +281,16 @@
       __invEl.style.zIndex = '10050';
       __invEl.scrollTop = 0;
     }
-    setTimeout(() => { window.dispatchEvent(new Event('storage')); }, 200);
+    setTimeout(() => { 
+  function escapeHtml(val) {
+    return String(val == null ? '' : val)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+window.dispatchEvent(new Event('storage')); }, 200);
   }
 
   function openCheckout() {
@@ -288,7 +315,16 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    const expBtn = document.getElementById('expressCheckoutBtn');
+    
+  function escapeHtml(val) {
+    return String(val == null ? '' : val)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+const expBtn = document.getElementById('expressCheckoutBtn');
     if (expBtn) {
       const clone = expBtn.cloneNode(true);
       clone.innerHTML = '<span class="btn-text">Proceed to Online Checkout &amp; Invoice &rarr;</span>';
@@ -297,6 +333,7 @@
     }
   });
 })();
+
 
 
 
