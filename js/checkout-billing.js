@@ -25,8 +25,8 @@
     if (document.getElementById('veloraCheckoutModal')) return;
     const style = document.createElement('style');
     style.textContent = `
-      .vc-overlay { position:fixed; inset:0; z-index:9600; background:rgba(8,5,6,0.82); backdrop-filter:blur(14px); display:none; align-items:center; justify-content:center; padding:1rem; overflow-y:auto; }
-      .vc-overlay.is-open { display:flex; }
+      .vc-overlay { position:fixed; inset:0; z-index:10050; background:rgba(8,5,6,0.82); backdrop-filter:blur(14px); display:none; align-items:center; justify-content:center; padding:1rem; overflow-y:auto; }
+      .vc-overlay.is-open { display:flex !important; }
       .vc-card { width:100%; max-width:760px; max-height:92vh; overflow-y:auto; background:#FFFDF9; color:#120C0E; border:1px solid rgba(212,175,55,0.55); border-radius:8px; box-shadow:0 32px 90px rgba(0,0,0,0.75); }
       .vc-head { background:linear-gradient(135deg,#140508,#3D0712); color:#F8F5EE; padding:1.25rem 1.6rem; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(212,175,55,0.35); }
       .vc-head h3 { font-family:'Cinzel',serif; letter-spacing:0.14em; font-size:1.05rem; color:#F3E5C0; margin:0; }
@@ -285,6 +285,7 @@
     }
   });
 })();
+
 
 
 
