@@ -40,7 +40,7 @@
       .vc-head { background:linear-gradient(135deg,#140508,#3D0712); color:#F8F5EE; padding:1.25rem 1.6rem; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(212,175,55,0.35); }
       .vc-head h3 { font-family:'Cinzel',serif; letter-spacing:0.14em; font-size:1.05rem; color:#F3E5C0; margin:0; }
       .vc-close { background:none; border:none; color:#F3E5C0; font-size:1.6rem; cursor:pointer; line-height:1; }
-      .vc-body { padding:1.5rem 1.6rem; display:grid; gap:1.1rem; }
+      .vc-body { padding:1.25rem 1.5rem; display:grid; gap:0.95rem; overflow-y:auto; flex:1; }
       .vc-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:0.85rem; }
       .vc-field { display:flex; flex-direction:column; gap:0.32rem; }
       .vc-field label { font-size:0.7rem; font-weight:600; letter-spacing:0.09em; text-transform:uppercase; color:#4E0916; }
@@ -338,6 +338,7 @@ const expBtn = document.getElementById('expressCheckoutBtn');
     }
   });
 })();
+
 
 
 
