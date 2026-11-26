@@ -175,16 +175,13 @@
 
       // Save local order archive & clear cart
       try {
-        const prev = JSON.parse(localStorage.getItem('velora_orders') || '[]');
-        prev.unshift(payload);
-        localStorage.setItem('velora_orders', JSON.stringify(prev.slice(0, 20)));
-        localStorage.setItem('velora_cart', '[]');
+        if (window.VeloraBilling) { window.VeloraBilling.completeOrderAndResetCart(payload); } else { localStorage.setItem('velora_cart', '[]'); }
       } catch (e) {}
 
       btn.disabled = false;
       btn.textContent = 'Confirm Order & Generate Tax Invoice →';
       document.getElementById('veloraCheckoutModal').classList.remove('is-open');
-      renderInvoice(payload);
+      renderInvoice(payload); if (window.VeloraBilling && window.VeloraBilling.__autoModal && typeof window.VeloraBilling.openInvoiceModal === 'function') { window.VeloraBilling.openInvoiceModal(payload); }
     });
   }
 
@@ -288,3 +285,6 @@
     }
   });
 })();
+
+
+

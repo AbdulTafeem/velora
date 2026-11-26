@@ -292,3 +292,18 @@ header.is-scrolled, .site-header.is-scrolled, .navbar.is-scrolled {
 }
 
 
+
+html, body { max-width: 100%; overflow-x: clip; }
+
+/* Mobile touch scroll safeguard */
+html, body {
+  max-width: 100%;
+  overflow-x: clip;
+  touch-action: pan-y pinch-zoom;
+  overscroll-behavior-y: auto;
+}
+.preloader.is-parting,
+.preloader[style*="display: none"] {
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
