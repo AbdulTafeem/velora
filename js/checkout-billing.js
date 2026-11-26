@@ -127,7 +127,13 @@
     });
 
     document.getElementById('vcCloseBtn').onclick = () => document.getElementById('veloraCheckoutModal').classList.remove('is-open');
-    document.getElementById('invCloseBtn').onclick = () => document.getElementById('veloraInvoiceModal').classList.remove('is-open');
+    document.getElementById('invCloseBtn').onclick = () => {
+      const __invEl = document.getElementById('veloraInvoiceModal');
+      if (__invEl) {
+        __invEl.classList.remove('is-open');
+        __invEl.style.display = 'none';
+      }
+    };
 
     document.getElementById('veloraCheckoutForm').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -250,7 +256,13 @@
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waMsg)}`, '_blank', 'noopener,noreferrer');
     };
 
-    document.getElementById('veloraInvoiceModal').classList.add('is-open');
+    const __invEl = document.getElementById('veloraInvoiceModal');
+    if (__invEl) {
+      __invEl.classList.add('is-open');
+      __invEl.style.display = 'flex';
+      __invEl.style.zIndex = '10050';
+      __invEl.scrollTop = 0;
+    }
     setTimeout(() => { window.dispatchEvent(new Event('storage')); }, 200);
   }
 
@@ -285,6 +297,7 @@
     }
   });
 })();
+
 
 
 
