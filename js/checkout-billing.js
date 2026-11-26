@@ -4,7 +4,7 @@
 (function () {
   const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw9NZAh4Wm_so6SkhZl8ASyMaVz1EE67Rk_IpPCN_5tve8D3eCR3tJyW6uLEuSOnhRZ/exec';
   const WHATSAPP_NUMBER = '918284029319';
-  const RAZORPAY_KEY_ID = ''; // Paste 'rzp_live_XXXXXXXX' here once client provides bank KYC
+  const RAZORPAY_KEY_ID = '';
 
   const fmt = (n) => '₹' + Number(n || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 });
 
@@ -191,7 +191,7 @@
     const rowsHtml = order.items.map((it, idx) => `
       <tr>
         <td>${idx + 1}</td>
-        <td><strong>${it.name}</strong><br/><span style="font-size:0.74rem;color:#555;">Finish: ${it.finish} &bull; HSN: 9403</span></td>
+        <td><strong>${escapeHtml(it.name)}</strong><br/><span style="font-size:0.74rem;color:#555;">Finish: ${escapeHtml(it.finish)} &bull; HSN: 9403</span></td>
         <td>${it.qty}</td>
         <td>${fmt(it.price)}</td>
         <td style="text-align:right;"><strong>${fmt(it.price * it.qty)}</strong></td>
@@ -206,17 +206,17 @@
         </div>
         <div style="text-align:right;">
           <div style="font-weight:700;color:#540A18;letter-spacing:0.08em;">RETAIL / TAX INVOICE</div>
-          <div>Invoice No: <strong>${order.orderId}</strong></div>
+          <div>Invoice No: <strong>${escapeHtml(order.orderId)}</strong></div>
           <div>Date: ${order.orderDate}</div>
-          <div>Status: <span style="color:#15803d;font-weight:600;">${order.status}</span></div>
+          <div>Status: <span style="color:#15803d;font-weight:600;">${escapeHtml(order.status)}</span></div>
         </div>
       </div>
       <div class="vc-grid-2" style="margin-bottom:0.75rem;background:#FAF7F2;padding:0.85rem;border-radius:4px;">
         <div>
           <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:#540A18;font-weight:700;">Billed &amp; Shipped To</div>
-          <strong>${order.customer.name}</strong><br/>
-          ${order.customer.address}, ${order.customer.cityState} - ${order.customer.pincode}<br/>
-          Phone: ${order.customer.phone} &bull; Email: ${order.customer.email}<br/>
+          <strong>${escapeHtml(order.customer.name)}</strong><br/>
+          ${escapeHtml(order.customer.address)}, ${escapeHtml(order.customer.cityState)} - ${escapeHtml(order.customer.pincode)}<br/>
+          Phone: ${escapeHtml(order.customer.phone)} &bull; Email: ${escapeHtml(order.customer.email)}<br/>
           GSTIN: ${order.customer.gstin}
         </div>
         <div style="text-align:right;">
@@ -245,9 +245,9 @@
     `;
 
     document.getElementById('invWhatsappBtn').onclick = () => {
-      const itemLines = order.items.map((it, i) => `${i + 1}. ${it.name} (${it.finish}) x${it.qty} - ${fmt(it.price * it.qty)}`).join('\n');
-      const waMsg = `*VELORA — Confirmed Order & Invoice (${order.orderId})*\n\n${itemLines}\n\n*Grand Total:* ${fmt(order.grandTotal)} (Incl. GST)\n*Payment Mode:* ${order.customer.paymentMode}\n*Customer:* ${order.customer.name} (${order.customer.phone})\n*Address:* ${order.customer.address}, ${order.customer.cityState} - ${order.customer.pincode}`;
-      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waMsg)}`, '_blank', 'noopener');
+      const itemLines = order.items.map((it, i) => `${i + 1}. ${escapeHtml(it.name)} (${escapeHtml(it.finish)}) x${it.qty} - ${fmt(it.price * it.qty)}`).join('\n');
+      const waMsg = `*VELORA — Confirmed Order & Invoice (${escapeHtml(order.orderId)})*\n\n${itemLines}\n\n*Grand Total:* ${fmt(order.grandTotal)} (Incl. GST)\n*Payment Mode:* ${order.customer.paymentMode}\n*Customer:* ${escapeHtml(order.customer.name)} (${escapeHtml(order.customer.phone)})\n*Address:* ${escapeHtml(order.customer.address)}, ${escapeHtml(order.customer.cityState)} - ${escapeHtml(order.customer.pincode)}`;
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waMsg)}`, '_blank', 'noopener,noreferrer');
     };
 
     document.getElementById('veloraInvoiceModal').classList.add('is-open');
@@ -285,6 +285,7 @@
     }
   });
 })();
+
 
 
 

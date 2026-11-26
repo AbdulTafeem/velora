@@ -125,7 +125,7 @@
               <div class="product-meta-row">
                 <span class="product-room-tag">${product.room} &bull; ${product.finishes.length} Finishes</span>
                 <span class="product-mini-swatches" aria-hidden="true">
-                  ${product.finishes.map((f) => `<span class="mini-swatch" title="${f}" style="${getFinishSwatchStyle(f)}"></span>`).join('')}
+                  ${product.finishes.map((f) => `<span class="mini-swatch" title="${escapeHtml(f)}" style="${getFinishSwatchStyle(f)}"></span>`).join('')}
                 </span>
               </div>
               <h3 class="product-title"><a href="product.html?id=${product.id}">${product.name}</a></h3>
@@ -276,7 +276,7 @@
 
     const finishesEl = document.getElementById('qvFinishes');
     finishesEl.innerHTML = p.finishes
-      .map((f, idx) => `<button type="button" class="qv-finish-btn ${idx === 0 ? 'is-active' : ''}" data-qv-finish="${f}"><span class="finish-swatch-dot" style="${getFinishSwatchStyle(f)}"></span>${f}</button>`)
+      .map((f, idx) => `<button type="button" class="qv-finish-btn ${idx === 0 ? 'is-active' : ''}" data-qv-finish="${escapeHtml(f)}"><span class="finish-swatch-dot" style="${getFinishSwatchStyle(f)}"></span>${escapeHtml(f)}</button>`)
       .join('');
 
     quickViewModal.classList.add('is-open');
@@ -435,7 +435,7 @@
     const lines = cart.map((item, i) => `${i + 1}. ${item.name} (${item.finish}) x${item.qty} - ${formatINR(item.price * item.qty)}`);
     const total = cartGrandTotalEl?.textContent || '';
     const msg = `*VELORA — New Order Request*\n\n${lines.join('\n')}\n\n*Total:* ${total}\n*Shipping:* Free Insured Pan-India Delivery\n\n*Delivery Details (Please fill):*\n• Name: \n• City & Pincode: \n• Payment Mode (UPI / COD): `;
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
   });
 
   document.getElementById('expressCheckoutBtn')?.addEventListener('click', () => {
@@ -458,7 +458,7 @@
 
   document.getElementById('spotlightWaBtn')?.addEventListener('click', () => {
     const msg = `*VELORA — Direct Order Request*\n\n1. Teak & Solid Wood Base T-Stand (${spotlightFinish}) x1 - ₹3,999\n\n*Total:* ₹3,999\n*Shipping:* Free Insured Pan-India Delivery\n\n*Delivery Details (Please fill):*\n• Name: \n• City & Pincode: \n• Payment Mode (UPI / COD): `;
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
   });
 
   document.getElementById('liveSearchInput')?.addEventListener('input', (e) => {
@@ -479,6 +479,7 @@
   renderProducts();
   renderCart();
 })();
+
 
 
 
