@@ -79,7 +79,7 @@
         #veloraInvoiceModal .inv-box { display: block !important; overflow: visible !important; padding: 0.4rem 0.2rem !important; color: #111 !important; background: #fff !important; }
         #veloraInvoiceModal .inv-actions, #veloraInvoiceModal .vc-close { display: none !important; }
       }
-    ;
+    `;
     document.head.appendChild(style);
 
     const wrap = document.createElement('div');
