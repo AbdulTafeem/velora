@@ -1,5 +1,5 @@
 ﻿/* ==========================================================================
-   VELORA — ONLINE CHECKOUT, ORDER SYNC & CONFIRMATION ENGINE
+   VELORA — ONLINE CHECKOUT, SERVER-VERIFIED ORDER SYNC & CONFIRMATION ENGINE
    ========================================================================== */
 (function () {
   'use strict';
@@ -20,6 +20,16 @@
   function unlockScroll() {
     document.documentElement.style.overflow = '';
     document.body.style.overflow = '';
+  }
+
+  function buildWhatsAppOrderUrl(customer, items, totals, orderId) {
+    const itemLines = items
+      .map((it, i) => `${i + 1}. ${it.name} (${it.finish}) x${it.qty} - ${fmt(it.price * it.qty)}`)
+      .join('\n');
+    const discLine = totals.discount > 0 ? `\n*Discount (${totals.promoCode || 'VELORA10'}):* -${fmt(totals.discount)}` : '';
+    const header = orderId ? `*VELORA — Confirmed Order (${orderId})*` : '*VELORA — Order Request (Direct Concierge)*';
+    const waMsg = `${header}\n\n${itemLines}${discLine}\n\n*Grand Total:* ${fmt(totals.grandTotal)} (Incl. GST)\n*Payment Mode:* ${customer.paymentMode}\n*Customer:* ${customer.name} (${customer.phone})\n*Address:* ${customer.address}, ${customer.cityState} - ${customer.pincode}`;
+    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waMsg)}`;
   }
 
   function injectUI() {
@@ -46,6 +56,8 @@
       .vc-summary { background:#F8F5EE; border:1px solid rgba(212,175,55,0.35); border-radius:5px; padding:0.9rem 1.1rem; font-size:0.84rem; display:grid; gap:0.35rem; }
       .vc-row { display:flex; justify-content:space-between; }
       .vc-row.grand { border-top:1px solid rgba(18,12,14,0.12); padding-top:0.45rem; margin-top:0.25rem; font-weight:700; font-size:0.98rem; color:#540A18; }
+      .vc-error-box { display:none; background:#FEF2F2; border:1px solid #DC2626; color:#7F1D1D; padding:0.85rem 1rem; border-radius:5px; font-size:0.82rem; line-height:1.45; }
+      .vc-error-box.is-visible { display:block; }
       .vc-submit { width:100%; padding:0.88rem; background:linear-gradient(135deg,#F3E5C0,#D4AF37,#A88438); color:#080506; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; font-size:0.75rem; border:none; border-radius:4px; cursor:pointer; }
       .vc-submit:disabled { opacity:0.6; cursor:wait; }
       .inv-box { padding:0.85rem 1.25rem; background:#fff; color:#111; font-size:0.79rem; line-height:1.38; overflow-y:auto; flex:1; }
@@ -78,6 +90,10 @@
             <button type="button" class="vc-close" id="vcCloseBtn" aria-label="Close checkout">&times;</button>
           </div>
           <form class="vc-body" id="veloraCheckoutForm">
+            <div style="position:absolute;left:-9999px;" aria-hidden="true">
+              <label for="vcWebsite">Leave blank</label>
+              <input type="text" id="vcWebsite" tabindex="-1" autocomplete="off" />
+            </div>
             <div class="vc-grid-2">
               <div class="vc-field"><label for="vcName">Full Name *</label><input type="text" id="vcName" required placeholder="e.g. Aarav Sharma" /></div>
               <div class="vc-field"><label for="vcPhone">Mobile / WhatsApp *</label><input type="tel" id="vcPhone" required pattern="[0-9+\\s-]{10,15}" placeholder="+91 98765 43210" /></div>
@@ -100,6 +116,7 @@
               </div>
             </div>
             <div class="vc-summary" id="vcOrderSummary"></div>
+            <div class="vc-error-box" id="vcErrorBox" role="alert"></div>
             <button type="submit" class="vc-submit" id="vcPlaceOrderBtn">Confirm Order &amp; Generate Summary &rarr;</button>
           </form>
         </div>
@@ -154,12 +171,15 @@
       e.preventDefault();
       const totals = Store.calculateTotals();
       if (!totals.items.length) return;
-      const btn = document.getElementById('vcPlaceOrderBtn');
-      btn.disabled = true;
-      btn.textContent = 'Recording Order & Generating Summary...';
 
-      const orderId = 'VEL-' + new Date().getFullYear() + '-' + Math.floor(100000 + Math.random() * 900000);
-      const orderDate = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+      const btn = document.getElementById('vcPlaceOrderBtn');
+      const errBox = document.getElementById('vcErrorBox');
+      errBox.classList.remove('is-visible');
+      errBox.innerHTML = '';
+
+      btn.disabled = true;
+      btn.textContent = 'Verifying Prices & Recording Order...';
+
       const customer = {
         name: document.getElementById('vcName').value.trim(),
         phone: document.getElementById('vcPhone').value.trim(),
@@ -171,48 +191,59 @@
         paymentMode: selectedPay
       };
 
+      // Send only product IDs, finish, qty and promoCode — server computes authoritative prices
       const payload = {
         action: 'createOrder',
-        orderId,
-        orderDate,
+        website: document.getElementById('vcWebsite').value,
         customer,
-        items: totals.items,
-        promoCode: totals.promoCode,
-        subtotal: totals.subtotal,
-        discount: totals.discount,
-        taxableValue: totals.taxableValue,
-        totalGst: totals.totalGst,
-        grandTotal: totals.grandTotal,
-        status: selectedPay.includes('COD') ? 'Confirmed (COD)' : 'Confirmed (Awaiting Payment Link)'
+        items: totals.items.map((it) => ({
+          id: it.id,
+          name: it.name,
+          finish: it.finish,
+          qty: it.qty
+        })),
+        promoCode: totals.promoCode
       };
 
       try {
-        await fetch(APPS_SCRIPT_URL, {
+        const res = await fetch(APPS_SCRIPT_URL, {
           method: 'POST',
-          mode: 'no-cors',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify(payload)
         });
-      } catch (err) {}
+        if (!res.ok) throw new Error('Order server returned HTTP ' + res.status);
+        const data = await res.json();
+        if (!data || !data.ok) {
+          throw new Error((data && data.error) || 'Could not confirm your order.');
+        }
 
-      try {
         if (window.VeloraBilling && typeof window.VeloraBilling.completeOrderAndResetCart === 'function') {
-          window.VeloraBilling.completeOrderAndResetCart(payload);
+          window.VeloraBilling.completeOrderAndResetCart(data);
         } else {
           Store.clearCart();
         }
-      } catch (err) {}
 
-      btn.disabled = false;
-      btn.textContent = 'Confirm Order & Generate Summary →';
-      document.getElementById('veloraCheckoutModal').classList.remove('is-open');
-      renderInvoice(payload);
+        btn.disabled = false;
+        btn.textContent = 'Confirm Order & Generate Summary →';
+        document.getElementById('veloraCheckoutModal').classList.remove('is-open');
+        renderInvoice(data);
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = 'Confirm Order & Generate Summary →';
+        const waFallback = buildWhatsAppOrderUrl(customer, totals.items, totals, '');
+        errBox.innerHTML = `
+          <strong>Could not record order automatically:</strong> ${escapeHtml((err && err.message) || 'Network error')}.<br/>
+          Please check your connection and retry, or place this exact order instantly via WhatsApp:<br/>
+          <a href="${waFallback}" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:0.5rem;padding:0.45rem 0.85rem;background:#140508;color:#F3E5C0;border-radius:4px;text-decoration:none;font-weight:600;">Complete Order on WhatsApp &rarr;</a>
+        `;
+        errBox.classList.add('is-visible');
+      }
     });
   }
 
   function renderInvoice(order) {
-    const cgst = +(order.totalGst / 2).toFixed(2);
-    const sgst = +(order.totalGst - cgst).toFixed(2);
+    const cgst = +(Number(order.totalGst || 0) / 2).toFixed(2);
+    const sgst = +(Number(order.totalGst || 0) - cgst).toFixed(2);
     const rowsHtml = order.items.map((it, idx) => `
       <tr>
         <td>${idx + 1}</td>
@@ -269,12 +300,9 @@
       </div>
     `;
 
-    // Plain-text WhatsApp message (Bug #9 fix — no escapeHtml inside encodeURIComponent)
     document.getElementById('invWhatsappBtn').onclick = () => {
-      const itemLines = order.items.map((it, i) => `${i + 1}. ${it.name} (${it.finish}) x${it.qty} - ${fmt(it.price * it.qty)}`).join('\n');
-      const discLine = order.discount > 0 ? `\n*Discount (${order.promoCode || 'VELORA10'}):* -${fmt(order.discount)}` : '';
-      const waMsg = `*VELORA — Confirmed Order (${order.orderId})*\n\n${itemLines}${discLine}\n\n*Grand Total:* ${fmt(order.grandTotal)} (Incl. GST)\n*Payment Mode:* ${order.customer.paymentMode}\n*Customer:* ${order.customer.name} (${order.customer.phone})\n*Address:* ${order.customer.address}, ${order.customer.cityState} - ${order.customer.pincode}`;
-      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waMsg)}`, '_blank', 'noopener,noreferrer');
+      const url = buildWhatsAppOrderUrl(order.customer, order.items, order, order.orderId);
+      window.open(url, '_blank', 'noopener,noreferrer');
     };
 
     const invEl = document.getElementById('veloraInvoiceModal');
@@ -299,6 +327,9 @@
       }
       return;
     }
+    const errBox = document.getElementById('vcErrorBox');
+    if (errBox) errBox.classList.remove('is-visible');
+
     document.getElementById('vcOrderSummary').innerHTML = `
       <div class="vc-row"><span>Items (${totals.totalQty}):</span><span>${fmt(totals.subtotal)}</span></div>
       ${totals.discount > 0 ? `<div class="vc-row" style="color:#15803d;"><span>Code ${escapeHtml(totals.promoCode)} (10% OFF):</span><span>-${fmt(totals.discount)}</span></div>` : ''}
