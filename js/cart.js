@@ -1,32 +1,14 @@
-﻿window.formatINR = function(a){ return '₹' + Number(a || 0).toLocaleString('en-IN'); };
-/* ==========================================================================
+﻿/* ==========================================================================
    VELORA — E-COMMERCE STORE, CART, QUICK-VIEW & WHATSAPP ENGINE (js/cart.js)
    ========================================================================== */
 (function () {
-  
-  function escapeHtml(val) {
-    return String(val == null ? '' : val)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
-  }
-const WHATSAPP_NUMBER = '918284029319'; // Replace with your business WhatsApp number
+  'use strict';
 
-  function safeReadStorage(key) {
-    try {
-      const raw = localStorage.getItem(key);
-      const parsed = raw ? JSON.parse(raw) : [];
-      return Array.isArray(parsed) ? parsed : [];
-    } catch (err) {
-      return [];
-    }
-  }
+  const Store = window.VeloraStore;
+  const formatINR = Store.formatINR;
+  const escapeHtml = Store.escapeHtml;
+  const WHATSAPP_NUMBER = '918284029319';
 
-  let cart = safeReadStorage('velora_cart');
-  let wishlist = safeReadStorage('velora_wishlist');
-  let promoApplied = false;
   let activeCategory = 'all';
   let searchQuery = '';
   let activeQvProduct = null;
@@ -49,20 +31,14 @@ const WHATSAPP_NUMBER = '918284029319'; // Replace with your business WhatsApp n
   const toastEl = document.getElementById('veloraToast');
 
   function lockScroll() {
+    document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
-    if (window.VeloraLenis && typeof window.VeloraLenis.stop === 'function') {
-      window.VeloraLenis.stop();
-    }
   }
 
   function unlockScroll() {
+    document.documentElement.style.overflow = '';
     document.body.style.overflow = '';
-    if (window.VeloraLenis && typeof window.VeloraLenis.start === 'function') {
-      window.VeloraLenis.start();
-    }
   }
-
-      function formatINR(amount) { return '₹' + Number(amount || 0).toLocaleString('en-IN'); } window.formatINR = formatINR;
 
   function getFinishSwatchStyle(finishName) {
     const f = String(finishName || '').toLowerCase();
@@ -73,6 +49,7 @@ const WHATSAPP_NUMBER = '918284029319'; // Replace with your business WhatsApp n
     if (f.includes('olive')) return 'background:linear-gradient(135deg,#4d5d3b,#2c3621);';
     return 'background:linear-gradient(135deg,#27272a,#09090b);';
   }
+
   function showToast(message) {
     if (!toastEl) return;
     toastEl.textContent = message;
@@ -81,128 +58,112 @@ const WHATSAPP_NUMBER = '918284029319'; // Replace with your business WhatsApp n
     toastEl._timer = setTimeout(() => toastEl.classList.remove('is-visible'), 2800);
   }
 
-  function saveState() {
-    try {
-      localStorage.setItem('velora_cart', JSON.stringify(cart));
-      localStorage.setItem('velora_wishlist', JSON.stringify(wishlist));
-    } catch (err) {
-      // Ignore storage errors in private mode
-    }
+  function buildProductCardHtml(product, isWishlisted, overrideBadge) {
+    const badgeText = overrideBadge || product.badge;
+    const badgeClass = !overrideBadge && product.badgeType === 'maroon' ? 'badge-shimmer badge-maroon' : 'badge-shimmer';
+    const mrpVal = product.mrp || product.originalPrice;
+    return `
+      <article class="product-card" data-product-id="${escapeHtml(product.id)}">
+        <div class="product-media">
+          <div class="product-top-bar">
+            <span class="${badgeClass}">${escapeHtml(badgeText)}</span>
+            <button type="button" class="wishlist-btn ${isWishlisted ? 'is-wishlisted' : ''}" data-wish="${escapeHtml(product.id)}" aria-label="Save ${escapeHtml(product.name)} to wishlist">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+          </div>
+          <a href="product.html?id=${encodeURIComponent(product.id)}" class="product-media-link" aria-label="View ${escapeHtml(product.name)}">
+            <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" class="product-img-main" onerror="this.src='assets/images/product-1.jpg'" loading="lazy" />
+            <img src="${escapeHtml(product.hoverImage)}" alt="${escapeHtml(product.name)} alternate view" class="product-img-hover" loading="lazy" />
+          </a>
+          <div class="product-quick-actions">
+            <button type="button" class="btn-quick-view" data-qv="${escapeHtml(product.id)}">Quick View</button>
+          </div>
+        </div>
+        <div class="product-body">
+          <div class="product-meta-row">
+            <span class="product-room-tag">${escapeHtml(product.room)} &bull; ${product.finishes.length} Finishes</span>
+            <span class="product-mini-swatches" aria-hidden="true">
+              ${product.finishes.map((f) => `<span class="mini-swatch" title="${escapeHtml(f)}" style="${getFinishSwatchStyle(f)}"></span>`).join('')}
+            </span>
+          </div>
+          <h3 class="product-title"><a href="product.html?id=${encodeURIComponent(product.id)}">${escapeHtml(product.name)}</a></h3>
+          <div class="product-footer-row">
+            <div class="product-price-box">
+              <span class="price-now">${formatINR(product.price)}</span>
+              ${mrpVal ? `<span class="price-mrp">${formatINR(mrpVal)}</span>` : ''}
+            </div>
+            ${product.stock === 0
+              ? '<button type="button" class="btn-add-cart" disabled style="opacity:0.5;cursor:not-allowed;">Sold Out</button>'
+              : `<button type="button" class="btn-add-cart" data-add="${escapeHtml(product.id)}">Add to Cart</button>`}
+          </div>
+        </div>
+      </article>
+    `;
   }
 
   function renderProducts() {
-    if (!productsGrid || typeof VELORA_PRODUCTS === 'undefined') return;
+    const catalog = Store.getCatalog();
+    if (!productsGrid || !catalog.length) return;
 
-    const filtered = VELORA_PRODUCTS.filter((p) => {
-      const matchCat = activeCategory === 'all' || (p.category === activeCategory || p.category.replace(/s$/, "") === activeCategory.replace(/s$/, ""));
+    const wishlist = Store.getWishlist();
+    const targetSlug = activeCategory === 'all' ? 'all' : Store.normalizeCategory(activeCategory);
+
+    const filtered = catalog.filter((p) => {
+      const prodSlug = Store.normalizeCategory(p.category);
+      const matchCat = targetSlug === 'all' || prodSlug === targetSlug;
       const q = searchQuery.trim().toLowerCase();
       const matchSearch =
         !q ||
         p.name.toLowerCase().includes(q) ||
-        p.category.toLowerCase().includes(q) ||
-        p.room.toLowerCase().includes(q);
+        prodSlug.includes(q) ||
+        String(p.room || '').toLowerCase().includes(q);
       return matchCat && matchSearch;
     });
 
     if (filtered.length === 0) {
-      productsGrid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem 1rem;color:var(--ink-muted);">No products matched your filter. Try resetting to "All Pieces".</div>`;
+      productsGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem 1rem;color:var(--ink-muted);">No products matched your filter. Try resetting to "All Pieces".</div>';
       return;
     }
 
     productsGrid.innerHTML = filtered
-      .map((product) => {
-        const isWishlisted = wishlist.includes(product.id);
-        const badgeClass = product.badgeType === 'maroon' ? 'badge-shimmer badge-maroon' : 'badge-shimmer';
-        return `
-          <article class="product-card" data-product-id="${product.id}" data-cursor="view">
-            <div class="product-media">
-              <div class="product-top-bar">
-                <span class="${badgeClass}">${product.badge}</span>
-                <button type="button" class="wishlist-btn ${isWishlisted ? 'is-wishlisted' : ''}" data-wish="${product.id}" aria-label="Save ${product.name} to wishlist">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                </button>
-              </div>
-              <a href="product.html?id=${product.id}" class="product-media-link" aria-label="View ${product.name}">
-                <img src="${product.image}" alt="${product.name}" class="product-img-main" onerror="this.src='assets/images/product-1.jpg'" loading="lazy" />
-                <img src="${product.hoverImage}" alt="${product.name} alternate view" class="product-img-hover" loading="lazy" />
-              </a>
-              <div class="product-quick-actions">
-                <button type="button" class="btn-quick-view" data-qv="${product.id}">Quick View</button>
-              </div>
-            </div>
-            <div class="product-body">
-              <div class="product-meta-row">
-                <span class="product-room-tag">${product.room} &bull; ${product.finishes.length} Finishes</span>
-                <span class="product-mini-swatches" aria-hidden="true">
-                  ${product.finishes.map((f) => `<span class="mini-swatch" title="${escapeHtml(f)}" style="${getFinishSwatchStyle(f)}"></span>`).join('')}
-                </span>
-              </div>
-              <h3 class="product-title"><a href="product.html?id=${product.id}">${product.name}</a></h3>
-              <div class="product-footer-row">
-                <div class="product-price-box">
-                  <span class="price-now">${formatINR(product.price)}</span>
-                  ${((product.mrp || product.originalPrice) || product.originalPrice) ? `<span class="price-mrp">${formatINR(((product.mrp || product.originalPrice) || product.originalPrice))}</span>` : ""}
-                </div>
-                ${product.stock === 0 ? `<button type="button" class="btn-add-cart" disabled style="opacity:0.5;cursor:not-allowed;">Sold Out</button>` : `<button type="button" class="btn-add-cart" data-add="${product.id}">Add to Cart</button>`}
-              </div>
-            </div>
-          </article>
-        `;
-      })
+      .map((product) => buildProductCardHtml(product, wishlist.includes(product.id), ''))
       .join('');
-
-        if (typeof gsap !== 'undefined' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      gsap.fromTo(
-        productsGrid.querySelectorAll('.product-card'),
-        { y: 22, opacity: 0, scale: 0.98 },
-        { y: 0, opacity: 1, scale: 1, duration: 0.55, stagger: 0.06, ease: 'power3.out', clearProps: 'transform,opacity' }
-      );
-    }
-    if (typeof window.bindVeloraCardTilt === 'function') {
-      window.bindVeloraCardTilt();
-    }
   }
 
   function addToCart(productId, chosenFinish) {
-    if (typeof VELORA_PRODUCTS === 'undefined') return;
-    const product = VELORA_PRODUCTS.find((p) => p.id === productId);
+    const product = Store.addItem(productId, chosenFinish);
     if (!product) return;
-    const finish = chosenFinish || product.finishes[0];
-    const existing = cart.find((item) => item.id === productId && item.finish === finish);
-    if (existing) {
-      existing.qty += 1;
-    } else {
-      cart.push({ id: product.id, name: product.name, price: product.price, image: product.image, finish, qty: 1 });
-    }
-    saveState();
     renderCart();
     openCart();
     showToast(`Added "${product.name}" to your bag`);
   }
 
   function updateQty(index, delta) {
-    if (!cart[index]) return;
-    cart[index].qty += delta;
-    if (cart[index].qty <= 0) cart.splice(index, 1);
-    saveState();
+    Store.updateItemQty(index, delta);
     renderCart();
   }
 
   function removeCartItem(index) {
-    cart.splice(index, 1);
-    saveState();
+    Store.removeItem(index);
     renderCart();
   }
 
   function renderCart() {
-    const totalQty = cart.reduce((sum, i) => sum + i.qty, 0);
-    if (cartCountEl) cartCountEl.textContent = totalQty;
-    if (drawerBagCountEl) drawerBagCountEl.textContent = totalQty;
+    const totals = Store.calculateTotals();
+    const wishlist = Store.getWishlist();
+
+    if (cartCountEl) cartCountEl.textContent = totals.totalQty;
+    if (drawerBagCountEl) drawerBagCountEl.textContent = totals.totalQty;
     if (wishlistCountEl) wishlistCountEl.textContent = wishlist.length;
+
+    const promoInput = document.getElementById('promoCodeInput');
+    if (promoInput && totals.promoCode && !promoInput.value) {
+      promoInput.value = totals.promoCode;
+    }
 
     if (!cartItemsContainer) return;
 
-    if (cart.length === 0) {
+    if (totals.items.length === 0) {
       cartItemsContainer.innerHTML = `
         <div class="cart-empty-state">
           <h4>Your Velvet Bag is Empty</h4>
@@ -213,16 +174,16 @@ const WHATSAPP_NUMBER = '918284029319'; // Replace with your business WhatsApp n
       const emptyBtn = document.getElementById('emptyExploreBtn');
       if (emptyBtn) emptyBtn.addEventListener('click', closeAllOverlays);
     } else {
-      cartItemsContainer.innerHTML = cart
+      cartItemsContainer.innerHTML = totals.items
         .map(
           (item, idx) => `
           <div class="cart-line-item">
-            <img src="${item.image}" alt="${item.name}" />
+            <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}" />
             <div class="cart-line-info">
               <div class="cart-line-top">
                 <div>
-                  <a href="product.html?id=${item.id}" class="cart-line-title">${item.name}</a>
-                  <div class="cart-line-finish">Finish: ${item.finish}</div>
+                  <a href="product.html?id=${encodeURIComponent(item.id)}" class="cart-line-title">${escapeHtml(item.name)}</a>
+                  <div class="cart-line-finish">Finish: ${escapeHtml(item.finish)}</div>
                 </div>
                 <button type="button" class="cart-remove-btn" data-remove="${idx}">Remove</button>
               </div>
@@ -241,14 +202,10 @@ const WHATSAPP_NUMBER = '918284029319'; // Replace with your business WhatsApp n
         .join('');
     }
 
-    const subtotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
-    const discount = promoApplied ? Math.round(subtotal * 0.1) : 0;
-    const grandTotal = Math.max(0, subtotal - discount);
-
-    if (cartSubtotalEl) cartSubtotalEl.textContent = formatINR(subtotal);
-    if (discountRowEl) discountRowEl.style.display = promoApplied && subtotal > 0 ? 'flex' : 'none';
-    if (cartDiscountEl) cartDiscountEl.textContent = '-' + formatINR(discount);
-    if (cartGrandTotalEl) cartGrandTotalEl.textContent = formatINR(grandTotal);
+    if (cartSubtotalEl) cartSubtotalEl.textContent = formatINR(totals.subtotal);
+    if (discountRowEl) discountRowEl.style.display = totals.hasPromo ? 'flex' : 'none';
+    if (cartDiscountEl) cartDiscountEl.textContent = '-' + formatINR(totals.discount);
+    if (cartGrandTotalEl) cartGrandTotalEl.textContent = formatINR(totals.grandTotal);
   }
 
   function openCart() {
@@ -267,9 +224,8 @@ const WHATSAPP_NUMBER = '918284029319'; // Replace with your business WhatsApp n
   }
 
   function openQuickView(productId) {
-    if (typeof VELORA_PRODUCTS === 'undefined' || !quickViewModal) return;
-    const p = VELORA_PRODUCTS.find((item) => item.id === productId);
-    if (!p) return;
+    const p = Store.getProductById(productId);
+    if (!p || !quickViewModal) return;
     lastFocusedEl = document.activeElement;
     activeQvProduct = p;
     activeQvFinish = p.finishes[0];
@@ -279,7 +235,8 @@ const WHATSAPP_NUMBER = '918284029319'; // Replace with your business WhatsApp n
     document.getElementById('qvBadge').textContent = p.badge;
     document.getElementById('qvTitle').textContent = p.name;
     document.getElementById('qvPrice').textContent = formatINR(p.price);
-    const qvMrpEl = document.getElementById('qvMrp'); if (qvMrpEl) qvMrpEl.textContent = p.mrp ? formatINR(p.mrp) : '';
+    const qvMrpEl = document.getElementById('qvMrp');
+    if (qvMrpEl) qvMrpEl.textContent = p.mrp ? formatINR(p.mrp) : '';
     document.getElementById('qvDesc').textContent = p.description;
     document.getElementById('qvDimensions').textContent = 'Dimensions: ' + p.dimensions;
 
@@ -319,19 +276,9 @@ const WHATSAPP_NUMBER = '918284029319'; // Replace with your business WhatsApp n
     }
     const wishBtn = e.target.closest('[data-wish]');
     if (wishBtn) {
-      const id = wishBtn.dataset.wish;
-      if (wishlist.includes(id)) {
-        wishlist = wishlist.filter((item) => item !== id);
-        showToast('Removed from Wishlist');
-      } else {
-        wishlist.push(id);
-        showToast('Saved to your Velora Wishlist');
-      }
-      saveState();
-      window.addEventListener('velora:catalogUpdated', () => { renderProducts(); });
-    window.addEventListener('load', () => { if (productsGrid && !productsGrid.children.length) renderProducts(); });
-  setTimeout(() => { if (productsGrid && !productsGrid.children.length) renderProducts(); }, 600);
-  renderProducts();
+      const res = Store.toggleWishlist(wishBtn.dataset.wish);
+      showToast(res.added ? 'Saved to your Velora Wishlist' : 'Removed from Wishlist');
+      renderProducts();
       renderCart();
       return;
     }
@@ -371,43 +318,18 @@ const WHATSAPP_NUMBER = '918284029319'; // Replace with your business WhatsApp n
     if (e.key === 'Escape') closeAllOverlays();
   });
 
-    // Header Wishlist Button Tap (Filters to saved wishlist items or notifies if empty)
   let showingWishlistOnly = false;
   document.getElementById('wishlistOpenBtn')?.addEventListener('click', () => {
+    const wishlist = Store.getWishlist();
     if (wishlist.length === 0) {
       showToast('Your Wishlist is empty. Tap the heart icon on any product to save it.');
       return;
     }
     showingWishlistOnly = !showingWishlistOnly;
-    if (showingWishlistOnly && productsGrid && typeof VELORA_PRODUCTS !== 'undefined') {
-      const saved = VELORA_PRODUCTS.filter((p) => wishlist.includes(p.id));
+    if (showingWishlistOnly && productsGrid) {
+      const saved = Store.getCatalog().filter((p) => wishlist.includes(p.id));
       productsGrid.innerHTML = saved
-        .map((product) => `
-          <article class="product-card" data-product-id="${product.id}" data-cursor="view">
-            <div class="product-media">
-              <div class="product-top-bar">
-                <span class="badge-shimmer">Saved</span>
-                <button type="button" class="wishlist-btn is-wishlisted" data-wish="${product.id}" aria-label="Remove from wishlist">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                </button>
-              </div>
-              <a href="product.html?id=${product.id}" class="product-media-link" aria-label="View ${product.name}">
-                <img src="${product.image}" alt="${product.name}" class="product-img-main" onerror="this.src='assets/images/product-1.jpg'" loading="lazy" />
-                <img src="${product.hoverImage}" alt="${product.name} alternate view" class="product-img-hover" loading="lazy" />
-              </a>
-              <div class="product-quick-actions">
-                <button type="button" class="btn-quick-view" data-qv="${product.id}">Quick View</button>
-              </div>
-            </div>
-            <div class="product-body">
-              <h3 class="product-title"><a href="product.html?id=${product.id}">${product.name}</a></h3>
-              <div class="product-footer-row">
-                <div class="product-price-box"><span class="price-now">${formatINR(product.price)}</span></div>
-                ${product.stock === 0 ? `<button type="button" class="btn-add-cart" disabled style="opacity:0.5;cursor:not-allowed;">Sold Out</button>` : `<button type="button" class="btn-add-cart" data-add="${product.id}">Add to Cart</button>`}
-              </div>
-            </div>
-          </article>
-        `)
+        .map((product) => buildProductCardHtml(product, true, 'Saved'))
         .join('');
       document.getElementById('bestsellers')?.scrollIntoView({ behavior: 'smooth' });
       showToast(`Showing ${saved.length} saved Wishlist item(s). Tap heart again to show all.`);
@@ -416,6 +338,7 @@ const WHATSAPP_NUMBER = '918284029319'; // Replace with your business WhatsApp n
       showToast('Showing all products');
     }
   });
+
   document.getElementById('cartOpenBtn')?.addEventListener('click', openCart);
   document.getElementById('cartCloseBtn')?.addEventListener('click', closeAllOverlays);
   document.getElementById('qvCloseBtn')?.addEventListener('click', closeAllOverlays);
@@ -426,24 +349,25 @@ const WHATSAPP_NUMBER = '918284029319'; // Replace with your business WhatsApp n
   });
 
   document.getElementById('applyPromoBtn')?.addEventListener('click', () => {
-    const code = document.getElementById('promoCodeInput')?.value.trim().toUpperCase();
-    if (((code === 'VELORA10' || code === 'VALORA10') || code === 'VALORA10')) {
-      promoApplied = true;
+    const code = document.getElementById('promoCodeInput')?.value || '';
+    const res = Store.applyPromoCode(code);
+    if (res.ok) {
       renderCart();
-      showToast('Code VELORA10 applied! 10% privilege unlocked.');
+      showToast(`Code ${res.code} applied! 10% privilege unlocked.`);
     } else {
       showToast('Invalid code. Try VELORA10 for 10% OFF.');
     }
   });
 
   document.getElementById('whatsappCheckoutBtn')?.addEventListener('click', () => {
-    if (cart.length === 0) {
+    const totals = Store.calculateTotals();
+    if (totals.items.length === 0) {
       showToast('Please add at least one piece to your bag first.');
       return;
     }
-    const lines = cart.map((item, i) => `${i + 1}. ${item.name} (${item.finish}) x${item.qty} - ${formatINR(item.price * item.qty)}`);
-    const total = cartGrandTotalEl?.textContent || '';
-    const msg = `*VELORA — New Order Request*\n\n${lines.join('\n')}\n\n*Total:* ${total}\n*Shipping:* Free Insured Pan-India Delivery\n\n*Delivery Details (Please fill):*\n• Name: \n• City & Pincode: \n• Payment Mode (UPI / COD): `;
+    const lines = totals.items.map((item, i) => `${i + 1}. ${item.name} (${item.finish}) x${item.qty} - ${formatINR(item.price * item.qty)}`);
+    const promoLine = totals.hasPromo ? `\n*Promo (${totals.promoCode}):* -${formatINR(totals.discount)}` : '';
+    const msg = `*VELORA — New Order Request*\n\n${lines.join('\n')}${promoLine}\n\n*Total:* ${formatINR(totals.grandTotal)}\n*Shipping:* Free Insured Pan-India Delivery\n\n*Delivery Details (Please fill):*\n• Name: \n• City & Pincode: \n• Payment Mode (UPI / COD): `;
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
   });
 
@@ -451,12 +375,28 @@ const WHATSAPP_NUMBER = '918284029319'; // Replace with your business WhatsApp n
     showToast('Pay via UPI / COD online checkout coming soon — please Order via WhatsApp above.');
   });
 
-  let spotlightFinish = 'Natural Teak Wood / Noir';
+  // Sync Spotlight finishes dynamically from product vel-06 (Bug #3 fix)
+  function syncSpotlightFinishes() {
+    const spotProd = Store.getProductById('vel-06');
+    const pillsWrap = document.getElementById('spotlightFinishPills');
+    const selectedLabel = document.getElementById('selectedSpotlightFinish');
+    if (!spotProd || !pillsWrap || !Array.isArray(spotProd.finishes) || !spotProd.finishes.length) return;
+    pillsWrap.innerHTML = spotProd.finishes
+      .map((f, i) => `<button type="button" class="finish-pill ${i === 0 ? 'is-active' : ''}" data-finish="${escapeHtml(f)}">${escapeHtml(f)}</button>`)
+      .join('');
+    spotlightFinish = spotProd.finishes[0];
+    if (selectedLabel) selectedLabel.textContent = spotlightFinish;
+  }
+
+  let spotlightFinish = 'Natural Teak Wood / Matte Black';
+  syncSpotlightFinishes();
+
   document.getElementById('spotlightFinishPills')?.addEventListener('click', (e) => {
     const pill = e.target.closest('[data-finish]');
     if (!pill) return;
     spotlightFinish = pill.dataset.finish;
-    document.getElementById('selectedSpotlightFinish').textContent = spotlightFinish;
+    const selectedLabel = document.getElementById('selectedSpotlightFinish');
+    if (selectedLabel) selectedLabel.textContent = spotlightFinish;
     document.querySelectorAll('#spotlightFinishPills .finish-pill').forEach((p) => p.classList.remove('is-active'));
     pill.classList.add('is-active');
   });
@@ -466,7 +406,10 @@ const WHATSAPP_NUMBER = '918284029319'; // Replace with your business WhatsApp n
   });
 
   document.getElementById('spotlightWaBtn')?.addEventListener('click', () => {
-    const msg = `*VELORA — Direct Order Request*\n\n1. Teak & Solid Wood Base T-Stand (${spotlightFinish}) x1 - ₹3,999\n\n*Total:* ₹3,999\n*Shipping:* Free Insured Pan-India Delivery\n\n*Delivery Details (Please fill):*\n• Name: \n• City & Pincode: \n• Payment Mode (UPI / COD): `;
+    const spotProd = Store.getProductById('vel-06');
+    const price = spotProd ? spotProd.price : 3999;
+    const name = spotProd ? spotProd.name : 'Solid Wood Cylinder Base T-Stand';
+    const msg = `*VELORA — Direct Order Request*\n\n1. ${name} (${spotlightFinish}) x1 - ${formatINR(price)}\n\n*Total:* ${formatINR(price)}\n*Shipping:* Free Insured Pan-India Delivery\n\n*Delivery Details (Please fill):*\n• Name: \n• City & Pincode: \n• Payment Mode (UPI / COD): `;
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
   });
 
@@ -479,40 +422,20 @@ const WHATSAPP_NUMBER = '918284029319'; // Replace with your business WhatsApp n
     add: addToCart,
     open: openCart,
     close: closeAllOverlays,
-    render: renderCart
+    render: renderCart,
+    clear: () => {
+      Store.clearCart();
+      renderCart();
+    }
   };
 
-  window.addEventListener('velora:catalogUpdated', () => { renderProducts(); });
-    window.addEventListener('load', () => { if (productsGrid && !productsGrid.children.length) renderProducts(); });
-  setTimeout(() => { if (productsGrid && !productsGrid.children.length) renderProducts(); }, 600);
+  window.addEventListener('velora:catalogUpdated', () => {
+    syncSpotlightFinishes();
+    renderProducts();
+    renderCart();
+  });
+  window.addEventListener('storage', () => renderCart());
+
   renderProducts();
   renderCart();
 })();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

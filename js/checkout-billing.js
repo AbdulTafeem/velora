@@ -1,33 +1,25 @@
 ﻿/* ==========================================================================
-   VELORA — ONLINE CHECKOUT, ORDER SYNC & ADVANCE GST INVOICE ENGINE
+   VELORA — ONLINE CHECKOUT, ORDER SYNC & CONFIRMATION ENGINE
    ========================================================================== */
 (function () {
+  'use strict';
+
+  const Store = window.VeloraStore;
+  const fmt = (n) => '₹' + Number(n || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 });
+  const escapeHtml = Store.escapeHtml;
+
   const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw9NZAh4Wm_so6SkhZl8ASyMaVz1EE67Rk_IpPCN_5tve8D3eCR3tJyW6uLEuSOnhRZ/exec';
   const WHATSAPP_NUMBER = '918284029319';
   const RAZORPAY_KEY_ID = '';
 
-  const fmt = (n) => '₹' + Number(n || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 });
-
-  function escapeHtml(val) {
-    return String(val == null ? '' : val)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
+  function lockScroll() {
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
   }
 
-  function getCartState() {
-    let items = [];
-    try { items = JSON.parse(localStorage.getItem('velora_cart') || '[]'); } catch (e) {}
-    const subtotal = items.reduce((s, it) => s + (Number(it.price) || 0) * (Number(it.qty) || 1), 0);
-    const promoRow = document.getElementById('cartDiscountRow');
-    const hasPromo = promoRow && promoRow.style.display !== 'none';
-    const discount = hasPromo ? Math.round(subtotal * 0.10) : 0;
-    const grandTotal = Math.max(0, subtotal - discount);
-    const taxableValue = +(grandTotal / 1.18).toFixed(2);
-    const totalGst = +(grandTotal - taxableValue).toFixed(2);
-    return { items, subtotal, discount, grandTotal, taxableValue, totalGst, hasPromo };
+  function unlockScroll() {
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
   }
 
   function injectUI() {
@@ -35,12 +27,12 @@
     const style = document.createElement('style');
     style.textContent = `
       .vc-overlay { position:fixed; inset:0; z-index:10050; background:rgba(8,5,6,0.82); backdrop-filter:blur(14px); display:none; align-items:center; justify-content:center; padding:1rem; overflow-y:auto; overscroll-behavior:contain; }
-      .vc-overlay.is-open { display:flex !important; }
+      .vc-overlay.is-open { display:flex; }
       .vc-card { width:100%; max-width:740px; max-height:90vh; display:flex; flex-direction:column; overflow:hidden; background:#FFFDF9; color:#120C0E; border:1px solid rgba(212,175,55,0.55); border-radius:8px; box-shadow:0 32px 90px rgba(0,0,0,0.75); }
-      .vc-head { background:linear-gradient(135deg,#140508,#3D0712); color:#F8F5EE; padding:1.25rem 1.6rem; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(212,175,55,0.35); }
-      .vc-head h3 { font-family:'Cinzel',serif; letter-spacing:0.14em; font-size:1.05rem; color:#F3E5C0; margin:0; }
+      .vc-head { background:linear-gradient(135deg,#140508,#3D0712); color:#F8F5EE; padding:1.1rem 1.5rem; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(212,175,55,0.35); flex-shrink:0; }
+      .vc-head h3 { font-family:'Cinzel',serif; letter-spacing:0.14em; font-size:1.02rem; color:#F3E5C0; margin:0; }
       .vc-close { background:none; border:none; color:#F3E5C0; font-size:1.6rem; cursor:pointer; line-height:1; }
-      .vc-body { padding:1.25rem 1.5rem; display:grid; gap:0.95rem; overflow-y:auto; flex:1; }
+      .vc-body { padding:1.2rem 1.5rem; display:grid; gap:0.9rem; overflow-y:auto; flex:1; }
       .vc-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:0.85rem; }
       .vc-field { display:flex; flex-direction:column; gap:0.32rem; }
       .vc-field label { font-size:0.7rem; font-weight:600; letter-spacing:0.09em; text-transform:uppercase; color:#4E0916; }
@@ -51,24 +43,19 @@
       .vc-pay-opt.is-selected { border-color:#540A18; background:rgba(84,10,24,0.06); box-shadow:inset 0 0 0 1px #D4AF37; }
       .vc-pay-opt strong { display:block; font-size:0.8rem; color:#120C0E; }
       .vc-pay-opt span { font-size:0.68rem; color:#5C534E; }
-      .vc-summary { background:#F8F5EE; border:1px solid rgba(212,175,55,0.35); border-radius:5px; padding:0.95rem 1.1rem; font-size:0.84rem; display:grid; gap:0.35rem; }
+      .vc-summary { background:#F8F5EE; border:1px solid rgba(212,175,55,0.35); border-radius:5px; padding:0.9rem 1.1rem; font-size:0.84rem; display:grid; gap:0.35rem; }
       .vc-row { display:flex; justify-content:space-between; }
       .vc-row.grand { border-top:1px solid rgba(18,12,14,0.12); padding-top:0.45rem; margin-top:0.25rem; font-weight:700; font-size:0.98rem; color:#540A18; }
-      .vc-submit { width:100%; padding:0.92rem; background:linear-gradient(135deg,#F3E5C0,#D4AF37,#A88438); color:#080506; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; font-size:0.76rem; border:none; border-radius:4px; cursor:pointer; }
+      .vc-submit { width:100%; padding:0.88rem; background:linear-gradient(135deg,#F3E5C0,#D4AF37,#A88438); color:#080506; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; font-size:0.75rem; border:none; border-radius:4px; cursor:pointer; }
       .vc-submit:disabled { opacity:0.6; cursor:wait; }
-      /* Invoice Styling */
-      .inv-box { padding:0.75rem 1.2rem; background:#fff; color:#111; font-size:0.78rem; line-height:1.35; overflow-y:auto; flex:1; }
+      .inv-box { padding:0.85rem 1.25rem; background:#fff; color:#111; font-size:0.79rem; line-height:1.38; overflow-y:auto; flex:1; }
       .inv-top { display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid #540A18; padding-bottom:0.55rem; margin-bottom:0.65rem; }
-      .inv-brand { font-family:'Cinzel',serif; font-size:1.5rem; font-weight:700; color:#540A18; letter-spacing:0.16em; }
+      .inv-brand { font-family:'Cinzel',serif; font-size:1.45rem; font-weight:700; color:#540A18; letter-spacing:0.16em; }
       .inv-table { width:100%; border-collapse:collapse; margin-block:0.55rem; }
-      .inv-table th { background:#140508; color:#F3E5C0; text-align:left; padding:0.35rem 0.5rem; font-size:0.66rem; letter-spacing:0.08em; text-transform:uppercase; }
-      .inv-table td { padding:0.35rem 0.5rem; border-bottom:1px solid #e5e0d8; }
-      .inv-actions { display:flex; gap:0.75rem; padding:0.7rem 1.2rem 0.9rem; background:#F8F5EE; border-top:1px solid #e5e0d8; flex-shrink:0; }
-      @media (max-width:640px) { .vc-grid-2, .vc-pay-grid { grid-template-columns:1fr; } }
-      @media screen {
-        #veloraInvoiceModal .inv-actions { display: flex !important; visibility: visible !important; }
-        #veloraInvoiceModal .vc-close, #veloraCheckoutModal .vc-close { display: inline-flex !important; visibility: visible !important; }
-      }
+      .inv-table th { background:#140508; color:#F3E5C0; text-align:left; padding:0.38rem 0.5rem; font-size:0.66rem; letter-spacing:0.08em; text-transform:uppercase; }
+      .inv-table td { padding:0.38rem 0.5rem; border-bottom:1px solid #e5e0d8; }
+      .inv-actions { display:flex; gap:0.75rem; padding:0.75rem 1.25rem 0.95rem; background:#F8F5EE; border-top:1px solid #e5e0d8; flex-shrink:0; }
+      @media (max-width:640px) { .vc-grid-2, .vc-pay-grid { grid-template-columns:1fr; } .inv-actions { flex-direction:column; } }
       @media print {
         @page { size: A4 portrait; margin: 10mm; }
         html, body { height: auto !important; overflow: visible !important; background: #fff !important; }
@@ -87,22 +74,22 @@
       <div class="vc-overlay" id="veloraCheckoutModal" role="dialog" aria-modal="true">
         <div class="vc-card">
           <div class="vc-head">
-            <h3>VELORA &mdash; SECURE ONLINE CHECKOUT</h3>
-            <button type="button" class="vc-close" id="vcCloseBtn">&times;</button>
+            <h3>VELORA &mdash; ORDER &amp; DELIVERY DETAILS</h3>
+            <button type="button" class="vc-close" id="vcCloseBtn" aria-label="Close checkout">&times;</button>
           </div>
           <form class="vc-body" id="veloraCheckoutForm">
             <div class="vc-grid-2">
-              <div class="vc-field"><label>Full Name *</label><input type="text" id="vcName" required placeholder="e.g. Aarav Sharma" /></div>
-              <div class="vc-field"><label>Mobile / WhatsApp *</label><input type="tel" id="vcPhone" required pattern="[0-9+\s-]{10,15}" placeholder="+91 98765 43210" /></div>
+              <div class="vc-field"><label for="vcName">Full Name *</label><input type="text" id="vcName" required placeholder="e.g. Aarav Sharma" /></div>
+              <div class="vc-field"><label for="vcPhone">Mobile / WhatsApp *</label><input type="tel" id="vcPhone" required pattern="[0-9+\\s-]{10,15}" placeholder="+91 98765 43210" /></div>
             </div>
             <div class="vc-grid-2">
-              <div class="vc-field"><label>Email (For Digital Invoice) *</label><input type="email" id="vcEmail" required placeholder="you@example.com" /></div>
-              <div class="vc-field"><label>Company &amp; GSTIN (Optional - B2B)</label><input type="text" id="vcGstin" placeholder="e.g. Studio Luxe / 29ABCDE1234F1Z5" /></div>
+              <div class="vc-field"><label for="vcEmail">Email (For Order Summary) *</label><input type="email" id="vcEmail" required placeholder="you@example.com" /></div>
+              <div class="vc-field"><label for="vcGstin">Company &amp; GSTIN (Optional - B2B)</label><input type="text" id="vcGstin" placeholder="e.g. Studio Luxe / 29ABCDE1234F1Z5" /></div>
             </div>
-            <div class="vc-field"><label>Complete Delivery Address *</label><textarea id="vcAddress" rows="2" required placeholder="House/Flat No., Building, Street, Landmark"></textarea></div>
+            <div class="vc-field"><label for="vcAddress">Complete Delivery Address *</label><textarea id="vcAddress" rows="2" required placeholder="House/Flat No., Building, Street, Landmark"></textarea></div>
             <div class="vc-grid-2">
-              <div class="vc-field"><label>City &amp; State *</label><input type="text" id="vcCityState" required placeholder="e.g. Mumbai, Maharashtra" /></div>
-              <div class="vc-field"><label>6-Digit Pincode *</label><input type="text" id="vcPincode" required pattern="[0-9]{6}" maxlength="6" placeholder="400001" /></div>
+              <div class="vc-field"><label for="vcCityState">City &amp; State *</label><input type="text" id="vcCityState" required placeholder="e.g. Mumbai, Maharashtra" /></div>
+              <div class="vc-field"><label for="vcPincode">6-Digit Pincode *</label><input type="text" id="vcPincode" required pattern="[0-9]{6}" maxlength="6" placeholder="400001" /></div>
             </div>
             <div class="vc-field">
               <label>Select Payment Mode</label>
@@ -113,7 +100,7 @@
               </div>
             </div>
             <div class="vc-summary" id="vcOrderSummary"></div>
-            <button type="submit" class="vc-submit" id="vcPlaceOrderBtn">Confirm Order &amp; Generate Tax Invoice &rarr;</button>
+            <button type="submit" class="vc-submit" id="vcPlaceOrderBtn">Confirm Order &amp; Generate Summary &rarr;</button>
           </form>
         </div>
       </div>
@@ -121,12 +108,12 @@
       <div class="vc-overlay" id="veloraInvoiceModal" role="dialog" aria-modal="true">
         <div class="vc-card">
           <div class="vc-head">
-            <h3>TAX INVOICE &amp; ORDER CONFIRMATION</h3>
-            <button type="button" class="vc-close" id="invCloseBtn">&times;</button>
+            <h3>ORDER CONFIRMATION &amp; SUMMARY</h3>
+            <button type="button" class="vc-close" id="invCloseBtn" aria-label="Close confirmation">&times;</button>
           </div>
           <div class="inv-box" id="veloraInvoiceContent"></div>
           <div class="inv-actions">
-            <button type="button" class="vc-submit" style="flex:1;" onclick="window.print()">Download / Print PDF Invoice</button>
+            <button type="button" class="vc-submit" style="flex:1;" onclick="window.print()">Download / Print PDF Summary</button>
             <button type="button" class="vc-submit" id="invWhatsappBtn" style="flex:1;background:#140508;color:#F3E5C0;border:1px solid #D4AF37;">Send Order Slip on WhatsApp</button>
           </div>
         </div>
@@ -143,26 +130,33 @@
       selectedPay = card.dataset.pay;
     });
 
-    document.getElementById('vcCloseBtn').onclick = () => {
-      document.getElementById('veloraCheckoutModal').classList.remove('is-open');
-      document.documentElement.style.overflow = ''; document.body.style.overflow = '';
-    };
-    document.getElementById('invCloseBtn').onclick = () => {
-const __invEl = document.getElementById('veloraInvoiceModal');
-      if (__invEl) {
-        __invEl.classList.remove('is-open');
-        __invEl.style.display = 'none';
-        document.documentElement.style.overflow = ''; document.body.style.overflow = '';
+    function closeCheckoutModal() {
+      document.getElementById('veloraCheckoutModal')?.classList.remove('is-open');
+      unlockScroll();
+    }
+
+    function closeInvoiceModal() {
+      document.getElementById('veloraInvoiceModal')?.classList.remove('is-open');
+      unlockScroll();
+    }
+
+    document.getElementById('vcCloseBtn').onclick = closeCheckoutModal;
+    document.getElementById('invCloseBtn').onclick = closeInvoiceModal;
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (document.getElementById('veloraCheckoutModal')?.classList.contains('is-open')) closeCheckoutModal();
+        if (document.getElementById('veloraInvoiceModal')?.classList.contains('is-open')) closeInvoiceModal();
       }
-    };
+    });
 
     document.getElementById('veloraCheckoutForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const state = getCartState();
-      if (!state.items.length) return;
+      const totals = Store.calculateTotals();
+      if (!totals.items.length) return;
       const btn = document.getElementById('vcPlaceOrderBtn');
       btn.disabled = true;
-      btn.textContent = 'Generating Invoice & Recording Order...';
+      btn.textContent = 'Recording Order & Generating Summary...';
 
       const orderId = 'VEL-' + new Date().getFullYear() + '-' + Math.floor(100000 + Math.random() * 900000);
       const orderDate = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
@@ -182,12 +176,13 @@ const __invEl = document.getElementById('veloraInvoiceModal');
         orderId,
         orderDate,
         customer,
-        items: state.items,
-        subtotal: state.subtotal,
-        discount: state.discount,
-        taxableValue: state.taxableValue,
-        totalGst: state.totalGst,
-        grandTotal: state.grandTotal,
+        items: totals.items,
+        promoCode: totals.promoCode,
+        subtotal: totals.subtotal,
+        discount: totals.discount,
+        taxableValue: totals.taxableValue,
+        totalGst: totals.totalGst,
+        grandTotal: totals.grandTotal,
         status: selectedPay.includes('COD') ? 'Confirmed (COD)' : 'Confirmed (Awaiting Payment Link)'
       };
 
@@ -200,15 +195,18 @@ const __invEl = document.getElementById('veloraInvoiceModal');
         });
       } catch (err) {}
 
-      // Save local order archive & clear cart
       try {
-        if (window.VeloraBilling) { window.VeloraBilling.completeOrderAndResetCart(payload); } else { localStorage.setItem('velora_cart', '[]'); }
-      } catch (e) {}
+        if (window.VeloraBilling && typeof window.VeloraBilling.completeOrderAndResetCart === 'function') {
+          window.VeloraBilling.completeOrderAndResetCart(payload);
+        } else {
+          Store.clearCart();
+        }
+      } catch (err) {}
 
       btn.disabled = false;
-      btn.textContent = 'Confirm Order & Generate Tax Invoice →';
+      btn.textContent = 'Confirm Order & Generate Summary →';
       document.getElementById('veloraCheckoutModal').classList.remove('is-open');
-      renderInvoice(payload); const invModal = document.getElementById('veloraInvoiceModal'); if (invModal) invModal.classList.add('is-open'); if (window.VeloraBilling && window.VeloraBilling.__autoModal && typeof window.VeloraBilling.openInvoiceModal === 'function') { window.VeloraBilling.openInvoiceModal(payload); }
+      renderInvoice(payload);
     });
   }
 
@@ -218,7 +216,7 @@ const __invEl = document.getElementById('veloraInvoiceModal');
     const rowsHtml = order.items.map((it, idx) => `
       <tr>
         <td>${idx + 1}</td>
-        <td><strong>${escapeHtml(it.name)}</strong><br/><span style="font-size:0.74rem;color:#555;">Finish: ${escapeHtml(it.finish)} &bull; HSN: 9403</span></td>
+        <td><strong>${escapeHtml(it.name)}</strong><br/><span style="font-size:0.74rem;color:#555;">Finish: ${escapeHtml(it.finish)}</span></td>
         <td>${it.qty}</td>
         <td>${fmt(it.price)}</td>
         <td style="text-align:right;"><strong>${fmt(it.price * it.qty)}</strong></td>
@@ -232,9 +230,9 @@ const __invEl = document.getElementById('veloraInvoiceModal');
           <div style="font-size:0.74rem;color:#555;margin-top:2px;">Elevate Your Lifestyle &bull; Architectural Home Furniture<br/>Support: +91 82840 29319 &bull; velevanteyourlifestyle@gmail.com</div>
         </div>
         <div style="text-align:right;">
-          <div style="font-weight:700;color:#540A18;letter-spacing:0.08em;">RETAIL / TAX INVOICE</div>
-          <div>Invoice No: <strong>${escapeHtml(order.orderId)}</strong></div>
-          <div>Date: ${order.orderDate}</div>
+          <div style="font-weight:700;color:#540A18;letter-spacing:0.08em;">ORDER CONFIRMATION</div>
+          <div>Order Ref: <strong>${escapeHtml(order.orderId)}</strong></div>
+          <div>Date: ${escapeHtml(order.orderDate)}</div>
           <div>Status: <span style="color:#15803d;font-weight:600;">${escapeHtml(order.status)}</span></div>
         </div>
       </div>
@@ -244,98 +242,83 @@ const __invEl = document.getElementById('veloraInvoiceModal');
           <strong>${escapeHtml(order.customer.name)}</strong><br/>
           ${escapeHtml(order.customer.address)}, ${escapeHtml(order.customer.cityState)} - ${escapeHtml(order.customer.pincode)}<br/>
           Phone: ${escapeHtml(order.customer.phone)} &bull; Email: ${escapeHtml(order.customer.email)}<br/>
-          GSTIN: ${order.customer.gstin}
+          GSTIN: ${escapeHtml(order.customer.gstin)}
         </div>
         <div style="text-align:right;">
           <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:#540A18;font-weight:700;">Payment &amp; Dispatch</div>
-          Mode: <strong>${order.customer.paymentMode}</strong><br/>
+          Mode: <strong>${escapeHtml(order.customer.paymentMode)}</strong><br/>
           Logistics: Insured Pan-India Doorstep<br/>
           Shipping Charges: <strong>Complimentary (₹0)</strong>
         </div>
       </div>
       <table class="inv-table">
-        <thead><tr><th>#</th><th>Item &amp; HSN</th><th>Qty</th><th>Rate (Incl. GST)</th><th style="text-align:right;">Amount</th></tr></thead>
+        <thead><tr><th>#</th><th>Item &amp; Finish</th><th>Qty</th><th>Rate (Incl. GST)</th><th style="text-align:right;">Amount</th></tr></thead>
         <tbody>${rowsHtml}</tbody>
       </table>
       <div style="max-width:320px;margin-left:auto;display:grid;gap:0.3rem;font-size:0.82rem;">
         <div class="vc-row"><span>Subtotal:</span><span>${fmt(order.subtotal)}</span></div>
-        ${order.discount > 0 ? `<div class="vc-row" style="color:#15803d;"><span>Privilege Discount (10%):</span><span>-${fmt(order.discount)}</span></div>` : ''}
-        <div class="vc-row"><span>Taxable Value:</span><span>${fmt(order.taxableValue)}</span></div>
-        <div class="vc-row"><span>CGST (9%):</span><span>${fmt(cgst)}</span></div>
-        <div class="vc-row"><span>SGST (9%):</span><span>${fmt(sgst)}</span></div>
+        ${order.discount > 0 ? `<div class="vc-row" style="color:#15803d;"><span>Privilege Discount (${escapeHtml(order.promoCode || 'VELORA10')}):</span><span>-${fmt(order.discount)}</span></div>` : ''}
+        <div class="vc-row"><span>Taxable Value (Est.):</span><span>${fmt(order.taxableValue)}</span></div>
+        <div class="vc-row"><span>CGST (9% Incl.):</span><span>${fmt(cgst)}</span></div>
+        <div class="vc-row"><span>SGST (9% Incl.):</span><span>${fmt(sgst)}</span></div>
         <div class="vc-row grand"><span>Grand Total (INR):</span><span>${fmt(order.grandTotal)}</span></div>
       </div>
-      <div style="margin-top:1.25rem;padding-top:0.75rem;border-top:1px dashed #ccc;display:flex;justify-content:space-between;align-items:center;font-size:0.72rem;color:#555;">
-        <span>Computer-generated VELORA Luxury Invoice. Valid for warranty &amp; transit insurance.</span>
-        <strong style="color:#540A18;">Authorized Signatory &mdash; VELORA India</strong>
+      <div style="margin-top:1rem;padding-top:0.65rem;border-top:1px dashed #ccc;display:flex;justify-content:space-between;align-items:center;font-size:0.72rem;color:#555;">
+        <span>Computer-generated VELORA Order Confirmation. Formal GST invoice issued upon dispatch.</span>
+        <strong style="color:#540A18;">VELORA India Concierge</strong>
       </div>
     `;
 
+    // Plain-text WhatsApp message (Bug #9 fix — no escapeHtml inside encodeURIComponent)
     document.getElementById('invWhatsappBtn').onclick = () => {
-const itemLines = order.items.map((it, i) => `${i + 1}. ${escapeHtml(it.name)} (${escapeHtml(it.finish)}) x${it.qty} - ${fmt(it.price * it.qty)}`).join('\n');
-      const waMsg = `*VELORA — Confirmed Order & Invoice (${escapeHtml(order.orderId)})*\n\n${itemLines}\n\n*Grand Total:* ${fmt(order.grandTotal)} (Incl. GST)\n*Payment Mode:* ${order.customer.paymentMode}\n*Customer:* ${escapeHtml(order.customer.name)} (${escapeHtml(order.customer.phone)})\n*Address:* ${escapeHtml(order.customer.address)}, ${escapeHtml(order.customer.cityState)} - ${escapeHtml(order.customer.pincode)}`;
+      const itemLines = order.items.map((it, i) => `${i + 1}. ${it.name} (${it.finish}) x${it.qty} - ${fmt(it.price * it.qty)}`).join('\n');
+      const discLine = order.discount > 0 ? `\n*Discount (${order.promoCode || 'VELORA10'}):* -${fmt(order.discount)}` : '';
+      const waMsg = `*VELORA — Confirmed Order (${order.orderId})*\n\n${itemLines}${discLine}\n\n*Grand Total:* ${fmt(order.grandTotal)} (Incl. GST)\n*Payment Mode:* ${order.customer.paymentMode}\n*Customer:* ${order.customer.name} (${order.customer.phone})\n*Address:* ${order.customer.address}, ${order.customer.cityState} - ${order.customer.pincode}`;
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waMsg)}`, '_blank', 'noopener,noreferrer');
     };
 
-    const __invEl = document.getElementById('veloraInvoiceModal');
-    if (__invEl) {
-      __invEl.classList.add('is-open');
-      document.documentElement.style.overflow = 'hidden'; document.body.style.overflow = 'hidden';
-      __invEl.style.display = 'flex';
-      __invEl.style.zIndex = '10050';
-      __invEl.scrollTop = 0;
+    const invEl = document.getElementById('veloraInvoiceModal');
+    if (invEl) {
+      invEl.classList.add('is-open');
+      lockScroll();
     }
     setTimeout(() => {
-window.dispatchEvent(new Event('storage')); }, 200);
+      window.dispatchEvent(new Event('storage'));
+    }, 100);
   }
 
   function openCheckout() {
     injectUI();
-    const state = getCartState();
-    if (!state.items.length) {
+    const totals = Store.calculateTotals();
+    if (!totals.items.length) {
       const t = document.getElementById('veloraToast');
-      if (t) { t.textContent = 'Please add at least one piece to your bag first.'; t.classList.add('is-visible'); setTimeout(() => t.classList.remove('is-visible'), 3000); }
+      if (t) {
+        t.textContent = 'Please add at least one piece to your bag first.';
+        t.classList.add('is-visible');
+        setTimeout(() => t.classList.remove('is-visible'), 3000);
+      }
       return;
     }
-    const cgst = +(state.totalGst / 2).toFixed(2);
     document.getElementById('vcOrderSummary').innerHTML = `
-      <div class="vc-row"><span>Items (${state.items.reduce((s, i) => s + i.qty, 0)}):</span><span>${fmt(state.subtotal)}</span></div>
-      ${state.discount > 0 ? `<div class="vc-row" style="color:#15803d;"><span>Code VELORA10 (10% OFF):</span><span>-${fmt(state.discount)}</span></div>` : ''}
-      <div class="vc-row" style="font-size:0.76rem;color:#5C534E;"><span>Taxable Value (${fmt(state.taxableValue)}) + 18% GST (${fmt(cgst)} CGST + ${fmt(cgst)} SGST):</span><span>Included</span></div>
+      <div class="vc-row"><span>Items (${totals.totalQty}):</span><span>${fmt(totals.subtotal)}</span></div>
+      ${totals.discount > 0 ? `<div class="vc-row" style="color:#15803d;"><span>Code ${escapeHtml(totals.promoCode)} (10% OFF):</span><span>-${fmt(totals.discount)}</span></div>` : ''}
+      <div class="vc-row" style="font-size:0.76rem;color:#5C534E;"><span>Taxable Value (${fmt(totals.taxableValue)}) + 18% GST (${fmt(totals.cgst)} CGST + ${fmt(totals.sgst)} SGST):</span><span>Included</span></div>
       <div class="vc-row"><span>Insured Pan-India Delivery:</span><span style="color:#15803d;font-weight:600;">FREE</span></div>
-      <div class="vc-row grand"><span>Total Payable:</span><span>${fmt(state.grandTotal)}</span></div>
+      <div class="vc-row grand"><span>Total Payable:</span><span>${fmt(totals.grandTotal)}</span></div>
     `;
     document.getElementById('cartDrawer')?.classList.remove('is-open');
-    document.getElementById('drawerBackdrop')?.classList.remove('is-open');
-    document.documentElement.style.overflow = 'hidden'; document.body.style.overflow = 'hidden';
+    document.getElementById('drawerBackdrop')?.classList.remove('is-visible');
+    lockScroll();
     document.getElementById('veloraCheckoutModal').classList.add('is-open');
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-const expBtn = document.getElementById('expressCheckoutBtn');
+    const expBtn = document.getElementById('expressCheckoutBtn');
     if (expBtn) {
       const clone = expBtn.cloneNode(true);
-      clone.innerHTML = '<span class="btn-text">Proceed to Online Checkout &amp; Invoice &rarr;</span>';
+      clone.innerHTML = '<span class="btn-text">Proceed to Online Order &amp; Summary &rarr;</span>';
       expBtn.parentNode.replaceChild(clone, expBtn);
       clone.addEventListener('click', openCheckout);
     }
   });
 })();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
