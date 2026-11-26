@@ -76,7 +76,7 @@
           <form class="vc-body" id="veloraCheckoutForm">
             <div class="vc-grid-2">
               <div class="vc-field"><label>Full Name *</label><input type="text" id="vcName" required placeholder="e.g. Aarav Sharma" /></div>
-              <div class="vc-field"><label>Mobile / WhatsApp *</label><input type="tel" id="vcPhone" required pattern="[0-9+\\s-]{10,15}" placeholder="+91 98765 43210" /></div>
+              <div class="vc-field"><label>Mobile / WhatsApp *</label><input type="tel" id="vcPhone" required pattern="[0-9+\s-]{10,15}" placeholder="+91 98765 43210" /></div>
             </div>
             <div class="vc-grid-2">
               <div class="vc-field"><label>Email (For Digital Invoice) *</label><input type="email" id="vcEmail" required placeholder="you@example.com" /></div>
@@ -333,6 +333,7 @@ const expBtn = document.getElementById('expressCheckoutBtn');
     }
   });
 })();
+
 
 
 
