@@ -34,9 +34,9 @@
     if (document.getElementById('veloraCheckoutModal')) return;
     const style = document.createElement('style');
     style.textContent = `
-      .vc-overlay { position:fixed; inset:0; z-index:10050; background:rgba(8,5,6,0.82); backdrop-filter:blur(14px); display:none; align-items:center; justify-content:center; padding:1rem; overflow-y:auto; }
+      .vc-overlay { position:fixed; inset:0; z-index:10050; background:rgba(8,5,6,0.82); backdrop-filter:blur(14px); display:none; align-items:center; justify-content:center; padding:1rem; overflow-y:auto; overscroll-behavior:contain; }
       .vc-overlay.is-open { display:flex !important; }
-      .vc-card { width:100%; max-width:740px; max-height:92vh; display:flex; flex-direction:column; overflow:hidden; background:#FFFDF9; color:#120C0E; border:1px solid rgba(212,175,55,0.55); border-radius:8px; box-shadow:0 32px 90px rgba(0,0,0,0.75); }
+      .vc-card { width:100%; max-width:740px; max-height:90vh; display:flex; flex-direction:column; overflow:hidden; background:#FFFDF9; color:#120C0E; border:1px solid rgba(212,175,55,0.55); border-radius:8px; box-shadow:0 32px 90px rgba(0,0,0,0.75); }
       .vc-head { background:linear-gradient(135deg,#140508,#3D0712); color:#F8F5EE; padding:1.25rem 1.6rem; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(212,175,55,0.35); }
       .vc-head h3 { font-family:'Cinzel',serif; letter-spacing:0.14em; font-size:1.05rem; color:#F3E5C0; margin:0; }
       .vc-close { background:none; border:none; color:#F3E5C0; font-size:1.6rem; cursor:pointer; line-height:1; }
@@ -57,13 +57,13 @@
       .vc-submit { width:100%; padding:0.92rem; background:linear-gradient(135deg,#F3E5C0,#D4AF37,#A88438); color:#080506; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; font-size:0.76rem; border:none; border-radius:4px; cursor:pointer; }
       .vc-submit:disabled { opacity:0.6; cursor:wait; }
       /* Invoice Styling */
-      .inv-box { padding:0.9rem 1.25rem; background:#fff; color:#111; font-size:0.8rem; overflow-y:auto; flex:1; }
-      .inv-top { display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid #540A18; padding-bottom:1rem; margin-bottom:1rem; }
+      .inv-box { padding:0.75rem 1.2rem; background:#fff; color:#111; font-size:0.78rem; line-height:1.35; overflow-y:auto; flex:1; }
+      .inv-top { display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid #540A18; padding-bottom:0.55rem; margin-bottom:0.65rem; }
       .inv-brand { font-family:'Cinzel',serif; font-size:1.5rem; font-weight:700; color:#540A18; letter-spacing:0.16em; }
-      .inv-table { width:100%; border-collapse:collapse; margin-block:1rem; }
-      .inv-table th { background:#140508; color:#F3E5C0; text-align:left; padding:0.42rem 0.55rem; font-size:0.68rem; letter-spacing:0.08em; text-transform:uppercase; }
-      .inv-table td { padding:0.42rem 0.55rem; border-bottom:1px solid #e5e0d8; }
-      .inv-actions { display:flex; gap:0.75rem; padding:0.75rem 1.25rem 1rem; background:#F8F5EE; border-top:1px solid #e5e0d8; flex-shrink:0; }
+      .inv-table { width:100%; border-collapse:collapse; margin-block:0.55rem; }
+      .inv-table th { background:#140508; color:#F3E5C0; text-align:left; padding:0.35rem 0.5rem; font-size:0.66rem; letter-spacing:0.08em; text-transform:uppercase; }
+      .inv-table td { padding:0.35rem 0.5rem; border-bottom:1px solid #e5e0d8; }
+      .inv-actions { display:flex; gap:0.75rem; padding:0.7rem 1.2rem 0.9rem; background:#F8F5EE; border-top:1px solid #e5e0d8; flex-shrink:0; }
       @media (max-width:640px) { .vc-grid-2, .vc-pay-grid { grid-template-columns:1fr; } }
       @media print {
         @page { size: A4 portrait; margin: 10mm; }
@@ -84,16 +84,16 @@
           background: #fff !important;
           backdrop-filter: none !important;
         }
-        #veloraInvoiceModal .vc-card { width:100%; max-width:740px; max-height:92vh; display:flex; flex-direction:column; overflow:hidden; background:#FFFDF9; color:#120C0E; border:1px solid rgba(212,175,55,0.55); border-radius:8px; box-shadow:0 32px 90px rgba(0,0,0,0.75); }
-        #veloraInvoiceModal .inv-box { padding:0.9rem 1.25rem; background:#fff; color:#111; font-size:0.8rem; overflow-y:auto; flex:1; }
+        #veloraInvoiceModal .vc-card { width:100%; max-width:740px; max-height:90vh; display:flex; flex-direction:column; overflow:hidden; background:#FFFDF9; color:#120C0E; border:1px solid rgba(212,175,55,0.55); border-radius:8px; box-shadow:0 32px 90px rgba(0,0,0,0.75); }
+        #veloraInvoiceModal .inv-box { padding:0.75rem 1.2rem; background:#fff; color:#111; font-size:0.78rem; line-height:1.35; overflow-y:auto; flex:1; }
         .inv-actions, .vc-close { display: none !important; }
       }
-        #veloraInvoiceModal .vc-card { width:100%; max-width:740px; max-height:92vh; display:flex; flex-direction:column; overflow:hidden; background:#FFFDF9; color:#120C0E; border:1px solid rgba(212,175,55,0.55); border-radius:8px; box-shadow:0 32px 90px rgba(0,0,0,0.75); }
-        #veloraInvoiceModal .inv-box { padding:0.9rem 1.25rem; background:#fff; color:#111; font-size:0.8rem; overflow-y:auto; flex:1; }
+        #veloraInvoiceModal .vc-card { width:100%; max-width:740px; max-height:90vh; display:flex; flex-direction:column; overflow:hidden; background:#FFFDF9; color:#120C0E; border:1px solid rgba(212,175,55,0.55); border-radius:8px; box-shadow:0 32px 90px rgba(0,0,0,0.75); }
+        #veloraInvoiceModal .inv-box { padding:0.75rem 1.2rem; background:#fff; color:#111; font-size:0.78rem; line-height:1.35; overflow-y:auto; flex:1; }
         .inv-actions, .vc-close { display: none !important; }
       }
-        #veloraInvoiceModal .vc-card { width:100%; max-width:740px; max-height:92vh; display:flex; flex-direction:column; overflow:hidden; background:#FFFDF9; color:#120C0E; border:1px solid rgba(212,175,55,0.55); border-radius:8px; box-shadow:0 32px 90px rgba(0,0,0,0.75); }
-        #veloraInvoiceModal .inv-box { padding:0.9rem 1.25rem; background:#fff; color:#111; font-size:0.8rem; overflow-y:auto; flex:1; }
+        #veloraInvoiceModal .vc-card { width:100%; max-width:740px; max-height:90vh; display:flex; flex-direction:column; overflow:hidden; background:#FFFDF9; color:#120C0E; border:1px solid rgba(212,175,55,0.55); border-radius:8px; box-shadow:0 32px 90px rgba(0,0,0,0.75); }
+        #veloraInvoiceModal .inv-box { padding:0.75rem 1.2rem; background:#fff; color:#111; font-size:0.78rem; line-height:1.35; overflow-y:auto; flex:1; }
         .inv-actions, .vc-close { display: none !important; }
       }
     `;
@@ -160,7 +160,10 @@
       selectedPay = card.dataset.pay;
     });
 
-    document.getElementById('vcCloseBtn').onclick = () => document.getElementById('veloraCheckoutModal').classList.remove('is-open');
+    document.getElementById('vcCloseBtn').onclick = () => {
+      document.getElementById('veloraCheckoutModal').classList.remove('is-open');
+      document.documentElement.style.overflow = ''; document.body.style.overflow = '';
+    };
     document.getElementById('invCloseBtn').onclick = () => {
 const __invEl = document.getElementById('veloraInvoiceModal');
       if (__invEl) {
@@ -321,6 +324,7 @@ window.dispatchEvent(new Event('storage')); }, 200);
     `;
     document.getElementById('cartDrawer')?.classList.remove('is-open');
     document.getElementById('drawerBackdrop')?.classList.remove('is-open');
+    document.documentElement.style.overflow = 'hidden'; document.body.style.overflow = 'hidden';
     document.getElementById('veloraCheckoutModal').classList.add('is-open');
   }
 
@@ -334,6 +338,7 @@ const expBtn = document.getElementById('expressCheckoutBtn');
     }
   });
 })();
+
 
 
 
