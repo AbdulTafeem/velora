@@ -65,38 +65,21 @@
       .inv-table td { padding:0.35rem 0.5rem; border-bottom:1px solid #e5e0d8; }
       .inv-actions { display:flex; gap:0.75rem; padding:0.7rem 1.2rem 0.9rem; background:#F8F5EE; border-top:1px solid #e5e0d8; flex-shrink:0; }
       @media (max-width:640px) { .vc-grid-2, .vc-pay-grid { grid-template-columns:1fr; } }
+      @media screen {
+        #veloraInvoiceModal .inv-actions { display: flex !important; visibility: visible !important; }
+        #veloraInvoiceModal .vc-close, #veloraCheckoutModal .vc-close { display: inline-flex !important; visibility: visible !important; }
+      }
       @media print {
         @page { size: A4 portrait; margin: 10mm; }
         html, body { height: auto !important; overflow: visible !important; background: #fff !important; }
         body > *:not(:has(#veloraInvoiceModal)), #veloraCheckoutModal { display: none !important; }
         #veloraInvoiceModal, #veloraInvoiceModal * { visibility: visible !important; }
-        #veloraInvoiceModal {
-          display: block !important;
-          position: static !important;
-          inset: auto !important;
-          width: 100% !important;
-          max-width: 100% !important;
-          height: auto !important;
-          max-height: none !important;
-          overflow: visible !important;
-          padding: 0 !important;
-          margin: 0 !important;
-          background: #fff !important;
-          backdrop-filter: none !important;
-        }
-        #veloraInvoiceModal .vc-card { width:100%; max-width:740px; max-height:90vh; display:flex; flex-direction:column; overflow:hidden; background:#FFFDF9; color:#120C0E; border:1px solid rgba(212,175,55,0.55); border-radius:8px; box-shadow:0 32px 90px rgba(0,0,0,0.75); }
-        #veloraInvoiceModal .inv-box { padding:0.75rem 1.2rem; background:#fff; color:#111; font-size:0.78rem; line-height:1.35; overflow-y:auto; flex:1; }
-        .inv-actions, .vc-close { display: none !important; }
+        #veloraInvoiceModal { display: block !important; position: static !important; inset: auto !important; width: 100% !important; max-width: 100% !important; height: auto !important; max-height: none !important; overflow: visible !important; padding: 0 !important; margin: 0 !important; background: #fff !important; backdrop-filter: none !important; }
+        #veloraInvoiceModal .vc-card { display: block !important; width: 100% !important; max-width: 100% !important; max-height: none !important; overflow: visible !important; box-shadow: none !important; border: none !important; border-radius: 0 !important; }
+        #veloraInvoiceModal .inv-box { display: block !important; overflow: visible !important; padding: 0.4rem 0.2rem !important; color: #111 !important; background: #fff !important; }
+        #veloraInvoiceModal .inv-actions, #veloraInvoiceModal .vc-close { display: none !important; }
       }
-        #veloraInvoiceModal .vc-card { width:100%; max-width:740px; max-height:90vh; display:flex; flex-direction:column; overflow:hidden; background:#FFFDF9; color:#120C0E; border:1px solid rgba(212,175,55,0.55); border-radius:8px; box-shadow:0 32px 90px rgba(0,0,0,0.75); }
-        #veloraInvoiceModal .inv-box { padding:0.75rem 1.2rem; background:#fff; color:#111; font-size:0.78rem; line-height:1.35; overflow-y:auto; flex:1; }
-        .inv-actions, .vc-close { display: none !important; }
-      }
-        #veloraInvoiceModal .vc-card { width:100%; max-width:740px; max-height:90vh; display:flex; flex-direction:column; overflow:hidden; background:#FFFDF9; color:#120C0E; border:1px solid rgba(212,175,55,0.55); border-radius:8px; box-shadow:0 32px 90px rgba(0,0,0,0.75); }
-        #veloraInvoiceModal .inv-box { padding:0.75rem 1.2rem; background:#fff; color:#111; font-size:0.78rem; line-height:1.35; overflow-y:auto; flex:1; }
-        .inv-actions, .vc-close { display: none !important; }
-      }
-    `;
+    ;
     document.head.appendChild(style);
 
     const wrap = document.createElement('div');
