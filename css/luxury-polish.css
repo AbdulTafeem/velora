@@ -335,3 +335,45 @@ header.is-scrolled,
   -webkit-backdrop-filter: none !important;
   transition: transform 0.22s ease, opacity 0.22s ease !important;
 }
+
+/* PC Smooth UI Motion & Lightweight Hover Polish */
+button,
+a.btn,
+[class*="btn"],
+.nav-link,
+.mobile-nav-link,
+.finish-pill,
+.hotspot-pin {
+  transition: transform 0.2s var(--velora-ease), opacity 0.2s var(--velora-ease), background-color 0.22s var(--velora-ease), border-color 0.22s var(--velora-ease), box-shadow 0.25s var(--velora-ease);
+}
+
+.velora-reveal {
+  opacity: 1;
+  transform: translate3d(0, 12px, 0);
+  transition: transform 0.32s var(--velora-ease), opacity 0.28s var(--velora-ease);
+}
+.velora-reveal.is-revealed,
+.velora-reveal.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .product-card,
+  .room-card,
+  .why-card,
+  .collection-panel {
+    transition: transform 0.26s var(--velora-ease), box-shadow 0.26s var(--velora-ease), border-color 0.24s var(--velora-ease);
+  }
+  .product-card:hover,
+  .room-card:hover,
+  .why-card:hover {
+    transform: translate3d(0, -4px, 0) !important;
+  }
+  .product-card:hover .product-img-main,
+  .room-card:hover img,
+  .collection-panel:hover img {
+    transform: scale(1.035);
+    transition: transform 0.32s var(--velora-ease);
+  }
+}
