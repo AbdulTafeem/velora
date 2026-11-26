@@ -65,10 +65,10 @@
       .inv-table td { padding:0.6rem 0.65rem; border-bottom:1px solid #e5e0d8; }
       .inv-actions { display:flex; gap:0.75rem; padding:1rem 1.6rem 1.5rem; background:#F8F5EE; border-top:1px solid #e5e0d8; }
       @media (max-width:640px) { .vc-grid-2, .vc-pay-grid { grid-template-columns:1fr; } }
-      @media print {
+            @media print {
         @page { size: A4 portrait; margin: 10mm; }
         html, body { height: auto !important; overflow: visible !important; background: #fff !important; }
-        body > *:not(#veloraInvoiceModal), #veloraCheckoutModal { display: none !important; }
+        body > *:not(:has(#veloraInvoiceModal)), #veloraCheckoutModal { display: none !important; }
         #veloraInvoiceModal, #veloraInvoiceModal * { visibility: visible !important; }
         #veloraInvoiceModal {
           display: block !important;
@@ -84,6 +84,24 @@
           background: #fff !important;
           backdrop-filter: none !important;
         }
+        #veloraInvoiceModal .vc-card {
+          display: block !important;
+          width: 100% !important;
+          max-width: 100% !important;
+          max-height: none !important;
+          overflow: visible !important;
+          box-shadow: none !important;
+          border: none !important;
+          border-radius: 0 !important;
+        }
+        #veloraInvoiceModal .inv-box {
+          display: block !important;
+          padding: 0.5rem 0.25rem !important;
+          color: #111 !important;
+          background: #fff !important;
+        }
+        .inv-actions, .vc-close { display: none !important; }
+      }
         #veloraInvoiceModal .vc-card {
           width: 100% !important;
           max-width: 100% !important;
@@ -332,6 +350,7 @@ const expBtn = document.getElementById('expressCheckoutBtn');
     }
   });
 })();
+
 
 
 
