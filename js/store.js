@@ -33,11 +33,16 @@
       'storage-rack': 'storage-rack',
       'shoe-racks': 'shoe-rack',
       'shoe-rack': 'shoe-rack',
+      'shoe & valet racks': 'shoe-rack',
       'wall-shelves': 'wall-shelf',
       'wall-shelf': 'wall-shelf',
+      'wall shelves': 'wall-shelf',
       'stools': 'stool',
       'stool': 'stool',
-      'decor': 'decor'
+      'metal stools': 'stool',
+      'decor': 'decor',
+      'wall lighting & decor': 'decor',
+      'home decor & tealight stands': 'decor'
     };
     return map[slug] || slug;
   }
@@ -314,3 +319,4 @@
     toggleWishlist
   };
 })(window);
+

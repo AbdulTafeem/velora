@@ -997,6 +997,7 @@
       seenCats[key].items.push(p);
     });
 
+    grouped.sort(function (a, b) { return b.items.length - a.items.length; });
     document.querySelectorAll('#collectionsTrack .collection-panel').forEach(function (panel, idx) {
       var grp = grouped[idx];
       if (!grp || !grp.items.length) {
@@ -1084,6 +1085,7 @@
 </script>
 </body>
 </html>
+
 
 
 
