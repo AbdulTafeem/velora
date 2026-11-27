@@ -115,25 +115,28 @@
                 <div class="vc-pay-opt" data-pay="Online Card / Netbanking"><strong>Cards / Netbanking</strong><span>${RAZORPAY_KEY_ID ? 'Instant Gateway' : 'Concierge Link'}</span></div>
               </div>
             </div>
-                        <div id="veloraUpiBox" style="display:none;padding:0.95rem;border:1px solid rgba(212,175,55,0.55);border-radius:6px;background:#FAF7F2;font-size:0.82rem;">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.65rem;">
-                <strong style="font-family:'Cinzel',serif;font-size:0.86rem;color:#540A18;letter-spacing:0.08em;">INSTANT UPI SCAN &amp; PAY</strong>
-                <span style="font-size:0.68rem;padding:2px 8px;border-radius:99px;background:#EFE8DC;color:#540A18;font-weight:700;">Zero Gateway Fee</span>
+                        <div id="veloraUpiBox" style="display:none;padding:1rem;border:1px solid rgba(212,175,55,0.6);border-radius:6px;background:#FAF7F2;font-size:0.82rem;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.7rem;">
+                <strong style="font-family:'Cinzel',serif;font-size:0.86rem;color:#540A18;letter-spacing:0.08em;">INSTANT UPI PAYMENT (MOBILE APP / QR)</strong>
+                <span style="font-size:0.68rem;padding:2px 8px;border-radius:99px;background:#EFE8DC;color:#540A18;font-weight:700;">Zero Fee &bull; Instant</span>
               </div>
               <div style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;">
-                <div style="width:124px;background:#fff;padding:6px;border-radius:6px;border:1px solid rgba(0,0,0,0.1);text-align:center;flex-shrink:0;">
+                <div style="width:128px;background:#fff;padding:6px;border-radius:6px;border:1px solid rgba(0,0,0,0.12);text-align:center;flex-shrink:0;">
                   <img src="assets/images/velora-upi-qr.jpg" alt="VELORA UPI QR" style="width:100%;height:auto;border-radius:4px;display:block;" />
-                  <div style="font-size:0.62rem;font-weight:600;margin-top:4px;color:#540A18;">GPay &bull; PhonePe &bull; Paytm</div>
+                  <div style="font-size:0.62rem;font-weight:600;margin-top:4px;color:#540A18;">Scan via Any UPI App</div>
                 </div>
-                <div style="flex:1;min-width:180px;line-height:1.5;color:#3E3537;">
-                  <div style="font-weight:700;color:#120C0E;margin-bottom:3px;">Verified Merchant: VELORA</div>
-                  <div>1. Scan QR via any UPI app and pay the exact <strong>Total Payable</strong> amount.</div>
-                  <div>2. Enter the <strong>12-digit UPI Ref / UTR Number</strong> below to generate your official GST Tax Invoice.</div>
+                <div style="flex:1;min-width:195px;line-height:1.5;color:#3E3537;">
+                  <div style="font-weight:700;color:#120C0E;margin-bottom:4px;">Payee: RIYAN (VELORA Official)</div>
+                  <div style="margin-bottom:0.55rem;">On mobile, tap below to open GPay, PhonePe, or Paytm directly with your exact payable amount:</div>
+                  <a id="vcUpiAppBtn" href="upi://pay?pa=50100918358454@HDFC0003029.ifsc.npci&pn=RIYAN&cu=INR&tn=VELORA%20Order" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:0.55rem 0.9rem;background:#140508;color:#F3E5C0;border:1px solid #D4AF37;border-radius:4px;text-decoration:none;font-weight:700;font-size:0.75rem;letter-spacing:0.06em;text-transform:uppercase;">
+                    Open UPI App &amp; Pay Now &rarr;
+                  </a>
                 </div>
               </div>
-              <div class="vc-field" style="margin-top:0.75rem;">
-                <label for="vcUtr">UPI Transaction UTR / Reference Number *</label>
-                <input type="text" id="vcUtr" placeholder="Enter 12-digit UPI Ref / UTR No. after payment" />
+              <div class="vc-field" style="margin-top:0.85rem;">
+                <label for="vcUtr">12-Digit UPI Transaction UTR / Ref No. (Mandatory for Confirmation) *</label>
+                <input type="text" id="vcUtr" inputmode="numeric" maxlength="12" pattern="[0-9]{12}" placeholder="Enter exact 12-digit UTR number from GPay / PhonePe / Paytm" />
+                <span style="font-size:0.7rem;color:#6B5E62;">Order will only confirm after entering a valid 12-digit payment reference number.</span>
               </div>
             </div>
             <div class="vc-summary" id="vcOrderSummary"></div>
@@ -367,6 +370,11 @@
     document.getElementById('cartDrawer')?.classList.remove('is-open');
     document.getElementById('drawerBackdrop')?.classList.remove('is-visible');
     lockScroll();
+    const upiLink = document.getElementById('vcUpiAppBtn');
+    if (upiLink) {
+      upiLink.href = 'upi://pay?pa=50100918358454@HDFC0003029.ifsc.npci&pn=RIYAN&am=' + Number(totals.grandTotal).toFixed(2) + '&cu=INR&tn=VELORA%20Order';
+      upiLink.innerHTML = 'Pay ' + fmt(totals.grandTotal) + ' via UPI App &rarr;';
+    }
     document.getElementById('veloraCheckoutModal').classList.add('is-open');
   }
 
@@ -380,3 +388,4 @@
     }
   });
 })();
+
