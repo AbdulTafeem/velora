@@ -22,10 +22,21 @@
     }, delayMs);
   }
   if (preloader) {
-    const isSubPage = /shop\.html|product\.html|policies\.html/i.test(window.location.pathname);
-    openVelvetCurtain(isSubPage ? 440 : 780);
+    let seenCurtain = false;
+    try { seenCurtain = sessionStorage.getItem('velora_seen_curtain') === '1'; } catch (e) {}
+    if (seenCurtain) {
+      preloader.style.display = 'none';
+      document.body.classList.add('velora-loaded');
+    } else {
+      try { sessionStorage.setItem('velora_seen_curtain', '1'); } catch (e) {}
+      const isSubPage = /shop\.html|product\.html|policies\.html/i.test(window.location.pathname);
+      openVelvetCurtain(isSubPage ? 380 : 680);
+    }
     window.addEventListener('pageshow', (e) => {
-      if (e.persisted) openVelvetCurtain(240);
+      if (e.persisted) {
+        preloader.style.display = 'none';
+        document.body.classList.add('velora-loaded');
+      }
     });
   } else {
     document.body.classList.add('velora-loaded');
@@ -224,5 +235,6 @@
     if (track) track.scrollBy({ left: 340, behavior: 'smooth' });
   });
 })();
+
 
 
