@@ -39,7 +39,7 @@
     opacity: 0.92;
   }
 </style>
-<style>
+<style id="velora-ui-polish">
   .whatsapp-float, .wa-float {
     right: 18px !important;
     bottom: 18px !important;
@@ -74,48 +74,23 @@
     white-space: nowrap !important;
     font-weight: 600 !important;
   }
-  .velora-oos-pill {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    background: rgba(20, 10, 12, 0.88);
-    border: 1px solid rgba(212, 175, 55, 0.5);
-    color: #f3d27a;
-    font-size: 10px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    padding: 4px 9px;
-    border-radius: 999px;
-    z-index: 5;
+  /* Keep collection badge compact top-right & boost overlay contrast */
+  .collection-badge {
+    width: auto !important;
+    display: inline-flex !important;
   }
-</style>
-<style id="velora-collection-scrim">
-  [data-velora-coll-card]::after,
-  [data-velora-room-card]::after {
-    content: "";
-    position: absolute;
-    inset: 0;
+  .collection-panel-overlay,
+  .room-overlay {
     background: linear-gradient(
       180deg,
-      rgba(16, 6, 8, 0.38) 0%,
-      rgba(16, 6, 8, 0.06) 38%,
+      rgba(16, 6, 8, 0.36) 0%,
+      rgba(16, 6, 8, 0.08) 40%,
       rgba(16, 6, 8, 0.78) 76%,
       rgba(12, 4, 6, 0.94) 100%
-    );
-    pointer-events: none;
-    z-index: 1;
+    ) !important;
+    opacity: 1 !important;
   }
-  [data-velora-coll-card] > *:not(img),
-  [data-velora-room-card] > *:not(img) {
-    z-index: 2;
-  }
-  [data-velora-room-card] > img {
-    position: absolute !important;
-    inset: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-    z-index: 0 !important;
+  .room-card img.room-media {
     opacity: 1 !important;
     display: block !important;
   }
@@ -954,246 +929,134 @@
 </script>
 <script>
 (function () {
-  var num = function (v) {
-    var n = Number(String(v == null ? '' : v).replace(/[^0-9.]/g, ''));
-    return isFinite(n) ? n : 0;
-  };
   var fmt = function (n) {
-    return '₹' + Math.round(num(n)).toLocaleString('en-IN');
+    return '₹' + Math.round(Number(n) || 0).toLocaleString('en-IN');
   };
 
-  function syncVeloraHomepage() {
-    var raw = Array.isArray(window.VELORA_PRODUCTS) ? window.VELORA_PRODUCTS : [];
-    var activeProducts = raw.filter(function (p) {
-      return p && String(p.status || 'active').toLowerCase() !== 'hidden';
-    }).map(function (p) {
-      return Object.assign({}, p, {
-        cleanPrice: num(p.price),
-        cleanMrp: num(p.mrp || p.originalPrice || p.comparePrice),
-        cleanStock: (p.stock === undefined || p.stock === '') ? 10 : num(p.stock)
-      });
-    });
+  function renderVeloraStorefront() {
+    var list = Array.isArray(window.VELORA_PRODUCTS) ? window.VELORA_PRODUCTS : [];
+    if (!list.length) return;
 
-    if (!activeProducts.length) return;
+    var inStock = list.filter(function (p) { return Number(p.stock) > 0; });
+    var showcase = inStock.length ? inStock : list;
 
-    var inStock = activeProducts.filter(function (p) { return p.cleanStock > 0; });
-    var showcase = inStock.length ? inStock : activeProducts;
-
-    // A. HERO SLIDES
-    Array.from(document.querySelectorAll('.hero-slide')).forEach(function (slide, idx) {
+    // 1. HERO SLIDES (.hero-slide)
+    document.querySelectorAll('.hero-slide').forEach(function (slide, idx) {
       var item = showcase[idx];
       if (!item) { slide.style.display = 'none'; return; }
       slide.style.display = '';
       var img = slide.querySelector('img');
-      if (img && item.image) { img.style.display = ''; img.src = item.image; img.alt = item.name; }
+      if (img && item.image) { img.src = item.image; img.alt = item.name; }
       var lbl = slide.querySelector('.tag-label');
       var ttl = slide.querySelector('.hero-floating-tag strong');
       var prc = slide.querySelector('.tag-price');
-      if (lbl) lbl.textContent = item.badge || item.category || 'Curated Piece';
+      if (lbl) lbl.textContent = item.badge || item.category;
       if (ttl) ttl.textContent = item.name;
-      if (prc) prc.textContent = fmt(item.cleanPrice);
+      if (prc) prc.textContent = fmt(item.price);
     });
 
-    // B. FEATURED SPOTLIGHT
-    var p0 = showcase[0];
-    var spotSec = document.querySelector('#spotlight, .spotlight-section, [data-spotlight]') ||
-      Array.from(document.querySelectorAll('section')).find(function (s) {
-        return s.textContent.indexOf('FEATURED PRODUCT') > -1 || s.textContent.indexOf('ADD TO BAG') > -1;
-      });
-    if (spotSec && p0) {
-      var spotImg = spotSec.querySelector('img');
-      if (spotImg && p0.image) { spotImg.style.display = ''; spotImg.src = p0.image; spotImg.alt = p0.name; }
-      var spotH = spotSec.querySelector('h2, h3');
-      if (spotH) spotH.textContent = p0.name;
-      var spotPrice = Array.from(spotSec.querySelectorAll('span, div, p')).find(function (el) {
-        return /^₹[0-9,]+$/.test(el.textContent.trim());
-      });
-      if (spotPrice) spotPrice.textContent = fmt(p0.cleanPrice);
-      var spotDesc = Array.from(spotSec.querySelectorAll('p')).find(function (p) {
-        return p.textContent.indexOf('Handcrafted architectural') > -1 || p.textContent.indexOf('kiln-dried') > -1 || p.textContent.length > 60;
-      });
-      if (spotDesc && p0.description) spotDesc.textContent = p0.description;
-      if (p0.dimensions) {
-        spotSec.querySelectorAll('p, span, div').forEach(function (el) {
-          if (el.textContent.trim() === 'Standard Artisan Dimensions') el.textContent = p0.dimensions;
-        });
-      }
-      var stockBadge = Array.from(spotSec.querySelectorAll('span, div')).find(function (el) {
-        return /IN STOCK|OUT OF STOCK|SHIPS IN/i.test(el.textContent.trim()) && el.children.length === 0;
-      });
-      if (stockBadge) {
-        stockBadge.textContent = p0.cleanStock <= 0 ? 'OUT OF STOCK' : ('IN STOCK (' + p0.cleanStock + ') • SHIPS IN 48 HRS');
-      }
-      spotSec.querySelectorAll('.hotspot-pin, .hotspot-dot, [data-title]').forEach(function (el) { el.style.display = 'none'; });
+    // 2. FEATURED SPOTLIGHT (.spotlight-details)
+    var spot = showcase[0];
+    if (spot) {
+      var spotImg = document.querySelector('.spotlight-media img, #spotlight img');
+      if (spotImg && spot.image) { spotImg.src = spot.image; spotImg.alt = spot.name; }
+      var spotTitle = document.querySelector('.spotlight-details .section-title');
+      var spotPrice = document.querySelector('.spotlight-price');
+      var spotDesc = document.querySelector('.spotlight-details .spotlight-desc, .spotlight-details p');
+      var spotBtn = document.querySelector('#spotlightAddBtn .btn-text');
+      if (spotTitle) spotTitle.textContent = spot.name;
+      if (spotPrice) spotPrice.textContent = fmt(spot.price);
+      if (spotDesc && spot.description) spotDesc.textContent = spot.description;
+      if (spotBtn) spotBtn.textContent = 'Add to Bag — ' + fmt(spot.price);
+      document.querySelectorAll('.hotspot-pin, .hotspot-dot').forEach(function (el) { el.style.display = 'none'; });
     }
 
-    // C. SHOP BY COLLECTION CARDS (restore crisp top-right pill + live piece counts)
-    var collSec = Array.from(document.querySelectorAll('section')).find(function (s) {
-      return /Shop by Collection/i.test(s.textContent);
+    // 3. SHOP BY COLLECTION (.collection-panel)
+    var collectionConfigs = [
+      {
+        eyebrow: 'Artisanal Brass & Crystal',
+        title: 'Bakhoor Burners & Decor Stands',
+        filter: function (p) { return p.category === 'decor'; }
+      },
+      {
+        eyebrow: 'Architectural Steel',
+        title: 'Geometric Wall Shelves & Racks',
+        filter: function (p) { return p.category === 'wall-shelf'; }
+      },
+      {
+        eyebrow: 'Open Wardrobe Systems',
+        title: 'Architectural Garment Racks',
+        filter: function (p) { return p.category === 'clothes-rack'; }
+      },
+      {
+        eyebrow: 'Sculptural Accent Pieces',
+        title: 'Minimalist Tables & Metal Stools',
+        filter: function (p) { return p.category === 'stool' || p.category === 'shoe-rack' || p.category === 'storage-rack'; }
+      }
+    ];
+
+    document.querySelectorAll('#collectionsTrack .collection-panel').forEach(function (panel, idx) {
+      var cfg = collectionConfigs[idx];
+      var matches = cfg ? list.filter(cfg.filter) : [];
+      if (!matches.length && list[idx]) matches = [list[idx]];
+
+      var subEl = panel.querySelector('.collection-subtitle');
+      var titleEl = panel.querySelector('.collection-title');
+      var badgeEl = panel.querySelector('.collection-badge');
+      var priceEl = panel.querySelector('.collection-meta span');
+      var imgEl = panel.querySelector('img');
+
+      if (cfg && matches.length) {
+        if (subEl) subEl.textContent = cfg.eyebrow;
+        if (titleEl) titleEl.textContent = cfg.title;
+      }
+      if (badgeEl) {
+        badgeEl.textContent = matches.length === 1 ? '1 PIECE' : (matches.length + ' PIECES');
+      }
+      if (priceEl) {
+        if (matches.length) {
+          var minP = Math.min.apply(null, matches.map(function (m) { return Number(m.price) || 0; }));
+          priceEl.textContent = minP > 0 ? ('FROM ' + fmt(minP)) : 'CURATING SOON';
+        } else {
+          priceEl.textContent = 'CURATING SOON';
+        }
+      }
+      if (imgEl && matches[0] && matches[0].image) {
+        imgEl.src = matches[0].image;
+        imgEl.alt = matches[0].name;
+      }
     });
-    if (collSec) {
-      var collCards = Array.from(collSec.querySelectorAll('a, article, .collection-card, [class*="collection"]')).filter(function (el) {
-        return /\bPIECES?\b/i.test(el.textContent) && /EXPLORE SERIES|CURATING SOON|FROM\s*₹/i.test(el.textContent);
-      });
-      collCards = collCards.filter(function (el) {
-        return !collCards.some(function (other) { return other !== el && el.contains(other); });
-      });
 
-      var buckets = [
-        {
-          eyebrow: 'Artisanal Brass & Crystal',
-          title: 'Bakhoor Burners & Decor Stands',
-          match: function (p) {
-            var c = (p.category + ' ' + p.name).toLowerCase();
-            return c.indexOf('decor') > -1 || c.indexOf('bakhoor') > -1 || c.indexOf('tealight') > -1 || c.indexOf('stand') > -1 || c.indexOf('light') > -1;
-          }
-        },
-        {
-          eyebrow: 'Architectural Steel',
-          title: 'Geometric Wall Shelves & Racks',
-          match: function (p) {
-            var c = (p.category + ' ' + p.name).toLowerCase();
-            return c.indexOf('shel') > -1 || c.indexOf('book') > -1;
-          }
-        },
-        {
-          eyebrow: 'Open Wardrobe Systems',
-          title: 'Architectural Garment Racks',
-          match: function (p) {
-            var c = (p.category + ' ' + p.name).toLowerCase();
-            return c.indexOf('clothes') > -1 || c.indexOf('garment') > -1 || c.indexOf('rack') > -1;
-          }
-        },
-        {
-          eyebrow: 'Sculptural Accent Pieces',
-          title: 'Minimalist Tables & Metal Stools',
-          match: function (p) {
-            var c = (p.category + ' ' + p.name).toLowerCase();
-            return c.indexOf('stool') > -1 || c.indexOf('table') > -1 || c.indexOf('pedestal') > -1 || c.indexOf('valet') > -1;
-          }
-        }
-      ];
+    // 4. SHOP BY ROOM (#rooms .room-card)
+    var roomSelectors = [
+      function (p) { return p.category === 'clothes-rack' || /bedroom/i.test(p.room); },
+      function (p) { return p.category === 'wall-shelf' || p.category === 'stool' || /living/i.test(p.room); },
+      function (p) { return p.category === 'decor' || p.category === 'shoe-rack' || /entry|foyer/i.test(p.room); },
+      function (p) { return /ceiling|double-rail|matrix|aurelia/i.test(p.name) || p.category === 'storage-rack'; }
+    ];
 
-      collCards.forEach(function (card, idx) {
-        card.setAttribute('data-velora-coll-card', '1');
-        if (getComputedStyle(card).position === 'static') card.style.position = 'relative';
-
-        var spec = buckets[idx];
-        var matching = spec ? activeProducts.filter(spec.match) : [];
-        if (!matching.length && activeProducts[idx]) matching = [activeProducts[idx]];
-
-        var heading = card.querySelector('h3, h4');
-        if (heading && spec && matching.length) {
-          heading.textContent = spec.title;
-          var prev = heading.previousElementSibling;
-          if (prev && prev.children.length === 0) prev.textContent = spec.eyebrow;
-        }
-
-        // Target top-right pill specifically (avoid matching eyebrow/body words)
-        var countEl = Array.from(card.querySelectorAll('span, div')).find(function (el) {
-          return el.children.length === 0 && /^\s*\d*\s*PIECES?\s*$/i.test(el.textContent);
-        });
-        if (countEl) {
-          countEl.textContent = matching.length === 1 ? '1 PIECE' : (matching.length + ' PIECES');
-        }
-
-        var priceEl = Array.from(card.querySelectorAll('span, div, p')).find(function (el) {
-          return el.children.length === 0 && /CURATING SOON|FROM\s*₹/i.test(el.textContent.trim());
-        });
-        if (priceEl && matching.length > 0) {
-          var validPrices = matching.map(function (m) { return m.cleanPrice; }).filter(function (v) { return v > 0; });
-          var minP = validPrices.length ? Math.min.apply(null, validPrices) : 0;
-          if (minP > 0) priceEl.textContent = 'FROM ' + fmt(minP);
-        }
-
-        var cImg = card.querySelector('img');
-        if (cImg && matching[0] && matching[0].image) {
-          cImg.style.display = '';
-          cImg.style.opacity = '1';
-          cImg.src = matching[0].image;
-          cImg.alt = matching[0].name;
-        }
-      });
-    }
-
-    // D. SHOP BY ROOM CARDS (populate 01, 02, 03, 04 with matching room photos & dark vignette)
-    var roomSec = Array.from(document.querySelectorAll('section')).find(function (s) {
-      return /Shop by Room/i.test(s.textContent);
-    });
-    if (roomSec) {
-      var roomCards = Array.from(roomSec.querySelectorAll('a, article, .room-card, [class*="room"]')).filter(function (el) {
-        return /EXPLORE/i.test(el.textContent) && /\b0[1-4]\b/.test(el.textContent);
-      });
-      roomCards = roomCards.filter(function (el) {
-        return !roomCards.some(function (other) { return other !== el && el.contains(other); });
-      });
-
-      var roomMatchers = [
-        // 01: Bedroom Garment Racks
-        function (p) {
-          var r = (p.room + ' ' + p.category + ' ' + p.name).toLowerCase();
-          return r.indexOf('bedroom') > -1 || r.indexOf('clothes') > -1 || r.indexOf('garment') > -1;
-        },
-        // 02: Living & Lounge
-        function (p) {
-          var r = (p.room + ' ' + p.category + ' ' + p.name).toLowerCase();
-          return r.indexOf('living') > -1 || r.indexOf('shel') > -1 || r.indexOf('table') > -1 || r.indexOf('stool') > -1;
-        },
-        // 03: Entryway & Foyer
-        function (p) {
-          var r = (p.room + ' ' + p.category + ' ' + p.name).toLowerCase();
-          return r.indexOf('entry') > -1 || r.indexOf('foyer') > -1 || r.indexOf('bakhoor') > -1 || r.indexOf('decor') > -1 || r.indexOf('valet') > -1;
-        },
-        // 04: Boutique & Store Display
-        function (p) {
-          var r = (p.room + ' ' + p.category + ' ' + p.name).toLowerCase();
-          return r.indexOf('ceiling') > -1 || r.indexOf('double-rail') > -1 || r.indexOf('boutique') > -1 || r.indexOf('retail') > -1;
-        }
-      ];
-
-      roomCards.forEach(function (card, idx) {
-        card.setAttribute('data-velora-room-card', '1');
-        if (getComputedStyle(card).position === 'static') card.style.position = 'relative';
-        card.style.overflow = 'hidden';
-
-        var matcher = roomMatchers[idx];
-        var matches = matcher ? showcase.filter(matcher) : [];
-        var pick = matches[0] || showcase[idx % showcase.length];
-        if (!pick || !pick.image) return;
-
-        var img = card.querySelector('img');
-        if (!img) {
-          img = document.createElement('img');
-          card.insertBefore(img, card.firstChild);
-        }
+    document.querySelectorAll('#rooms .room-card').forEach(function (card, idx) {
+      var fn = roomSelectors[idx];
+      var matches = fn ? showcase.filter(fn) : [];
+      var pick = matches[0] || showcase[idx % showcase.length];
+      var img = card.querySelector('img.room-media, img');
+      if (img && pick && pick.image) {
         img.src = pick.image;
         img.alt = pick.name;
-      });
-    }
+      }
+    });
 
-    // E. #StyledWithVelora Gallery Sync
-    var socialSec = Array.from(document.querySelectorAll('section')).find(function (s) {
+    // 5. #StyledWithVelora GALLERY
+    var socialSection = Array.from(document.querySelectorAll('section')).find(function (s) {
       return /StyledWithVelora/i.test(s.textContent);
     });
-    if (socialSec) {
-      var boxes = Array.from(socialSec.querySelectorAll('a, figure, div')).filter(function (el) {
-        var r = el.getBoundingClientRect();
-        return r.width > 140 && r.height > 140 && el.querySelector('img') && !el.closest('header');
-      });
-      boxes = boxes.filter(function (el) {
-        return !boxes.some(function (other) { return other !== el && el.contains(other); });
-      });
-      boxes.forEach(function (box, idx) {
+    if (socialSection) {
+      var socialImgs = Array.from(socialSection.querySelectorAll('img'));
+      socialImgs.forEach(function (img, idx) {
         var item = showcase[idx % showcase.length];
-        if (!item || !item.image) { box.style.display = 'none'; return; }
-        box.style.display = '';
-        var img = box.querySelector('img');
-        if (img) {
-          img.style.display = '';
+        if (item && item.image) {
+          img.style.display = 'block';
           img.style.opacity = '1';
-          img.style.width = '100%';
-          img.style.height = '100%';
-          img.style.objectFit = 'cover';
           img.src = item.image;
           img.alt = item.name;
         }
@@ -1201,13 +1064,15 @@
     }
   }
 
-  window.addEventListener('velora:catalogUpdated', syncVeloraHomepage);
-  document.addEventListener('DOMContentLoaded', function () { setTimeout(syncVeloraHomepage, 150); });
-  setInterval(syncVeloraHomepage, 900);
+  window.addEventListener('velora:catalogUpdated', renderVeloraStorefront);
+  if (window.VELORA_PRODUCTS && window.VELORA_PRODUCTS.length) {
+    renderVeloraStorefront();
+  }
 })();
 </script>
 </body>
 </html>
+
 
 
 
