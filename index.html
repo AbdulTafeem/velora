@@ -1020,8 +1020,8 @@
         return sum + (m.stock === undefined || m.stock === '' ? 12 : Number(m.stock) || 0);
       }, 0);
 
-      if (subEl) subEl.textContent = lead.name;
-      if (titleEl) titleEl.textContent = grp.label;
+      if (subEl) subEl.textContent = grp.label;
+      if (titleEl) titleEl.textContent = lead.name;
 
       if (badgeEl) {
         var dLabel = items.length === 1 ? '1 DESIGN' : (items.length + ' DESIGNS');
@@ -1085,6 +1085,7 @@
 </script>
 </body>
 </html>
+
 
 
 
