@@ -11,8 +11,6 @@
   const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbycPTz5PqooEFkcZo2CRcJgXFgqJOYdrZem705OTFHGxa9yeCYBYZutDEDjZF6vcz0k/exec';
   const WHATSAPP_NUMBER = '918284029319';
   const RAZORPAY_KEY_ID = '';
-  const MERCHANT_UPI_ID = 'houseofvelora@hdfcbank';
-  const MERCHANT_NAME = 'VELORA';
   const MERCHANT_UPI_ID = 'houseofvelora@hdfcbank'; // Replace with your verified Merchant VPA
   const MERCHANT_NAME = 'VELORA';
 
@@ -427,6 +425,7 @@
     }
   });
 })();
+
 
 
 
