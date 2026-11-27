@@ -103,6 +103,44 @@
       .shop-sidebar { display: none; }
       .shop-sidebar.is-open { display: flex; }
     }
+      @media (max-width: 768px) {
+      .shop-hero, .shop-toolbar, .shop-sidebar, #shopCatalogGrid .product-card {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+      }
+      #shopCatalogGrid .product-card {
+        background: #FFFDF9 !important;
+        box-shadow: 0 8px 22px -12px rgba(40, 22, 16, 0.22) !important;
+        animation: none !important;
+      }
+      .shop-room-bg {
+        will-change: auto !important;
+        transform: none !important;
+      }
+      #shopCatalogGrid .product-top-bar {
+        display: flex !important;
+        align-items: flex-start !important;
+        justify-content: space-between !important;
+        gap: 4px !important;
+        padding: 0.45rem !important;
+      }
+      #shopCatalogGrid .badge-shimmer {
+        font-size: 0.54rem !important;
+        letter-spacing: 0.06em !important;
+        padding: 3px 6px !important;
+        max-width: calc(100% - 36px) !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+      }
+      #shopCatalogGrid .wishlist-btn {
+        width: 32px !important;
+        height: 32px !important;
+        min-width: 32px !important;
+        min-height: 32px !important;
+        flex-shrink: 0 !important;
+      }
+    }
   </style>
 <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" /><link rel="stylesheet" href="css/luxury-polish.css" />
@@ -435,6 +473,7 @@
   <script src="js/billing-helpers.js" defer></script>
 </body>
 </html>
+
 
 
 
