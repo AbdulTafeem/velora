@@ -93,15 +93,14 @@
       #shopCatalogGrid .product-room-tag { font-size: 0.56rem !important; letter-spacing: 0.1em !important; }
     }
   </style>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/luxury-polish.css" />
   <link rel="stylesheet" href="css/phantom-luxury.css" />
 </head>
 <body>
   <div class="preloader" id="preloader" aria-hidden="true"><div class="curtain-panel curtain-left"></div><div class="curtain-panel curtain-right"></div><div class="preloader-frame"><span class="pf-corner pf-tl"></span><span class="pf-corner pf-tr"></span><span class="pf-corner pf-bl"></span><span class="pf-corner pf-br"></span><span class="pf-stamp">ATELIER EDITION &bull; INDIA</span></div><div class="preloader-seam"></div><div class="preloader-logo-wrap"><svg class="preloader-crest" viewBox="0 0 140 64" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="goldCrestGrad" x1="0" y1="0" x2="140" y2="64" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#F1DC9A"/><stop offset="50%" stop-color="#D4AF37"/><stop offset="100%" stop-color="#B8892B"/></linearGradient></defs><path d="M18 42L70 10L122 42" stroke="url(#goldCrestGrad)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><rect x="61" y="28" width="7" height="7" fill="url(#goldCrestGrad)"/><rect x="72" y="28" width="7" height="7" fill="url(#goldCrestGrad)"/><rect x="61" y="38" width="7" height="7" fill="url(#goldCrestGrad)"/><rect x="72" y="38" width="7" height="7" fill="url(#goldCrestGrad)"/></svg><div class="preloader-brand text-gold-gradient">VELORA</div><p class="preloader-tagline">Elevate Your Lifestyle</p><div class="preloader-bar"><div class="preloader-progress" id="preloaderProgress"></div></div></div></div>
-  <div class="shop-room-bg" aria-hidden="true"></div><div class="page-transition-curtain" id="pageTransitionCurtain" aria-hidden="true"></div>
+  <div class="shop-room-bg" aria-hidden="true"></div>
   <a href="#top" class="skip-link">Skip to main content</a>
-  <div class="grain-overlay" aria-hidden="true"></div>
   <header class="site-header is-scrolled" id="siteHeader">
     <nav class="navbar" aria-label="Primary Navigation">
       <div class="container navbar-inner">
@@ -287,11 +286,11 @@
 
   <div class="velora-toast" id="veloraToast" role="status" aria-live="polite"></div>
 
-  <script src="js/products.js"></script>
-  <script src="js/store.js"></script>
-  <script src="js/cart.js"></script>
-  <script src="js/animations.js"></script>
-  <script>
+  <script src="js/products.js" defer></script>
+  <script src="js/store.js" defer></script>
+  <script src="js/cart.js" defer></script>
+  <script src="js/animations.js" defer></script>
+  <script>document.addEventListener('DOMContentLoaded', () => {
     (function () {
       const Store = window.VeloraStore;
       const formatINR = Store.formatINR;
@@ -399,6 +398,8 @@
   <script src="js/billing-helpers.js" defer></script>
 </body>
 </html>
+
+
 
 
 

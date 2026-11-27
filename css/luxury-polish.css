@@ -377,3 +377,31 @@ a.btn,
     transition: transform 0.32s var(--velora-ease);
   }
 }
+
+/* ==========================================================================
+   60FPS GPU COMPOSITING & RENDER PERFORMANCE OPTIMIZATIONS
+   ========================================================================== */
+.product-card, .collection-panel, .room-card,
+.product-card img, .collection-panel img, .room-card img {
+  will-change: auto !important;
+}
+.product-card:hover, .collection-panel:hover, .room-card:hover {
+  will-change: transform;
+}
+
+/* Defer offscreen layout/paint for faster initial load & silky scrolling */
+#collections, #spotlight, #rooms, #testimonials, .gallery-section, .site-footer {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 680px;
+}
+
+/* Respect OS reduced-motion preference cleanly */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .velora-reveal { opacity: 1 !important; transform: none !important; }
+}
