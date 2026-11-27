@@ -971,59 +971,71 @@
       document.querySelectorAll('.hotspot-pin, .hotspot-dot').forEach(function (el) { el.style.display = 'none'; });
     }
 
-    // 3. SHOP BY COLLECTION (.collection-panel)
-    var collectionConfigs = [
-      {
-        eyebrow: 'Artisanal Brass & Crystal',
-        title: 'Bakhoor Burners & Decor Stands',
-        filter: function (p) { return p.category === 'decor'; }
-      },
-      {
-        eyebrow: 'Architectural Steel',
-        title: 'Geometric Wall Shelves & Racks',
-        filter: function (p) { return p.category === 'wall-shelf'; }
-      },
-      {
-        eyebrow: 'Open Wardrobe Systems',
-        title: 'Architectural Garment Racks',
-        filter: function (p) { return p.category === 'clothes-rack'; }
-      },
-      {
-        eyebrow: 'Sculptural Accent Pieces',
-        title: 'Minimalist Tables & Metal Stools',
-        filter: function (p) { return p.category === 'stool' || p.category === 'shoe-rack' || p.category === 'storage-rack'; }
+    // 3. SHOP BY COLLECTION (.collection-panel) — 100% dynamic from live Sheet categories & product names
+    var catMeta = {
+      'decor': { label: 'Wall Lighting & Decor', filter: 'decor' },
+      'wall-shelf': { label: 'Wall Shelves', filter: 'wall-shelf' },
+      'clothes-rack': { label: 'Clothes Racks', filter: 'clothes-rack' },
+      'stool': { label: 'Metal Stools', filter: 'stool' },
+      'shoe-rack': { label: 'Shoe & Valet Racks', filter: 'shoe-rack' },
+      'storage-rack': { label: 'Storage Racks', filter: 'storage-rack' }
+    };
+
+    var grouped = [];
+    var seenCats = {};
+    list.forEach(function (p) {
+      var key = p.category || 'decor';
+      if (!seenCats[key]) {
+        seenCats[key] = {
+          key: key,
+          label: (catMeta[key] && catMeta[key].label) || key,
+          filter: (catMeta[key] && catMeta[key].filter) || key,
+          items: []
+        };
+        grouped.push(seenCats[key]);
       }
-    ];
+      seenCats[key].items.push(p);
+    });
 
     document.querySelectorAll('#collectionsTrack .collection-panel').forEach(function (panel, idx) {
-      var cfg = collectionConfigs[idx];
-      var matches = cfg ? list.filter(cfg.filter) : [];
-      if (!matches.length && list[idx]) matches = [list[idx]];
+      var grp = grouped[idx];
+      if (!grp || !grp.items.length) {
+        panel.style.display = 'none';
+        return;
+      }
+      panel.style.display = '';
 
+      var items = grp.items;
+      var lead = items[0];
       var subEl = panel.querySelector('.collection-subtitle');
       var titleEl = panel.querySelector('.collection-title');
       var badgeEl = panel.querySelector('.collection-badge');
       var priceEl = panel.querySelector('.collection-meta span');
+      var linkEl = panel.querySelector('.collection-meta a');
       var imgEl = panel.querySelector('img');
 
-      if (cfg && matches.length) {
-        if (subEl) subEl.textContent = cfg.eyebrow;
-        if (titleEl) titleEl.textContent = cfg.title;
+      // 1 piece -> show exact product name; 2+ pieces -> show exact live Category name
+      if (items.length === 1) {
+        if (subEl) subEl.textContent = grp.label;
+        if (titleEl) titleEl.textContent = lead.name;
+      } else {
+        if (subEl) subEl.textContent = lead.room || 'Curated Series';
+        if (titleEl) titleEl.textContent = grp.label;
       }
+
       if (badgeEl) {
-        badgeEl.textContent = matches.length === 1 ? '1 PIECE' : (matches.length + ' PIECES');
+        badgeEl.textContent = items.length === 1 ? '1 PIECE' : (items.length + ' PIECES');
       }
       if (priceEl) {
-        if (matches.length) {
-          var minP = Math.min.apply(null, matches.map(function (m) { return Number(m.price) || 0; }));
-          priceEl.textContent = minP > 0 ? ('FROM ' + fmt(minP)) : 'CURATING SOON';
-        } else {
-          priceEl.textContent = 'CURATING SOON';
-        }
+        var minP = Math.min.apply(null, items.map(function (m) { return Number(m.price) || 0; }));
+        priceEl.textContent = minP > 0 ? ('FROM ' + fmt(minP)) : 'CURATING SOON';
       }
-      if (imgEl && matches[0] && matches[0].image) {
-        imgEl.src = matches[0].image;
-        imgEl.alt = matches[0].name;
+      if (linkEl) {
+        linkEl.setAttribute('data-filter', grp.filter);
+      }
+      if (imgEl && lead.image) {
+        imgEl.src = lead.image;
+        imgEl.alt = lead.name;
       }
     });
 
@@ -1072,6 +1084,7 @@
 </script>
 </body>
 </html>
+
 
 
 
