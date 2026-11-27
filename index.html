@@ -90,24 +90,34 @@
   }
 </style>
 <style id="velora-collection-scrim">
-  .collection-card::after,
-  [data-velora-coll-card]::after {
+  [data-velora-coll-card]::after,
+  [data-velora-room-card]::after {
     content: "";
     position: absolute;
     inset: 0;
     background: linear-gradient(
       180deg,
-      rgba(16, 6, 8, 0.45) 0%,
-      rgba(16, 6, 8, 0.08) 38%,
-      rgba(16, 6, 8, 0.78) 78%,
+      rgba(16, 6, 8, 0.38) 0%,
+      rgba(16, 6, 8, 0.06) 38%,
+      rgba(16, 6, 8, 0.78) 76%,
       rgba(12, 4, 6, 0.94) 100%
     );
     pointer-events: none;
     z-index: 1;
   }
-  [data-velora-coll-card] > *:not(img) {
-    position: relative;
+  [data-velora-coll-card] > *:not(img),
+  [data-velora-room-card] > *:not(img) {
     z-index: 2;
+  }
+  [data-velora-room-card] > img {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    z-index: 0 !important;
+    opacity: 1 !important;
+    display: block !important;
   }
 </style>
 </head>
@@ -969,9 +979,8 @@
     var inStock = activeProducts.filter(function (p) { return p.cleanStock > 0; });
     var showcase = inStock.length ? inStock : activeProducts;
 
-    // A. HERO SLIDES (exact names, clean prices, zero overlap)
-    var slides = Array.from(document.querySelectorAll('.hero-slide'));
-    slides.forEach(function (slide, idx) {
+    // A. HERO SLIDES
+    Array.from(document.querySelectorAll('.hero-slide')).forEach(function (slide, idx) {
       var item = showcase[idx];
       if (!item) { slide.style.display = 'none'; return; }
       slide.style.display = '';
@@ -985,7 +994,7 @@
       if (prc) prc.textContent = fmt(item.cleanPrice);
     });
 
-    // B. FEATURED SPOTLIGHT (bind to showcase[0])
+    // B. FEATURED SPOTLIGHT
     var p0 = showcase[0];
     var spotSec = document.querySelector('#spotlight, .spotlight-section, [data-spotlight]') ||
       Array.from(document.querySelectorAll('section')).find(function (s) {
@@ -1018,7 +1027,7 @@
       spotSec.querySelectorAll('.hotspot-pin, .hotspot-dot, [data-title]').forEach(function (el) { el.style.display = 'none'; });
     }
 
-    // C. SHOP BY COLLECTION CARDS (sync live titles, subtitles, piece counts, prices & contrast overlay)
+    // C. SHOP BY COLLECTION CARDS (restore crisp top-right pill + live piece counts)
     var collSec = Array.from(document.querySelectorAll('section')).find(function (s) {
       return /Shop by Collection/i.test(s.textContent);
     });
@@ -1073,7 +1082,6 @@
         var matching = spec ? activeProducts.filter(spec.match) : [];
         if (!matching.length && activeProducts[idx]) matching = [activeProducts[idx]];
 
-        // Update eyebrow & title to match actual live inventory
         var heading = card.querySelector('h3, h4');
         if (heading && spec && matching.length) {
           heading.textContent = spec.title;
@@ -1081,8 +1089,9 @@
           if (prev && prev.children.length === 0) prev.textContent = spec.eyebrow;
         }
 
-        var countEl = Array.from(card.querySelectorAll('span, div, p')).find(function (el) {
-          return el.children.length === 0 && /\bPIECES?\b/i.test(el.textContent.trim());
+        // Target top-right pill specifically (avoid matching eyebrow/body words)
+        var countEl = Array.from(card.querySelectorAll('span, div')).find(function (el) {
+          return el.children.length === 0 && /^\s*\d*\s*PIECES?\s*$/i.test(el.textContent);
         });
         if (countEl) {
           countEl.textContent = matching.length === 1 ? '1 PIECE' : (matching.length + ' PIECES');
@@ -1091,14 +1100,10 @@
         var priceEl = Array.from(card.querySelectorAll('span, div, p')).find(function (el) {
           return el.children.length === 0 && /CURATING SOON|FROM\s*₹/i.test(el.textContent.trim());
         });
-        if (priceEl) {
-          if (matching.length > 0) {
-            var validPrices = matching.map(function (m) { return m.cleanPrice; }).filter(function (v) { return v > 0; });
-            var minP = validPrices.length ? Math.min.apply(null, validPrices) : 0;
-            priceEl.textContent = minP > 0 ? ('FROM ' + fmt(minP)) : 'CURATING SOON';
-          } else {
-            priceEl.textContent = 'CURATING SOON';
-          }
+        if (priceEl && matching.length > 0) {
+          var validPrices = matching.map(function (m) { return m.cleanPrice; }).filter(function (v) { return v > 0; });
+          var minP = validPrices.length ? Math.min.apply(null, validPrices) : 0;
+          if (minP > 0) priceEl.textContent = 'FROM ' + fmt(minP);
         }
 
         var cImg = card.querySelector('img');
@@ -1111,7 +1116,62 @@
       });
     }
 
-    // D. #StyledWithVelora Gallery Sync
+    // D. SHOP BY ROOM CARDS (populate 01, 02, 03, 04 with matching room photos & dark vignette)
+    var roomSec = Array.from(document.querySelectorAll('section')).find(function (s) {
+      return /Shop by Room/i.test(s.textContent);
+    });
+    if (roomSec) {
+      var roomCards = Array.from(roomSec.querySelectorAll('a, article, .room-card, [class*="room"]')).filter(function (el) {
+        return /EXPLORE/i.test(el.textContent) && /\b0[1-4]\b/.test(el.textContent);
+      });
+      roomCards = roomCards.filter(function (el) {
+        return !roomCards.some(function (other) { return other !== el && el.contains(other); });
+      });
+
+      var roomMatchers = [
+        // 01: Bedroom Garment Racks
+        function (p) {
+          var r = (p.room + ' ' + p.category + ' ' + p.name).toLowerCase();
+          return r.indexOf('bedroom') > -1 || r.indexOf('clothes') > -1 || r.indexOf('garment') > -1;
+        },
+        // 02: Living & Lounge
+        function (p) {
+          var r = (p.room + ' ' + p.category + ' ' + p.name).toLowerCase();
+          return r.indexOf('living') > -1 || r.indexOf('shel') > -1 || r.indexOf('table') > -1 || r.indexOf('stool') > -1;
+        },
+        // 03: Entryway & Foyer
+        function (p) {
+          var r = (p.room + ' ' + p.category + ' ' + p.name).toLowerCase();
+          return r.indexOf('entry') > -1 || r.indexOf('foyer') > -1 || r.indexOf('bakhoor') > -1 || r.indexOf('decor') > -1 || r.indexOf('valet') > -1;
+        },
+        // 04: Boutique & Store Display
+        function (p) {
+          var r = (p.room + ' ' + p.category + ' ' + p.name).toLowerCase();
+          return r.indexOf('ceiling') > -1 || r.indexOf('double-rail') > -1 || r.indexOf('boutique') > -1 || r.indexOf('retail') > -1;
+        }
+      ];
+
+      roomCards.forEach(function (card, idx) {
+        card.setAttribute('data-velora-room-card', '1');
+        if (getComputedStyle(card).position === 'static') card.style.position = 'relative';
+        card.style.overflow = 'hidden';
+
+        var matcher = roomMatchers[idx];
+        var matches = matcher ? showcase.filter(matcher) : [];
+        var pick = matches[0] || showcase[idx % showcase.length];
+        if (!pick || !pick.image) return;
+
+        var img = card.querySelector('img');
+        if (!img) {
+          img = document.createElement('img');
+          card.insertBefore(img, card.firstChild);
+        }
+        img.src = pick.image;
+        img.alt = pick.name;
+      });
+    }
+
+    // E. #StyledWithVelora Gallery Sync
     var socialSec = Array.from(document.querySelectorAll('section')).find(function (s) {
       return /StyledWithVelora/i.test(s.textContent);
     });
@@ -1139,32 +1199,6 @@
         }
       });
     }
-
-    // E. PRODUCT CARD AUDIT (sync exact name, clean price, MRP, & Out-of-Stock badge)
-    document.querySelectorAll('[data-product-id], .product-card').forEach(function (card) {
-      var pid = card.getAttribute('data-product-id');
-      var prod = activeProducts.find(function (p) { return p.id === pid; });
-      if (!prod) return;
-
-      var titleEl = card.querySelector('h3, h4, .product-title, .card-title');
-      if (titleEl && prod.name) titleEl.textContent = prod.name;
-
-      var priceEl = card.querySelector('.price, .product-price, [data-price]');
-      if (priceEl && prod.cleanPrice > 0) priceEl.textContent = fmt(prod.cleanPrice);
-
-      var existing = card.querySelector('.velora-oos-pill');
-      if (prod.cleanStock <= 0) {
-        card.style.position = 'relative';
-        if (!existing) {
-          var badge = document.createElement('span');
-          badge.className = 'velora-oos-pill';
-          badge.textContent = 'Sold Out';
-          card.appendChild(badge);
-        }
-      } else if (existing) {
-        existing.remove();
-      }
-    });
   }
 
   window.addEventListener('velora:catalogUpdated', syncVeloraHomepage);
@@ -1174,6 +1208,7 @@
 </script>
 </body>
 </html>
+
 
 
 
