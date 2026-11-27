@@ -39,6 +39,16 @@
     opacity: 0.92;
   }
 </style>
+<style>
+  .whatsapp-float, .wa-float {
+    right: 18px !important;
+    bottom: 18px !important;
+    width: auto !important;
+    max-width: none !important;
+    white-space: nowrap !important;
+    z-index: 990 !important;
+  }
+</style>
 </head>
 <body>
   <a href="#top" class="skip-link">Skip to main content</a>
@@ -190,7 +200,7 @@
         </div>
         <div class="hero-visual"><div class="hero-arch-wrap"><div class="hero-arch-frame">
             <div class="hero-arch-inner" id="heroShowcaseStage">
-              <div class="hero-slide is-active" data-slide="0"><img src="assets/images/spotlight-tstand.jpg" alt="Velora Solid Wood Base T-Stand" width="600" height="750" fetchpriority="high" /><div class="hero-floating-tag"><span class="tag-label">Signature Edition</span><strong>Teak & Solid Wood T-Stand</strong><span class="tag-price">₹3,999</span></div></div>
+              <div class="hero-slide is-active" data-slide="0"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Velora Solid Wood Base T-Stand" width="600" height="750" fetchpriority="high" /><div class="hero-floating-tag"><span class="tag-label">Signature Edition</span><strong>Teak & Solid Wood T-Stand</strong><span class="tag-price">₹3,999</span></div></div>
               <div class="hero-slide" data-slide="1"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Floral Arch Lotus &amp; Crystal Tealight Stand" /><div class="hero-floating-tag"><span class="tag-label">Architectural Series</span><strong>Floral Arch Lotus &amp; Crystal Tealight Stand</strong><span class="tag-price">₹1,799</span></div></div>
               <div class="hero-slide" data-slide="2"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Floral Arch Lotus &amp; Crystal Tealight Stand" /><div class="hero-floating-tag"><span class="tag-label">Wall Sculpture</span><strong>Floral Arch Lotus &amp; Crystal Tealight Stand</strong><span class="tag-price">₹1,799</span></div></div>
             </div>
@@ -299,7 +309,7 @@
       <div class="collections-track" id="collectionsTrack">
           <!-- Collection 01 -->
           <article class="collection-panel">
-            <img src="assets/images/spotlight-tstand.jpg" alt="The Carrara & Steel Atelier" />
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="The Carrara & Steel Atelier" />
             <div class="collection-panel-overlay"></div>
             <span class="collection-index">01</span>
             <span class="collection-badge">0 PIECES</span>
@@ -488,7 +498,7 @@
         <!-- Left: Interactive Hotspot Stage -->
         <div class="spotlight-stage">
           <div class="spotlight-image-box reveal-clip">
-            <img src="assets/images/spotlight-tstand.jpg" alt="Teak & Solid Wood Base T-Stand" />
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Teak & Solid Wood Base T-Stand" />
 
             <!-- Hotspot 1 -->
             <button class="hotspot-pin is-active" style="top: 18%; left: 50%;"
@@ -523,14 +533,14 @@
           </div>
 
           <p class="spotlight-desc">
-            Built on a 14kg kiln-dried natural wood cylinder base with a 95cm powder-coated steel crossbar. Holds up to 35kg of coats, suits, or next-day outfits without wall drilling. Assembles in 5 minutes with included hex key.
+            Handcrafted architectural decor & lifestyle piece curated by VELORA.
           </p>
 
           <div class="finish-selector">
-            <span class="finish-label">Select Finish: <strong id="selectedSpotlightFinish">Natural Teak Wood / Noir</strong></span>
+            <span class="finish-label">Select Finish: <strong id="selectedSpotlightFinish">SIGNATURE FINISH</strong></span>
             <div class="finish-pills" id="spotlightFinishPills">
-              <button class="finish-pill is-active" data-finish="Natural Teak Wood / Noir"><span class="finish-swatch-dot" style="background:linear-gradient(135deg,#f5f5f4 50%,#1c1917 50%);"></span>Natural Teak Wood / Noir</button>
-              <button class="finish-pill" data-finish="Smoked Walnut Wood / Brushed Gold"><span class="finish-swatch-dot" style="background:linear-gradient(135deg,#18181b 50%,#d4af37 50%);"></span>Smoked Walnut Wood / Brushed Gold</button>
+              <button class="finish-pill is-active" data-finish="SIGNATURE FINISH"><span class="finish-swatch-dot" style="background:linear-gradient(135deg,#f5f5f4 50%,#1c1917 50%);"></span>SIGNATURE FINISH</button>
+              <button class="finish-pill" data-finish="Limited Edition"><span class="finish-swatch-dot" style="background:linear-gradient(135deg,#18181b 50%,#d4af37 50%);"></span>Limited Edition</button>
             </div>
           </div>
 
@@ -875,115 +885,170 @@
 (function () {
   var BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
-  function syncDynamicCatalogUI() {
-    var Store = window.VeloraStore;
-    if (!Store || typeof Store.getProducts !== 'function') return;
-    var products = Store.getProducts().filter(function (p) {
-      return String(p.status || 'active').toLowerCase() !== 'hidden' && p.image;
+  function syncVeloraHomepage() {
+    var raw = Array.isArray(window.VELORA_PRODUCTS) ? window.VELORA_PRODUCTS : [];
+    var products = raw.filter(function (p) {
+      return p && String(p.status || 'active').toLowerCase() !== 'hidden';
     });
-    var fmt = function (n) { return '₹' + Number(n || 0).toLocaleString('en-IN'); };
+    if (!products.length) return;
 
-    // 1. Hero Slides: strictly match live products count
-    document.querySelectorAll('.hero-slide').forEach(function (slide, idx) {
-      var p = products[idx];
-      if (!p) { slide.style.display = 'none'; return; }
+    var fmt = function (n) { return '₹' + Number(n || 0).toLocaleString('en-IN'); };
+    var p0 = products[0];
+
+    // 1. Hero Slides: show ONLY as many slides as real products exist (no duplicate slides)
+    var slides = Array.from(document.querySelectorAll('.hero-slide'));
+    slides.forEach(function (slide, idx) {
+      var item = products[idx];
+      if (!item) {
+        slide.style.display = 'none';
+        return;
+      }
       slide.style.display = '';
       var img = slide.querySelector('img');
-      if (img) { img.src = p.image; img.alt = p.name; }
-      var labelEl = slide.querySelector('.tag-label');
-      var titleEl = slide.querySelector('.hero-floating-tag strong');
-      var priceEl = slide.querySelector('.tag-price');
-      if (labelEl) labelEl.textContent = p.badge || p.category || 'Curated Piece';
-      if (titleEl) titleEl.textContent = p.name;
-      if (priceEl) priceEl.textContent = fmt(p.price);
+      if (img && item.image) { img.src = item.image; img.alt = item.name; }
+      var lbl = slide.querySelector('.tag-label');
+      var ttl = slide.querySelector('.hero-floating-tag strong');
+      var prc = slide.querySelector('.tag-price');
+      if (lbl) lbl.textContent = item.badge || item.category || 'Curated Piece';
+      if (ttl) ttl.textContent = item.name;
+      if (prc) prc.textContent = fmt(item.price);
     });
-
-    // 2. Featured Spotlight: bind strictly to products[0]
-    var spotlightHeading = Array.from(document.querySelectorAll('h2, h3')).find(function (el) {
-      return el.textContent.indexOf('Tealight Stand') > -1 || el.textContent.indexOf('Floral Arch') > -1 || el.textContent.indexOf('Minimalist Stepped') > -1;
-    });
-    if (spotlightHeading) {
-      var sec = spotlightHeading.closest('section');
-      if (!products.length && sec) {
-        sec.style.display = 'none';
-      } else if (sec && products[0]) {
-        sec.style.display = '';
-        var p0 = products[0];
-        spotlightHeading.textContent = p0.name;
-        var spotImg = sec.querySelector('img');
-        if (spotImg) { spotImg.src = p0.image; spotImg.alt = p0.name; }
-        sec.querySelectorAll('.hotspot-pin, .hotspot-dot, [data-title]').forEach(function (el) { el.style.display = 'none'; });
-      }
+    if (products.length <= 1) {
+      document.querySelectorAll('.hero-dots, .hero-slider-controls, .hero-nav').forEach(function (el) {
+        el.style.display = 'none';
+      });
     }
 
-    // 3. Shop by Collection Cards: live piece count & lowest price per category
-    document.querySelectorAll('.collection-card').forEach(function (card) {
-      card.style.display = '';
-      var link = card.querySelector('a[href*="cat="]');
-      var href = link ? link.getAttribute('href') : '';
-      var match = href.match(/cat=([^&]+)/);
-      var cat = match ? decodeURIComponent(match[1]).toLowerCase() : '';
-      var matching = cat ? products.filter(function (p) { return String(p.category || '').toLowerCase() === cat; }) : [];
+    // 2. Featured Product Spotlight: bind image, title, price, description, dimensions, finishes
+    var spotSec = document.querySelector('#spotlight, .spotlight-section, [data-spotlight]') ||
+      Array.from(document.querySelectorAll('section')).find(function (s) {
+        return s.textContent.indexOf('FEATURED PRODUCT') > -1 || s.textContent.indexOf('ADD TO BAG') > -1;
+      });
+    if (spotSec && p0) {
+      var spotImg = spotSec.querySelector('img');
+      if (spotImg && p0.image) { spotImg.src = p0.image; spotImg.alt = p0.name; }
+      var spotH = spotSec.querySelector('h2, h3');
+      if (spotH) spotH.textContent = p0.name;
+      var spotPrice = Array.from(spotSec.querySelectorAll('span, div, p')).find(function (el) {
+        return /^₹[0-9,]+$/.test(el.textContent.trim());
+      });
+      if (spotPrice) spotPrice.textContent = fmt(p0.price);
+      var spotDesc = Array.from(spotSec.querySelectorAll('p')).find(function (p) {
+        return p.textContent.indexOf('Handcrafted architectural') > -1 || p.textContent.indexOf('kiln-dried') > -1;
+      });
+      if (spotDesc && p0.description) spotDesc.textContent = p0.description;
+      if (p0.dimensions) {
+        spotSec.querySelectorAll('p, span, div').forEach(function (el) {
+          if (el.textContent.trim() === 'Standard Artisan Dimensions') el.textContent = p0.dimensions;
+        });
+      }
+      var finishes = Array.isArray(p0.finishes) ? p0.finishes : String(p0.finishes || '').split('|').map(function (x) { return x.trim(); }).filter(Boolean);
+      var fBtns = Array.from(spotSec.querySelectorAll('button')).filter(function (b) {
+        return /Signature Finish|Limited Edition|Teak|Walnut/i.test(b.textContent);
+      });
+      if (finishes.length && fBtns.length) {
+        fBtns.forEach(function (btn, i) {
+          if (finishes[i]) { btn.style.display = ''; btn.textContent = finishes[i]; }
+          else { btn.style.display = 'none'; }
+        });
+      }
+      spotSec.querySelectorAll('.hotspot-pin, .hotspot-dot, [data-title]').forEach(function (el) {
+        el.style.display = 'none';
+      });
+    }
+
+    // 3. Shop by Collection Cards: match live Sheet products by category or keyword
+    var matchedAnyCollection = false;
+    var cards = Array.from(document.querySelectorAll('.collection-card'));
+    cards.forEach(function (card) {
+      var text = card.textContent.toLowerCase();
+      var matching = products.filter(function (p) {
+        var cat = String(p.category || '').toLowerCase();
+        var nm = String(p.name || '').toLowerCase();
+        if (text.indexOf('stand') > -1 && (cat.indexOf('stand') > -1 || cat.indexOf('decor') > -1 || nm.indexOf('stand') > -1)) return true;
+        if (text.indexOf('shelf') > -1 || text.indexOf('shelves') > -1) return cat.indexOf('shel') > -1;
+        if (text.indexOf('rack') > -1) return cat.indexOf('rack') > -1;
+        if (text.indexOf('stool') > -1 || text.indexOf('seating') > -1) return cat.indexOf('seat') > -1 || cat.indexOf('stool') > -1;
+        return false;
+      });
+      if (matching.length) matchedAnyCollection = true;
 
       var countEl = Array.from(card.querySelectorAll('span, div, p')).find(function (el) {
         return /\bPIECES?\b/i.test(el.textContent.trim());
       });
-      if (countEl) {
-        countEl.textContent = matching.length === 1 ? '1 PIECE' : (matching.length + ' PIECES');
-      }
+      if (countEl) countEl.textContent = matching.length === 1 ? '1 PIECE' : (matching.length + ' PIECES');
 
       var priceEl = Array.from(card.querySelectorAll('span, div, p')).find(function (el) {
         return /CURATING SOON|FROM\s*₹/i.test(el.textContent.trim());
       });
       if (priceEl) {
         if (matching.length > 0) {
-          var minPrice = Math.min.apply(null, matching.map(function (m) { return Number(m.price) || 0; }));
-          priceEl.textContent = 'FROM ' + fmt(minPrice);
+          var minP = Math.min.apply(null, matching.map(function (m) { return Number(m.price) || 0; }));
+          priceEl.textContent = 'FROM ' + fmt(minP);
         } else {
           priceEl.textContent = 'CURATING SOON';
         }
       }
 
-      var img = card.querySelector('img');
-      if (img) {
+      var cImg = card.querySelector('img');
+      if (cImg) {
         if (matching.length > 0 && matching[0].image) {
-          img.style.display = '';
-          img.src = matching[0].image;
-          img.alt = matching[0].name;
+          cImg.style.display = '';
+          cImg.src = matching[0].image;
+          cImg.alt = matching[0].name;
         } else {
-          img.style.display = 'none';
+          cImg.style.display = 'none';
         }
       }
     });
 
-    // 4. Shop by Room & Social Gallery: show ONLY cards backed by real products
+    // If product category didn't match old furniture card names, map first product into Card 01 cleanly
+    if (!matchedAnyCollection && cards.length && p0) {
+      var c0 = cards[0];
+      var c0Count = Array.from(c0.querySelectorAll('span, div, p')).find(function (el) { return /\bPIECES?\b/i.test(el.textContent.trim()); });
+      var c0Price = Array.from(c0.querySelectorAll('span, div, p')).find(function (el) { return /CURATING SOON|FROM\s*₹/i.test(el.textContent.trim()); });
+      var c0Sub = c0.querySelector('.collection-subtitle');
+      var c0Title = c0.querySelector('.collection-title');
+      var c0Img = c0.querySelector('img');
+      if (c0Count) c0Count.textContent = products.length === 1 ? '1 PIECE' : (products.length + ' PIECES');
+      if (c0Price) c0Price.textContent = 'FROM ' + fmt(p0.price);
+      if (c0Sub && p0.category) c0Sub.textContent = p0.category;
+      if (c0Title) c0Title.textContent = p0.name;
+      if (c0Img && p0.image) { c0Img.style.display = ''; c0Img.src = p0.image; c0Img.alt = p0.name; }
+    }
+
+    // 4. Shop by Room & Social Gallery: display ONLY cards backed by real Sheet products
     document.querySelectorAll('.room-card, .social-card, .lookbook-card, .insta-card').forEach(function (card, idx) {
-      var p = products[idx];
-      if (!p) { card.style.display = 'none'; return; }
+      var item = products[idx];
+      if (!item || !item.image) {
+        card.style.display = 'none';
+        return;
+      }
       card.style.display = '';
       var img = card.querySelector('img');
-      if (img) { img.style.display = ''; img.src = p.image; img.alt = p.name; }
+      if (img) { img.style.display = ''; img.src = item.image; img.alt = item.name; }
     });
 
-    // 5. Hide any unassigned blank images outside collection cards
+    // 5. Hide any remaining unassigned blank images
     document.querySelectorAll('img').forEach(function (img) {
       if (img.id === 'qvImage' || img.closest('.collection-card')) return;
       var s = img.getAttribute('src') || '';
       if (!s || s === BLANK) {
-        var wrapper = img.closest('.room-card, .hero-slide, figure, .gallery-item, .insta-item');
-        if (wrapper) wrapper.style.display = 'none';
+        var wrap = img.closest('.room-card, .hero-slide, figure, .gallery-item, .insta-item');
+        if (wrap) wrap.style.display = 'none';
         else img.style.display = 'none';
       }
     });
   }
 
-  window.addEventListener('velora:catalog-updated', syncDynamicCatalogUI);
-  document.addEventListener('DOMContentLoaded', function () { setTimeout(syncDynamicCatalogUI, 200); });
-  setInterval(syncDynamicCatalogUI, 1200);
+  window.addEventListener('velora:catalogUpdated', syncVeloraHomepage);
+  document.addEventListener('DOMContentLoaded', function () { setTimeout(syncVeloraHomepage, 150); });
+  setInterval(syncVeloraHomepage, 800);
 })();
 </script>
 </body>
 </html>
+
 
 
 
