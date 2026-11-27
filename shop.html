@@ -36,7 +36,7 @@
     body { background: #e9e4dc !important; position: relative; }
     .shop-room-bg {
       position: fixed; inset: -3%; z-index: -1; pointer-events: none;
-      background: url('https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261104_080623_c94c85a3-23d5-4a0c-afff-41be1b5b8191.png&w=2400&q=85') center/cover no-repeat;
+      background: url('assets/images/shop-room-bg.webp') center/cover no-repeat;
       filter: saturate(1.08) contrast(1.03); transform: scale(1.01);
     }
     .shop-room-bg::after {
@@ -96,6 +96,12 @@
       #shopCatalogGrid .product-footer-row { flex-direction: column !important; align-items: stretch !important; gap: 0.5rem !important; }
       #shopCatalogGrid .btn-add-cart { width: 100% !important; text-align: center !important; padding: 0.45rem 0.5rem !important; font-size: 0.7rem !important; }
       #shopCatalogGrid .product-room-tag { font-size: 0.56rem !important; letter-spacing: 0.1em !important; }
+    }
+      .mobile-filter-toggle { display: none; width: 100%; padding: 0.78rem 1rem; background: #140508; color: #F3E5C0; border: 1px solid rgba(212,175,55,0.5); border-radius: 6px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.78rem; justify-content: space-between; align-items: center; cursor: pointer; margin-bottom: 0.85rem; }
+    @media (max-width: 768px) {
+      .mobile-filter-toggle { display: flex; }
+      .shop-sidebar { display: none; }
+      .shop-sidebar.is-open { display: flex; }
     }
   </style>
 <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -158,7 +164,7 @@
   </section>
 
   <main class="container shop-layout">
-    <aside class="shop-sidebar" aria-label="Filter Products">
+    <button type="button" class="mobile-filter-toggle" id="mobileFilterToggle" aria-expanded="false"><span>Filter &amp; Sort Pieces</span><span>&#9776;</span></button><aside class="shop-sidebar" id="shopSidebar" aria-label="Filter Products">
       <div class="filter-group">
         <h4>Category</h4>
         <div class="filter-check-list" id="shopCatFilters">
@@ -378,12 +384,28 @@
         renderShop();
       });
 
+            const mFilterBtn = document.getElementById('mobileFilterToggle');
+      const shopSidebar = document.getElementById('shopSidebar');
+      if (mFilterBtn && shopSidebar) {
+        mFilterBtn.addEventListener('click', () => {
+          const open = shopSidebar.classList.toggle('is-open');
+          mFilterBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+      }
       syncPriceBounds();
       renderShop();
       window.addEventListener('velora:catalogLoading', renderShop);
       window.addEventListener('velora:catalogError', renderShop);
       window.addEventListener('velora:catalogUpdated', () => {
-        syncPriceBounds();
+              const mFilterBtn = document.getElementById('mobileFilterToggle');
+      const shopSidebar = document.getElementById('shopSidebar');
+      if (mFilterBtn && shopSidebar) {
+        mFilterBtn.addEventListener('click', () => {
+          const open = shopSidebar.classList.toggle('is-open');
+          mFilterBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+      }
+      syncPriceBounds();
         renderShop();
       });
 
@@ -407,4 +429,5 @@
   <script src="js/billing-helpers.js" defer></script>
 </body>
 </html>
+
 

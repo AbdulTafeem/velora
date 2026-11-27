@@ -207,12 +207,29 @@
     document.getElementById('vcCloseBtn').onclick = closeCheckoutModal;
     document.getElementById('invCloseBtn').onclick = closeInvoiceModal;
 
-    document.addEventListener('keydown', (e) => {
+        document.addEventListener('keydown', (e) => {
+      const activeModal = document.querySelector('#veloraCheckoutModal.is-open, #veloraInvoiceModal.is-open');
+      if (!activeModal) return;
       if (e.key === 'Escape') {
-        if (document.getElementById('veloraCheckoutModal')?.classList.contains('is-open')) closeCheckoutModal();
-        if (document.getElementById('veloraInvoiceModal')?.classList.contains('is-open')) closeInvoiceModal();
+        e.stopImmediatePropagation();
+        if (activeModal.id === 'veloraCheckoutModal') closeCheckoutModal();
+        else closeInvoiceModal();
+        return;
       }
-    });
+      if (e.key === 'Tab') {
+        const focusables = Array.from(activeModal.querySelectorAll('button:not([disabled]), input:not([disabled]):not([tabindex="-1"]), select:not([disabled]), textarea:not([disabled]), a[href]')).filter((el) => el.offsetParent !== null);
+        if (!focusables.length) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    }, true);
 
     document.getElementById('veloraCheckoutForm').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -408,6 +425,7 @@
     }
   });
 })();
+
 
 
 

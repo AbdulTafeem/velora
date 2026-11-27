@@ -58,49 +58,7 @@
     toastEl._timer = setTimeout(() => toastEl.classList.remove('is-visible'), 2800);
   }
 
-  function buildProductCardHtml(product, isWishlisted, overrideBadge) {
-    const badgeText = overrideBadge || product.badge;
-    const badgeClass = !overrideBadge && product.badgeType === 'maroon' ? 'badge-shimmer badge-maroon' : 'badge-shimmer';
-    const mrpVal = product.mrp || product.originalPrice;
-    return `
-      <article class="product-card" data-product-id="${escapeHtml(product.id)}">
-        <div class="product-media">
-          <div class="product-top-bar">
-            <span class="${badgeClass}">${escapeHtml(badgeText)}</span>
-            <button type="button" class="wishlist-btn ${isWishlisted ? 'is-wishlisted' : ''}" data-wish="${escapeHtml(product.id)}" aria-label="Save ${escapeHtml(product.name)} to wishlist">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            </button>
-          </div>
-          <a href="product.html?id=${encodeURIComponent(product.id)}" class="product-media-link" aria-label="View ${escapeHtml(product.name)}">
-            <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" class="product-img-main" onerror="this.src='assets/images/product-1.jpg'" loading="lazy" />
-            <img src="${escapeHtml(product.hoverImage)}" alt="${escapeHtml(product.name)} alternate view" class="product-img-hover" loading="lazy" />
-          </a>
-          <div class="product-quick-actions">
-            <button type="button" class="btn-quick-view" data-qv="${escapeHtml(product.id)}">Quick View</button>
-          </div>
-        </div>
-        <div class="product-body">
-          <div class="product-meta-row">
-            <span class="product-room-tag">${escapeHtml(product.room)} &bull; ${product.finishes.length} Finishes</span>
-            <span class="product-mini-swatches" aria-hidden="true">
-              ${product.finishes.map((f) => `<span class="mini-swatch" title="${escapeHtml(f)}" style="${getFinishSwatchStyle(f)}"></span>`).join('')}
-            </span>
-          </div>
-          <h3 class="product-title"><a href="product.html?id=${encodeURIComponent(product.id)}">${escapeHtml(product.name)}</a></h3>
-          <div class="product-footer-row">
-            <div class="product-price-box">
-              <span class="price-now">${formatINR(product.price)}</span>
-              ${mrpVal ? `<span class="price-mrp">${formatINR(mrpVal)}</span>` : ''}
-            </div>
-            ${product.stock === 0
-              ? '<button type="button" class="btn-add-cart" disabled style="opacity:0.5;cursor:not-allowed;">Sold Out</button>'
-              : `<button type="button" class="btn-add-cart" data-add="${escapeHtml(product.id)}">Add to Cart</button>`}
-          </div>
-        </div>
-      </article>
-    `;
-  }
-
+  
   function renderProducts() {
     if (!productsGrid) return;
     const catState = window.VELORA_CATALOG_STATE || { status: 'ready' };
@@ -329,10 +287,19 @@
   });
 
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeAllOverlays();
+    if (e.key === 'Escape') {
+      if (document.querySelector('#veloraCheckoutModal.is-open, #veloraInvoiceModal.is-open')) return;
+      closeAllOverlays();
+    }
   });
 
   let showingWishlistOnly = false;
+  function renderWishlistView() {
+    const wishlist = Store.getWishlist();
+    const saved = Store.getCatalog().filter((p) => wishlist.includes(p.id));
+    if (!saved.length) { showingWishlistOnly = false; renderProducts(); return; }
+    if (productsGrid) productsGrid.innerHTML = saved.map((product) => Store.renderProductCard(product, { isWishlisted: true, overrideBadge: 'Saved' })).join('');
+  }
   document.getElementById('wishlistOpenBtn')?.addEventListener('click', () => {
     const wishlist = Store.getWishlist();
     if (wishlist.length === 0) {
@@ -343,7 +310,7 @@
     if (showingWishlistOnly && productsGrid) {
       const saved = Store.getCatalog().filter((p) => wishlist.includes(p.id));
       productsGrid.innerHTML = saved
-        .map((product) => buildProductCardHtml(product, true, 'Saved'))
+        .map((product) => Store.renderProductCard(product, { isWishlisted: true, overrideBadge: 'Saved' }))
         .join('');
       document.getElementById('bestsellers')?.scrollIntoView({ behavior: 'smooth' });
       showToast(`Showing ${saved.length} saved Wishlist item(s). Tap heart again to show all.`);
@@ -462,6 +429,7 @@
   renderProducts();
   renderCart();
 })();
+
 
 
 
