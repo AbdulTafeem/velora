@@ -115,6 +115,27 @@
                 <div class="vc-pay-opt" data-pay="Online Card / Netbanking"><strong>Cards / Netbanking</strong><span>${RAZORPAY_KEY_ID ? 'Instant Gateway' : 'Concierge Link'}</span></div>
               </div>
             </div>
+                        <div id="veloraUpiBox" style="display:none;padding:0.95rem;border:1px solid rgba(212,175,55,0.55);border-radius:6px;background:#FAF7F2;font-size:0.82rem;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.65rem;">
+                <strong style="font-family:'Cinzel',serif;font-size:0.86rem;color:#540A18;letter-spacing:0.08em;">INSTANT UPI SCAN &amp; PAY</strong>
+                <span style="font-size:0.68rem;padding:2px 8px;border-radius:99px;background:#EFE8DC;color:#540A18;font-weight:700;">Zero Gateway Fee</span>
+              </div>
+              <div style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;">
+                <div style="width:124px;background:#fff;padding:6px;border-radius:6px;border:1px solid rgba(0,0,0,0.1);text-align:center;flex-shrink:0;">
+                  <img src="assets/images/velora-upi-qr.jpg" alt="VELORA UPI QR" style="width:100%;height:auto;border-radius:4px;display:block;" />
+                  <div style="font-size:0.62rem;font-weight:600;margin-top:4px;color:#540A18;">GPay &bull; PhonePe &bull; Paytm</div>
+                </div>
+                <div style="flex:1;min-width:180px;line-height:1.5;color:#3E3537;">
+                  <div style="font-weight:700;color:#120C0E;margin-bottom:3px;">Verified Merchant: VELORA</div>
+                  <div>1. Scan QR via any UPI app and pay the exact <strong>Total Payable</strong> amount.</div>
+                  <div>2. Enter the <strong>12-digit UPI Ref / UTR Number</strong> below to generate your official GST Tax Invoice.</div>
+                </div>
+              </div>
+              <div class="vc-field" style="margin-top:0.75rem;">
+                <label for="vcUtr">UPI Transaction UTR / Reference Number *</label>
+                <input type="text" id="vcUtr" placeholder="Enter 12-digit UPI Ref / UTR No. after payment" />
+              </div>
+            </div>
             <div class="vc-summary" id="vcOrderSummary"></div>
             <div class="vc-error-box" id="vcErrorBox" role="alert"></div>
             <button type="submit" class="vc-submit" id="vcPlaceOrderBtn">Confirm Order &amp; Generate Summary &rarr;</button>
@@ -145,6 +166,11 @@
       document.querySelectorAll('.vc-pay-opt').forEach((c) => c.classList.remove('is-selected'));
       card.classList.add('is-selected');
       selectedPay = card.dataset.pay;
+      const upiBox = document.getElementById('veloraUpiBox');
+      const utrInp = document.getElementById('vcUtr');
+      const isPrepaid = !selectedPay.toLowerCase().includes('cod');
+      if (upiBox) upiBox.style.display = isPrepaid ? 'block' : 'none';
+      if (utrInp) utrInp.required = isPrepaid;
     });
 
     function closeCheckoutModal() {
@@ -188,7 +214,8 @@
         address: document.getElementById('vcAddress').value.trim(),
         cityState: document.getElementById('vcCityState').value.trim(),
         pincode: document.getElementById('vcPincode').value.trim(),
-        paymentMode: selectedPay
+        paymentMode: selectedPay,
+        utr: (document.getElementById('vcUtr')?.value || '').trim()
       };
 
       // Send only product IDs, finish, qty and promoCode — server computes authoritative prices
@@ -277,7 +304,7 @@
         </div>
         <div style="text-align:right;">
           <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:#540A18;font-weight:700;">Payment &amp; Dispatch</div>
-          Mode: <strong>${escapeHtml(order.customer.paymentMode)}</strong><br/>
+          Mode: <strong>${escapeHtml(order.customer.paymentMode)}</strong><br/>${order.customer.utr ? 'UPI Ref / UTR: <strong>' + escapeHtml(order.customer.utr) + '</strong><br/>' : ''}
           Logistics: Insured Pan-India Doorstep<br/>
           Shipping Charges: <strong>Complimentary (₹0)</strong>
         </div>
@@ -352,54 +379,4 @@
       clone.addEventListener('click', openCheckout);
     }
   });
-})();
-
-
-  
-/* VELORA Private UPI QR Payment Panel */
-(function initVeloraPaymentPanel() {
-  function injectPanel() {
-    const modal = document.getElementById('veloraCheckoutModal') || document.querySelector('.checkout-modal, [data-checkout-form]');
-    if (!modal || document.getElementById('veloraPaymentPanel')) return;
-    const submitBtn = modal.querySelector('button[type="submit"], #placeOrderBtn, .checkout-submit-btn');
-    if (!submitBtn) return;
-
-    const panel = document.createElement('div');
-    panel.id = 'veloraPaymentPanel';
-    panel.style.cssText = 'margin:1rem 0;padding:1rem;border:1px solid rgba(114,47,55,0.24);border-radius:14px;background:#FBF9F5;color:#1C1917;font-size:0.84rem;';
-    panel.innerHTML = `
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
-        <strong style="font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:#5A1822;letter-spacing:0.04em;">Instant UPI Scan &amp; Pay</strong>
-        <span style="font-size:0.7rem;padding:0.2rem 0.55rem;border-radius:99px;background:#EFE8DC;color:#5A1822;font-weight:600;">Zero Gateway Fee</span>
-      </div>
-      <div style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;">
-        <div style="width:132px;background:#fff;padding:8px;border-radius:10px;border:1px solid rgba(0,0,0,0.08);text-align:center;flex-shrink:0;">
-          <img src="assets/images/velora-upi-qr.jpg" alt="VELORA Official UPI QR" style="width:100%;height:auto;border-radius:6px;display:block;" />
-          <div style="font-size:0.66rem;font-weight:600;margin-top:5px;color:#5A1822;">Scan via GPay / PhonePe / Paytm</div>
-        </div>
-        <div style="flex:1;min-width:190px;line-height:1.55;font-size:0.8rem;color:#44403C;">
-          <div style="font-weight:600;color:#1C1917;margin-bottom:4px;">Verified Merchant: RIYAN (VELORA)</div>
-          <div>1. Scan the QR code using any UPI app and pay the exact <strong>Total Payable</strong> amount.</div>
-          <div>2. Enter the <strong>12-digit UPI Ref / UTR Number</strong> below to confirm your order immediately.</div>
-        </div>
-      </div>
-      <div style="margin-top:0.85rem;">
-        <label for="veloraUtrInput" style="display:block;font-size:0.75rem;font-weight:600;margin-bottom:4px;color:#44403C;">UPI Transaction UTR / Reference Number *</label>
-        <input id="veloraUtrInput" name="utr" type="text" placeholder="Enter 12-digit UPI Ref / UTR No. after payment" style="width:100%;padding:0.6rem 0.75rem;border:1px solid rgba(114,47,55,0.28);border-radius:8px;font-size:0.83rem;background:#fff;" />
-      </div>
-    `;
-    submitBtn.parentElement.insertBefore(panel, submitBtn);
-
-    const syncVisibility = () => {
-      const checked = modal.querySelector('input[name="paymentMode"]:checked, select[name="paymentMode"]');
-      const val = checked ? String(checked.value || '').toLowerCase() : 'upi';
-      panel.style.display = val.includes('cod') ? 'none' : 'block';
-    };
-    modal.addEventListener('change', syncVisibility);
-    syncVisibility();
-  }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', injectPanel);
-  else injectPanel();
-  const obs = new MutationObserver(injectPanel);
-  obs.observe(document.documentElement, { childList: true, subtree: true });
 })();
