@@ -8,7 +8,7 @@
   const fmt = (n) => '₹' + Number(n || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 });
   const escapeHtml = Store.escapeHtml;
 
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw9NZAh4Wm_so6SkhZl8ASyMaVz1EE67Rk_IpPCN_5tve8D3eCR3tJyW6uLEuSOnhRZ/exec';
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbycPTz5PqooEFkcZo2CRcJgXFgqJOYdrZem705OTFHGxa9yeCYBYZutDEDjZF6vcz0k/exec';
   const WHATSAPP_NUMBER = '918284029319';
   const RAZORPAY_KEY_ID = '';
 
@@ -353,3 +353,53 @@
     }
   });
 })();
+
+
+  /* RIYAN HDFC Bank & UPI QR Payment Panel Injector */
+  (function initVeloraPaymentPanel() {
+    function injectPanel() {
+      const modal = document.getElementById('veloraCheckoutModal') || document.querySelector('.checkout-modal, [data-checkout-form]');
+      if (!modal || document.getElementById('veloraPaymentPanel')) return;
+      const submitBtn = modal.querySelector('button[type="submit"], #placeOrderBtn, .checkout-submit-btn');
+      if (!submitBtn) return;
+
+      const panel = document.createElement('div');
+      panel.id = 'veloraPaymentPanel';
+      panel.style.cssText = 'margin:1rem 0;padding:1rem;border:1px solid rgba(114,47,55,0.24);border-radius:14px;background:#FBF9F5;color:#1C1917;font-size:0.84rem;';
+      panel.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.65rem;">
+          <strong style="font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:#5A1822;letter-spacing:0.04em;">Direct UPI / HDFC Bank Payment</strong>
+          <span style="font-size:0.7rem;padding:0.2rem 0.55rem;border-radius:99px;background:#EFE8DC;color:#5A1822;font-weight:600;">Zero Gateway Fee</span>
+        </div>
+        <div style="display:grid;grid-template-columns:116px 1fr;gap:0.85rem;align-items:center;">
+          <div style="background:#fff;padding:6px;border-radius:10px;border:1px solid rgba(0,0,0,0.08);text-align:center;">
+            <img src="assets/images/velora-upi-qr.jpg" alt="RIYAN HDFC UPI QR" style="width:100%;height:auto;border-radius:6px;display:block;" onerror="this.parentElement.style.display='none'" />
+            <div style="font-size:0.65rem;font-weight:600;margin-top:4px;color:#5A1822;">Scan via Any UPI</div>
+          </div>
+          <div style="line-height:1.55;font-size:0.79rem;">
+            <div><strong>Account Name:</strong> RIYAN</div>
+            <div><strong>Bank:</strong> HDFC Bank (Landran)</div>
+            <div><strong>A/C No:</strong> <code style="background:#EFE8DC;padding:1px 5px;border-radius:4px;">50100918358454</code> <button type="button" onclick="navigator.clipboard&&navigator.clipboard.writeText('50100918358454')" style="border:none;background:#5A1822;color:#fff;font-size:0.66rem;padding:2px 6px;border-radius:4px;cursor:pointer;">Copy</button></div>
+            <div><strong>IFSC:</strong> <code style="background:#EFE8DC;padding:1px 5px;border-radius:4px;">HDFC0003029</code> <button type="button" onclick="navigator.clipboard&&navigator.clipboard.writeText('HDFC0003029')" style="border:none;background:#5A1822;color:#fff;font-size:0.66rem;padding:2px 6px;border-radius:4px;cursor:pointer;">Copy</button></div>
+          </div>
+        </div>
+        <div style="margin-top:0.75rem;">
+          <label for="veloraUtrInput" style="display:block;font-size:0.74rem;font-weight:600;margin-bottom:4px;color:#44403C;">UPI / Bank Transaction UTR Reference (Required for Prepaid)</label>
+          <input id="veloraUtrInput" name="utr" type="text" placeholder="Enter 12-digit UPI Ref / UTR No. after payment" style="width:100%;padding:0.55rem 0.7rem;border:1px solid rgba(114,47,55,0.28);border-radius:8px;font-size:0.82rem;background:#fff;" />
+        </div>
+      `;
+      submitBtn.parentElement.insertBefore(panel, submitBtn);
+
+      const syncVisibility = () => {
+        const checked = modal.querySelector('input[name="paymentMode"]:checked, select[name="paymentMode"]');
+        const val = checked ? String(checked.value || '').toLowerCase() : 'upi';
+        panel.style.display = val.includes('cod') ? 'none' : 'block';
+      };
+      modal.addEventListener('change', syncVisibility);
+      syncVisibility();
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', injectPanel);
+    else injectPanel();
+    const obs = new MutationObserver(injectPanel);
+    obs.observe(document.documentElement, { childList: true, subtree: true });
+  })();

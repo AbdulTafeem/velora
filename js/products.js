@@ -10,7 +10,7 @@ window.VELORA_CATALOG_STATE = {
 (function () {
   'use strict';
 
-  const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1yskAN_jSn2RRHHkt64wO0h4y855tGC2TdPm4NpKJFmM/gviz/tq?tqx=out:csv&sheet=Sheet1';
+  const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/19B_gbnR2kjsefn5-p47PRR4uWfLxhHxszJMVgTw_1dY/gviz/tq?tqx=out:csv&sheet=Sheet1';
 
   const SLUG_MAP = {
     'clothes-racks': 'clothes-rack',
@@ -212,3 +212,4 @@ window.addEventListener('velora:catalogUpdated', () => {
     if (spotBtn) spotBtn.textContent = 'Add to Bag — ' + fmt;
   }
 });
+
