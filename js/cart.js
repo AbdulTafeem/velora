@@ -391,7 +391,7 @@
 
   // Sync Spotlight finishes dynamically from product vel-06 (Bug #3 fix)
   function syncSpotlightFinishes() {
-    const spotProd = Store.getProductById('vel-06');
+    const spotProd = (Store.getProductById('vel-06') || Store.getCatalog()[0]);
     const pillsWrap = document.getElementById('spotlightFinishPills');
     const selectedLabel = document.getElementById('selectedSpotlightFinish');
     if (!spotProd || !pillsWrap || !Array.isArray(spotProd.finishes) || !spotProd.finishes.length) return;
@@ -416,11 +416,11 @@
   });
 
   document.getElementById('spotlightAddBtn')?.addEventListener('click', () => {
-    addToCart('vel-06', spotlightFinish);
+    const liveSpot = Store.getProductById('vel-06') || Store.getCatalog()[0]; if (liveSpot) addToCart(liveSpot.id, spotlightFinish);
   });
 
   document.getElementById('spotlightWaBtn')?.addEventListener('click', () => {
-    const spotProd = Store.getProductById('vel-06');
+    const spotProd = (Store.getProductById('vel-06') || Store.getCatalog()[0]);
     const price = spotProd ? spotProd.price : 3999;
     const name = spotProd ? spotProd.name : 'Solid Wood Cylinder Base T-Stand';
     const msg = `*VELORA — Direct Order Request*\n\n1. ${name} (${spotlightFinish}) x1 - ${formatINR(price)}\n\n*Total:* ${formatINR(price)}\n*Shipping:* Free Insured Pan-India Delivery\n\n*Delivery Details (Please fill):*\n• Name: \n• City & Pincode: \n• Payment Mode (UPI / COD): `;
@@ -455,4 +455,5 @@
   renderProducts();
   renderCart();
 })();
+
 

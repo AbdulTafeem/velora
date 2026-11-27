@@ -2622,3 +2622,7 @@ html, body { overscroll-behavior-y: none; }
 .product-card, .why-card, .room-card, .collection-panel, .testimonial-card { contain: layout style paint; backface-visibility: hidden; }
 .footer-watermark { background-size: 100% 100% !important; transition: none !important; }
 
+
+/* Enable secondary product angle on hover */
+.product-card:hover .product-img-hover { opacity: 1 !important; visibility: visible !important; }
+

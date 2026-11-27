@@ -793,7 +793,7 @@
         </div>
       </div>
     </div>
-  </footer>
+  <div style="text-align:center;padding:0.75rem 1rem 1.25rem;font-size:0.78rem;opacity:0.85;"><a href="policies.html" style="color:#D4AF37;text-decoration:underline;">Privacy, Shipping, Returns &amp; Grievance Policies</a></div></footer>
 
   <!-- Floating WhatsApp Concierge Button -->
   <a href="https://wa.me/918284029319?text=Hello%20VELORA!%20I%20would%20like%20assistance%20with%20your%20luxury%20home%20collection."
@@ -959,6 +959,18 @@
       if (spotPrice) spotPrice.textContent = fmt(spot.price);
       if (spotDesc && spot.description) spotDesc.textContent = spot.description;
       if (spotBtn) spotBtn.textContent = 'Add to Bag — ' + fmt(spot.price);
+    // Hydrate Mega Menu, Velvet Promo BG & Spotlight Add Button ID
+    if (spot) {
+      var spotBtnEl = document.getElementById('spotlightAddBtn');
+      if (spotBtnEl) spotBtnEl.setAttribute('data-id', spot.id);
+    }
+    document.querySelectorAll('.mega-menu img, .velvet-promo-bg').forEach(function (img, i) {
+      var p = showcase[i % showcase.length];
+      if (p && p.image) {
+        img.src = p.image;
+        img.alt = p.name;
+      }
+    });
       document.querySelectorAll('.hotspot-pin, .hotspot-dot').forEach(function (el) { el.style.display = 'none'; });
     }
 
@@ -1077,6 +1089,7 @@
 </script>
 </body>
 </html>
+
 
 
 

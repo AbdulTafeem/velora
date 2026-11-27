@@ -38,7 +38,7 @@
   };
 
   const injectCartVip = () => {
-    const cartFooter = document.querySelector('.cart-footer, #cartDrawer .drawer-footer');
+    const cartFooter = document.querySelector('.cart-drawer-footer, .cart-footer, #cartDrawer .drawer-footer');
     if (cartFooter && !cartFooter.querySelector('.velora-cart-vip')) {
       const vip = document.createElement('div');
       vip.className = 'velora-cart-vip';
@@ -87,5 +87,6 @@
     }
   });
 })();
+
 
 

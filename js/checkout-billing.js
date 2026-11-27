@@ -218,7 +218,7 @@
         cityState: document.getElementById('vcCityState').value.trim(),
         pincode: document.getElementById('vcPincode').value.trim(),
         paymentMode: selectedPay,
-        utr: (document.getElementById('vcUtr')?.value || '').trim()
+        utr: (document.getElementById('vcUtr')?.value || '').replace(/\D/g, '').trim()
       };
 
       // Send only product IDs, finish, qty and promoCode — server computes authoritative prices
@@ -388,4 +388,5 @@
     }
   });
 })();
+
 
