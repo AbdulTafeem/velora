@@ -1015,17 +1015,17 @@
       var linkEl = panel.querySelector('.collection-meta a');
       var imgEl = panel.querySelector('img');
 
-      // 1 piece -> show exact product name; 2+ pieces -> show exact live Category name
-      if (items.length === 1) {
-        if (subEl) subEl.textContent = grp.label;
-        if (titleEl) titleEl.textContent = lead.name;
-      } else {
-        if (subEl) subEl.textContent = lead.room || 'Curated Series';
-        if (titleEl) titleEl.textContent = grp.label;
-      }
+      // Uniform professional display: Category title + exact design count & total live stock
+      var totalStock = items.reduce(function (sum, m) {
+        return sum + (m.stock === undefined || m.stock === '' ? 12 : Number(m.stock) || 0);
+      }, 0);
+
+      if (subEl) subEl.textContent = lead.name;
+      if (titleEl) titleEl.textContent = grp.label;
 
       if (badgeEl) {
-        badgeEl.textContent = items.length === 1 ? '1 PIECE' : (items.length + ' PIECES');
+        var dLabel = items.length === 1 ? '1 DESIGN' : (items.length + ' DESIGNS');
+        badgeEl.textContent = dLabel + ' • ' + totalStock + ' IN STOCK';
       }
       if (priceEl) {
         var minP = Math.min.apply(null, items.map(function (m) { return Number(m.price) || 0; }));
@@ -1085,6 +1085,7 @@
 </script>
 </body>
 </html>
+
 
 
 
