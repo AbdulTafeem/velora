@@ -389,9 +389,15 @@
     showToast('Pay via UPI / COD online checkout coming soon — please Order via WhatsApp above.');
   });
 
-  // Sync Spotlight finishes dynamically from product vel-06 (Bug #3 fix)
+  // Single source of truth for Spotlight product, finishes, Add to Bag, and WhatsApp order
+  function getSpotlightProduct() {
+    const btn = document.getElementById('spotlightAddBtn');
+    const liveId = btn && btn.dataset ? btn.dataset.id : '';
+    return (liveId && Store.getProductById(liveId)) || Store.getCatalog()[0] || null;
+  }
+
   function syncSpotlightFinishes() {
-    const spotProd = (Store.getProductById('vel-06') || Store.getCatalog()[0]);
+    const spotProd = getSpotlightProduct();
     const pillsWrap = document.getElementById('spotlightFinishPills');
     const selectedLabel = document.getElementById('selectedSpotlightFinish');
     if (!spotProd || !pillsWrap || !Array.isArray(spotProd.finishes) || !spotProd.finishes.length) return;
@@ -402,8 +408,9 @@
     if (selectedLabel) selectedLabel.textContent = spotlightFinish;
   }
 
-  let spotlightFinish = 'Natural Teak Wood / Matte Black';
+  let spotlightFinish = 'Brushed Silver';
   syncSpotlightFinishes();
+  window.addEventListener('velora:catalogUpdated', syncSpotlightFinishes);
 
   document.getElementById('spotlightFinishPills')?.addEventListener('click', (e) => {
     const pill = e.target.closest('[data-finish]');
@@ -416,14 +423,14 @@
   });
 
   document.getElementById('spotlightAddBtn')?.addEventListener('click', () => {
-    const liveSpot = Store.getProductById('vel-06') || Store.getCatalog()[0]; if (liveSpot) addToCart(liveSpot.id, spotlightFinish);
+    const liveSpot = getSpotlightProduct();
+    if (liveSpot) addToCart(liveSpot.id, spotlightFinish);
   });
 
   document.getElementById('spotlightWaBtn')?.addEventListener('click', () => {
-    const spotProd = (Store.getProductById('vel-06') || Store.getCatalog()[0]);
-    const price = spotProd ? spotProd.price : 3999;
-    const name = spotProd ? spotProd.name : 'Solid Wood Cylinder Base T-Stand';
-    const msg = `*VELORA — Direct Order Request*\n\n1. ${name} (${spotlightFinish}) x1 - ${formatINR(price)}\n\n*Total:* ${formatINR(price)}\n*Shipping:* Free Insured Pan-India Delivery\n\n*Delivery Details (Please fill):*\n• Name: \n• City & Pincode: \n• Payment Mode (UPI / COD): `;
+    const spotProd = getSpotlightProduct();
+    if (!spotProd) return;
+    const msg = `*VELORA — Direct Order Request*\n\n1. ${spotProd.name} (${spotlightFinish}) x1 - ${formatINR(spotProd.price)}\n\n*Total:* ${formatINR(spotProd.price)}\n*Shipping:* Free Insured Pan-India Delivery\n\n*Delivery Details (Please fill):*\n• Name: \n• City & Pincode: \n• Payment Mode (UPI / COD): `;
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
   });
 
@@ -455,5 +462,6 @@
   renderProducts();
   renderCart();
 })();
+
 
 

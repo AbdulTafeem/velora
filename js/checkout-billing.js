@@ -11,6 +11,8 @@
   const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbycPTz5PqooEFkcZo2CRcJgXFgqJOYdrZem705OTFHGxa9yeCYBYZutDEDjZF6vcz0k/exec';
   const WHATSAPP_NUMBER = '918284029319';
   const RAZORPAY_KEY_ID = '';
+  const MERCHANT_UPI_ID = 'houseofvelora@hdfcbank'; // Replace with your verified Merchant VPA
+  const MERCHANT_NAME = 'VELORA';
 
   function lockScroll() {
     document.documentElement.style.overflow = 'hidden';
@@ -96,7 +98,7 @@
             </div>
             <div class="vc-grid-2">
               <div class="vc-field"><label for="vcName">Full Name *</label><input type="text" id="vcName" required placeholder="e.g. Aarav Sharma" /></div>
-              <div class="vc-field"><label for="vcPhone">Mobile / WhatsApp *</label><input type="tel" id="vcPhone" required pattern="[0-9+\\s-]{10,15}" placeholder="+91 98765 43210" /></div>
+              <div class="vc-field"><label for="vcPhone">Mobile / WhatsApp *</label><input type="tel" id="vcPhone" required pattern="[0-9+\\s\\-]{10,15}" placeholder="+91 98765 43210" /></div>
             </div>
             <div class="vc-grid-2">
               <div class="vc-field"><label for="vcEmail">Email (For Order Summary) *</label><input type="email" id="vcEmail" required placeholder="you@example.com" /></div>
@@ -112,7 +114,7 @@
               <div class="vc-pay-grid" id="vcPayGrid">
                 <div class="vc-pay-opt is-selected" data-pay="Cash on Delivery (COD)"><strong>Cash on Delivery</strong><span>Pay at Doorstep (Insured)</span></div>
                 <div class="vc-pay-opt" data-pay="UPI / Direct Bank Transfer"><strong>UPI / Instant Transfer</strong><span>Concierge QR / Link</span></div>
-                <div class="vc-pay-opt" data-pay="Online Card / Netbanking"><strong>Cards / Netbanking</strong><span>${RAZORPAY_KEY_ID ? 'Instant Gateway' : 'Concierge Link'}</span></div>
+                <div class="vc-pay-opt" data-pay="Online Card / Netbanking" ${RAZORPAY_KEY_ID ? '' : 'data-disabled="1" style="opacity:0.5;cursor:not-allowed;"'}><strong>Cards / Netbanking</strong><span>${RAZORPAY_KEY_ID ? 'Instant Gateway' : 'Coming Soon'}</span></div>
               </div>
             </div>
                         <div id="veloraUpiBox" style="display:none;padding:1rem;border:1px solid rgba(212,175,55,0.6);border-radius:6px;background:#FAF7F2;font-size:0.82rem;">
@@ -126,9 +128,9 @@
                   <div style="font-size:0.62rem;font-weight:600;margin-top:4px;color:#540A18;">Scan via Any UPI App</div>
                 </div>
                 <div style="flex:1;min-width:195px;line-height:1.5;color:#3E3537;">
-                  <div style="font-weight:700;color:#120C0E;margin-bottom:4px;">Payee: RIYAN (VELORA Official)</div>
+                  <div style="font-weight:700;color:#120C0E;margin-bottom:4px;">Payee: VELORA Official Merchant</div>
                   <div style="margin-bottom:0.55rem;">On mobile, tap below to open GPay, PhonePe, or Paytm directly with your exact payable amount:</div>
-                  <a id="vcUpiAppBtn" href="upi://pay?pa=50100918358454@HDFC0003029.ifsc.npci&pn=RIYAN&cu=INR&tn=VELORA%20Order" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:0.55rem 0.9rem;background:#140508;color:#F3E5C0;border:1px solid #D4AF37;border-radius:4px;text-decoration:none;font-weight:700;font-size:0.75rem;letter-spacing:0.06em;text-transform:uppercase;">
+                  <a id="vcUpiAppBtn" href="upi://pay?pa=${MERCHANT_UPI_ID}&pn=${encodeURIComponent(MERCHANT_NAME)}&cu=INR&tn=VELORA%20Order" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:0.55rem 0.9rem;background:#140508;color:#F3E5C0;border:1px solid #D4AF37;border-radius:4px;text-decoration:none;font-weight:700;font-size:0.75rem;letter-spacing:0.06em;text-transform:uppercase;">
                     Open UPI App &amp; Pay Now &rarr;
                   </a>
                 </div>
@@ -163,6 +165,7 @@
     document.body.appendChild(wrap);
 
     let selectedPay = 'Cash on Delivery (COD)';
+    let currentOrderKey = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('ord-' + Date.now() + '-' + Math.random().toString(36).slice(2));
     document.getElementById('vcPayGrid').addEventListener('click', (e) => {
       const card = e.target.closest('.vc-pay-opt');
       if (!card) return;
@@ -172,6 +175,8 @@
       const upiBox = document.getElementById('veloraUpiBox');
       const utrInp = document.getElementById('vcUtr');
       const isPrepaid = !selectedPay.toLowerCase().includes('cod');
+      const submitBtn = document.getElementById('vcPlaceOrderBtn');
+      if (submitBtn) submitBtn.textContent = isPrepaid ? 'Submit UPI Reference for Verification →' : 'Confirm COD Order & Generate Summary →';
       if (upiBox) upiBox.style.display = isPrepaid ? 'block' : 'none';
       if (utrInp) utrInp.required = isPrepaid;
     });
@@ -294,7 +299,7 @@
           <div style="font-weight:700;color:#540A18;letter-spacing:0.08em;">ORDER CONFIRMATION</div>
           <div>Order Ref: <strong>${escapeHtml(order.orderId)}</strong></div>
           <div>Date: ${escapeHtml(order.orderDate)}</div>
-          <div>Status: <span style="color:#15803d;font-weight:600;">${escapeHtml(order.status)}</span></div>
+          <div>Status: <span style="color:${String(order.status).toLowerCase().includes('pending') ? '#b45309' : '#15803d'};font-weight:700;">${escapeHtml(order.status)}</span></div>
         </div>
       </div>
       <div class="vc-grid-2" style="margin-bottom:0.75rem;background:#FAF7F2;padding:0.85rem;border-radius:4px;">
@@ -372,9 +377,11 @@
     lockScroll();
     const upiLink = document.getElementById('vcUpiAppBtn');
     if (upiLink) {
-      upiLink.href = 'upi://pay?pa=50100918358454@HDFC0003029.ifsc.npci&pn=RIYAN&am=' + Number(totals.grandTotal).toFixed(2) + '&cu=INR&tn=VELORA%20Order';
+      const refTag = encodeURIComponent('VELORA-' + currentOrderKey.slice(0, 8).toUpperCase());
+      upiLink.href = 'upi://pay?pa=' + MERCHANT_UPI_ID + '&pn=' + encodeURIComponent(MERCHANT_NAME) + '&am=' + Number(totals.grandTotal).toFixed(2) + '&cu=INR&tr=' + refTag + '&tn=' + refTag;
       upiLink.innerHTML = 'Pay ' + fmt(totals.grandTotal) + ' via UPI App &rarr;';
     }
+    currentOrderKey = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('ord-' + Date.now() + '-' + Math.random().toString(36).slice(2));
     document.getElementById('veloraCheckoutModal').classList.add('is-open');
   }
 
@@ -388,5 +395,6 @@
     }
   });
 })();
+
 
 

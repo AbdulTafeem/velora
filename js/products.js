@@ -63,7 +63,8 @@ window.VELORA_CATALOG_STATE = {
   function fixDriveUrl(url, fallback) {
     const clean = String(url || '').trim();
     if (!clean) return fallback;
-    return clean.replace(/https:\/\/drive\.google\.com\/file\/d\/([^/]+)\/.*/, 'https://lh3.googleusercontent.com/d/$1');
+    const m = clean.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:export=view&)?id=)([a-zA-Z0-9_-]+)/);
+    return m ? ('https://lh3.googleusercontent.com/d/' + m[1]) : clean;
   }
 
   function makeFallbackSku(name, index) {
@@ -96,16 +97,44 @@ window.VELORA_CATALOG_STATE = {
       if (!res.ok) throw new Error('Catalog HTTP ' + res.status);
 
       const csv = await res.text();
-      const lines = csv.split(/\r?\n/).filter((l) => l.trim());
+      function parseFullCsv(text) {
+        const rows = [];
+        let row = [];
+        let cur = '';
+        let inQ = false;
+        for (let i = 0; i < text.length; i++) {
+          const ch = text[i];
+          if (ch === '"') {
+            if (inQ && text[i + 1] === '"') { cur += '"'; i++; }
+            else { inQ = !inQ; }
+          } else if (ch === ',' && !inQ) {
+            row.push(cur.trim()); cur = '';
+          } else if ((ch === '\n' || ch === '\r') && !inQ) {
+            if (ch === '\r' && text[i + 1] === '\n') i++;
+            row.push(cur.trim());
+            if (row.some((c) => c !== '')) rows.push(row);
+            row = []; cur = '';
+          } else {
+            cur += ch;
+          }
+        }
+        if (cur !== '' || row.length) {
+          row.push(cur.trim());
+          if (row.some((c) => c !== '')) rows.push(row);
+        }
+        return rows;
+      }
+      const parsedRows = parseFullCsv(csv);
+      const lines = parsedRows;
       if (lines.length < 2) throw new Error('Catalog sheet is empty');
 
-      const headers = parseCsvLine(lines[0]).map((h) => h.toLowerCase().replace(/[^a-z0-9]/g, ''));
+      const headers = lines[0].map((h) => h.toLowerCase().replace(/[^a-z0-9]/g, ''));
       const seenIds = new Set();
 
       const items = lines
         .slice(1)
         .map((line, i) => {
-          const cols = parseCsvLine(line);
+          const cols = line;
           const row = {};
           headers.forEach((h, idx) => {
             row[h] = cols[idx] || '';
@@ -119,7 +148,7 @@ window.VELORA_CATALOG_STATE = {
           if (!rawPriceStr) return null;
           const price = Number(rawPriceStr);
 
-          const rawMrp = Number(String(row.mrp || '').replace(/[^0-9]/g, ''));
+          const rawMrp = Math.round(Number(String(row.mrp || '').replace(/[^0-9.]/g, '')) || 0);
           const mrp = rawMrp > price ? rawMrp : null;
 
           const hasStock = row.stock !== undefined && row.stock !== '';
@@ -185,5 +214,6 @@ window.VELORA_CATALOG_STATE = {
   window.reloadVeloraCatalog = loadCatalog;
   loadCatalog();
 })();
+
 
 

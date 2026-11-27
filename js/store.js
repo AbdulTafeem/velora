@@ -85,7 +85,7 @@
         </div>
         <div class="product-body">
           <div class="product-meta-row">
-            <span class="product-room-tag">${escapeHtml(product.room)} &bull; ${finishes.length} Finishes</span>
+            <span class="product-room-tag">${escapeHtml(product.room)} &bull; ${finishes.length} ${finishes.length === 1 ? 'Finish' : 'Finishes'}</span>
             <span class="product-mini-swatches" aria-hidden="true">
               ${finishes.map((f) => `<span class="mini-swatch" title="${escapeHtml(f)}" style="${getFinishSwatchStyle(f)}"></span>`).join('')}
             </span>
@@ -226,10 +226,20 @@
   function addItem(productId, chosenFinish) {
     const product = getProductById(productId);
     if (!product || product.stock === 0) return null;
+    const maxAllowed = Math.min(Number(product.stock) || 12, 10);
     const finish = chosenFinish || (product.finishes && product.finishes[0]) || 'Standard';
     const state = readState();
     const existing = state.items.find((i) => i.id === productId && i.finish === finish);
     if (existing) {
+      if ((Number(existing.qty) || 1) >= maxAllowed) {
+        const t = document.getElementById('veloraToast');
+        if (t) {
+          t.textContent = 'Maximum ' + maxAllowed + ' units available for this piece.';
+          t.classList.add('is-visible');
+          setTimeout(() => t.classList.remove('is-visible'), 3000);
+        }
+        return product;
+      }
       existing.qty = (Number(existing.qty) || 1) + 1;
     } else {
       state.items.push({
@@ -245,21 +255,63 @@
     return product;
   }
 
-  function updateItemQty(index, delta) {
+  function updateItemQty(indexOrId, delta, finish) {
     const state = readState();
-    if (!state.items[index]) return;
-    state.items[index].qty = (Number(state.items[index].qty) || 1) + delta;
-    if (state.items[index].qty <= 0) {
-      state.items.splice(index, 1);
+    const hydrated = getHydratedItems();
+    const target = typeof indexOrId === 'string'
+      ? state.items.find((i) => i.id === indexOrId && (!finish || i.finish === finish))
+      : (hydrated[indexOrId] ? state.items.find((i) => i.id === hydrated[indexOrId].id && i.finish === hydrated[indexOrId].finish) : state.items[indexOrId]);
+    if (!target) return;
+    const prod = getProductById(target.id);
+    const maxAllowed = prod ? Math.min(Number(prod.stock) || 12, 10) : 10;
+    const nextQty = (Number(target.qty) || 1) + delta;
+    if (nextQty > maxAllowed) {
+      const t = document.getElementById('veloraToast');
+      if (t) {
+        t.textContent = 'Maximum ' + maxAllowed + ' units available for this piece.';
+        t.classList.add('is-visible');
+        setTimeout(() => t.classList.remove('is-visible'), 3000);
+      }
+      return;
+    }
+    target.qty = nextQty;
+    if (target.qty <= 0) {
+      state.items = state.items.filter((i) => i !== target);
     }
     writeState(state);
   }
 
-  function removeItem(index) {
+  function removeItem(indexOrId, finish) {
     const state = readState();
-    state.items.splice(index, 1);
+    const hydrated = getHydratedItems();
+    const target = typeof indexOrId === 'string'
+      ? state.items.find((i) => i.id === indexOrId && (!finish || i.finish === finish))
+      : (hydrated[indexOrId] ? state.items.find((i) => i.id === hydrated[indexOrId].id && i.finish === hydrated[indexOrId].finish) : state.items[indexOrId]);
+    if (!target) return;
+    state.items = state.items.filter((i) => i !== target);
     writeState(state);
   }
+
+  window.addEventListener('velora:catalogUpdated', () => {
+    const catalog = getCatalog();
+    if (!catalog.length) return;
+    const state = readState();
+    const validItems = state.items.filter((entry) => {
+      const p = getProductById(entry.id);
+      return p && Number(p.stock) > 0;
+    });
+    if (validItems.length !== state.items.length) {
+      const removedCount = state.items.length - validItems.length;
+      state.items = validItems;
+      writeState(state);
+      const t = document.getElementById('veloraToast');
+      if (t) {
+        t.textContent = removedCount + ' unavailable item(s) removed from your bag.';
+        t.classList.add('is-visible');
+        setTimeout(() => t.classList.remove('is-visible'), 3500);
+      }
+    }
+  });
 
   function clearCart() {
     writeState({ items: [], promoCode: '' });
@@ -319,4 +371,5 @@
     toggleWishlist
   };
 })(window);
+
 
