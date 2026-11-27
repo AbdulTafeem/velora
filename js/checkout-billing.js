@@ -293,6 +293,8 @@
         document.getElementById('veloraCheckoutModal').classList.remove('is-open');
         renderInvoice(data);
       } catch (err) {
+        clearTimeout(timeoutId);
+        if (err && err.name === 'AbortError') err = new Error('Order server timed out (15s). Please retry or complete instantly via WhatsApp below.');
         btn.disabled = false;
         btn.textContent = 'Confirm Order & Generate Summary →';
         const waFallback = buildWhatsAppOrderUrl(customer, totals.items, totals, '');
@@ -425,6 +427,7 @@
     }
   });
 })();
+
 
 
 
