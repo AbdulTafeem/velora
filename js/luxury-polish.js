@@ -66,16 +66,18 @@
   }
   window.addEventListener('velora:catalogUpdated', () => requestAnimationFrame(runAll));
 
-  document.getElementById('newsletterForm')?.addEventListener('submit', (e) => {
+  document.getElementById('newsletterForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const inp = document.getElementById('newsletterEmail');
     const fb = document.getElementById('newsletterFeedback');
     const email = inp ? inp.value.trim() : '';
     if (!email) return;
     try {
-      const saved = JSON.parse(localStorage.getItem('velora_newsletter') || '[]');
-      if (!saved.includes(email)) saved.push(email);
-      localStorage.setItem('velora_newsletter', JSON.stringify(saved));
+      await fetch('https://script.google.com/macros/s/AKfycbycPTz5PqooEFkcZo2CRcJgXFgqJOYdrZem705OTFHGxa9yeCYBYZutDEDjZF6vcz0k/exec', {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'subscribe', email })
+      });
     } catch (err) {}
     if (inp) inp.value = '';
     if (fb) fb.textContent = 'Subscribed! Apply code VELORA10 at checkout for 10% OFF.';
@@ -86,7 +88,25 @@
       setTimeout(() => t.classList.remove('is-visible'), 3600);
     }
   });
+
+  // Hide 0 count badges cleanly (Audit 3.13)
+  function syncBadgeVisibility() {
+    ['cartCount', 'wishlistCount'].forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const num = Number(el.textContent.replace(/[^0-9]/g, '')) || 0;
+      el.style.display = num > 0 ? '' : 'none';
+    });
+  }
+  const badgeObserver = new MutationObserver(syncBadgeVisibility);
+  ['cartCount', 'wishlistCount'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) badgeObserver.observe(el, { childList: true, characterData: true, subtree: true });
+  });
+  document.addEventListener('DOMContentLoaded', syncBadgeVisibility);
+  setTimeout(syncBadgeVisibility, 250);
 })();
+
 
 
 

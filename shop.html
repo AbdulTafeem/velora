@@ -6,6 +6,7 @@
   <title>Shop All Pieces | VELORA India</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%232B050B'/%3E%3Cpath d='M12 36L32 16L52 36' stroke='%23D4AF37' stroke-width='4' fill='none'/%3E%3Ctext x='32' y='52' text-anchor='middle' font-family='Georgia,serif' font-weight='bold' font-size='18' fill='%23F1DC9A'%3EV%3C/text%3E%3C/svg%3E" />
   <meta property="og:title" content="VELORA — Luxury Home Furniture &amp; Storage Racks India" />
   <meta property="og:description" content="Heavy-gauge steel clothes racks, solid-wood-base stands, and wall shelves with free insured delivery across India." />
@@ -93,8 +94,8 @@
       #shopCatalogGrid .product-room-tag { font-size: 0.56rem !important; letter-spacing: 0.1em !important; }
     }
   </style>
-<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/luxury-polish.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" /><link rel="stylesheet" href="css/luxury-polish.css" />
   <link rel="stylesheet" href="css/phantom-luxury.css" />
 </head>
 <body>
@@ -112,7 +113,7 @@
         <ul class="nav-links">
           <li><a href="index.html" class="nav-link">Home</a></li>
           <li><a href="shop.html" class="nav-link is-active">Catalog</a></li>
-          <li><a href="product.html?id=vel-06" class="nav-link">Solid Wood T-Stand</a></li>
+          <li><a href="shop.html?cat=decor" class="nav-link">Solid Wood T-Stand</a></li>
           <li><a href="index.html#rooms" class="nav-link">Shop by Room</a></li>
           <li><a href="#footer" class="nav-link">Contact</a></li>
         </ul>
@@ -134,7 +135,7 @@
     <ul class="mobile-nav-list">
       <li><a href="index.html" class="mobile-nav-link">Home</a></li>
       <li><a href="shop.html" class="mobile-nav-link">Catalog</a></li>
-      <li><a href="product.html?id=vel-06" class="mobile-nav-link">Solid Wood T-Stand</a></li>
+      <li><a href="shop.html?cat=decor" class="mobile-nav-link">Solid Wood T-Stand</a></li>
       <li><a href="index.html#rooms" class="mobile-nav-link">Shop by Room</a></li>
       <li><a href="#footer" class="mobile-nav-link">Contact</a></li>
     </ul>
@@ -201,9 +202,9 @@
           <h3 class="footer-heading">Categories</h3>
           <ul class="footer-links">
             <li><a href="shop.html">All Products</a></li>
-            <li><a href="product.html?id=vel-01">Stepped Chrome Rack</a></li>
-            <li><a href="product.html?id=vel-06">Teak & Solid Wood T-Stand</a></li>
-            <li><a href="product.html?id=vel-04">Circular Wall Shelf</a></li>
+            <li><a href="shop.html?cat=clothes-rack">Stepped Chrome Rack</a></li>
+            <li><a href="shop.html?cat=decor">Teak & Solid Wood T-Stand</a></li>
+            <li><a href="shop.html?cat=wall-shelf">Circular Wall Shelf</a></li>
           </ul>
         </div>
         <div>
@@ -299,7 +300,10 @@
       const priceInput = document.getElementById('priceRangeInput');
       const priceLabel = document.getElementById('maxPriceLabel');
       const sortSelect = document.getElementById('shopSortSelect');
-      let selectedCat = 'all';
+      const urlCatRaw = new URLSearchParams(window.location.search).get('cat');
+      let selectedCat = urlCatRaw ? Store.normalizeCategory(urlCatRaw) : 'all';
+      const initRadio = document.querySelector('input[name="cat"][value="' + selectedCat + '"]');
+      if (initRadio) initRadio.checked = true; else selectedCat = 'all';
       let maxPrice = 25000;
 
       function renderShop() {
@@ -399,6 +403,8 @@
   <script src="js/billing-helpers.js" defer></script>
 </body>
 </html>
+
+
 
 
 

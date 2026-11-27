@@ -69,7 +69,20 @@
       .inv-table th { background:#140508; color:#F3E5C0; text-align:left; padding:0.38rem 0.5rem; font-size:0.66rem; letter-spacing:0.08em; text-transform:uppercase; }
       .inv-table td { padding:0.38rem 0.5rem; border-bottom:1px solid #e5e0d8; }
       .inv-actions { display:flex; gap:0.75rem; padding:0.75rem 1.25rem 0.95rem; background:#F8F5EE; border-top:1px solid #e5e0d8; flex-shrink:0; }
-      @media (max-width:640px) { .vc-grid-2, .vc-pay-grid { grid-template-columns:1fr; } .inv-actions { flex-direction:column; } }
+      @media (max-width:768px) {
+    .vc-field input, .vc-field select, .vc-field textarea { font-size:16px !important; }
+  }
+  @media (max-width:640px) {
+    .vc-overlay { padding:0; align-items:flex-end; }
+    .vc-card { max-height:100dvh; height:100dvh; border-radius:0; border:none; }
+    .vc-head { padding:0.9rem 1rem; }
+    .vc-head h3 { font-size:0.88rem; letter-spacing:0.1em; }
+    .vc-body { padding:1rem; padding-bottom:5rem; }
+    .vc-grid-2, .vc-pay-grid { grid-template-columns:1fr; }
+    .vc-grid-2 > div { text-align:left !important; }
+    .vc-submit#vcPlaceOrderBtn { position:sticky; bottom:0; z-index:5; box-shadow:0 -6px 18px rgba(0,0,0,0.18); }
+    .inv-actions { flex-direction:column; }
+  }
       @media print {
         @page { size: A4 portrait; margin: 10mm; }
         html, body { height: auto !important; overflow: visible !important; background: #fff !important; }
@@ -317,7 +330,7 @@
           Shipping Charges: <strong>Complimentary (₹0)</strong>
         </div>
       </div>
-      <table class="inv-table">
+      <div style="width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="inv-table">
         <thead><tr><th>#</th><th>Item &amp; Finish</th><th>Qty</th><th>Rate (Incl. GST)</th><th style="text-align:right;">Amount</th></tr></thead>
         <tbody>${rowsHtml}</tbody>
       </table>
@@ -395,6 +408,7 @@
     }
   });
 })();
+
 
 
 
