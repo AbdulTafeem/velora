@@ -657,3 +657,27 @@ body:has(.is-open) .wa-float {
     font-size: 0.92rem !important;
   }
 }
+
+/* Mobile 1-Tap Catalog Pill in Header */
+.mobile-catalog-pill {
+  display: none;
+}
+@media (max-width: 768px) {
+  .mobile-catalog-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.36rem 0.68rem;
+    border: 1px solid rgba(212, 175, 55, 0.65);
+    border-radius: 999px;
+    background: rgba(84, 10, 24, 0.85);
+    color: #F3E5C0;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    min-height: 32px;
+    white-space: nowrap;
+  }
+}
