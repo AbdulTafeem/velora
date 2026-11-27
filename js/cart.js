@@ -352,9 +352,7 @@
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
   });
 
-  document.getElementById('expressCheckoutBtn')?.addEventListener('click', () => {
-    showToast('Pay via UPI / COD online checkout coming soon — please Order via WhatsApp above.');
-  });
+  
 
   // Single source of truth for Spotlight product, finishes, Add to Bag, and WhatsApp order
   function getSpotlightProduct() {
@@ -429,6 +427,7 @@
   renderProducts();
   renderCart();
 })();
+
 
 
 

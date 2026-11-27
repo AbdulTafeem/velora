@@ -12,6 +12,7 @@
   const WHATSAPP_NUMBER = '918284029319';
   const RAZORPAY_KEY_ID = '';
   const MERCHANT_UPI_ID = 'houseofvelora@hdfcbank';
+  const MERCHANT_NAME = 'VELORA';
   const MERCHANT_UPI_ID = 'houseofvelora@hdfcbank'; // Replace with your verified Merchant VPA
   const MERCHANT_NAME = 'VELORA';
 
@@ -179,7 +180,6 @@
     document.body.appendChild(wrap);
 
     let selectedPay = 'Cash on Delivery (COD)';
-    let currentOrderKey = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('ord-' + Date.now());
     let currentOrderKey = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('ord-' + Date.now() + '-' + Math.random().toString(36).slice(2));
     document.getElementById('vcPayGrid').addEventListener('click', (e) => {
       const card = e.target.closest('.vc-pay-opt');
@@ -243,10 +243,6 @@
       errBox.classList.remove('is-visible');
       errBox.innerHTML = '';
 
-      const rawPhone = document.getElementById('vcPhone').value.replace(/\D/g, '').replace(/^91(?=\d{10}$)/, '');
-      if (!/^[6-9]\d{9}$/.test(rawPhone)) { errBox.textContent = 'Please enter a valid 10-digit Indian mobile number.'; errBox.classList.add('is-visible'); return; }
-      const cleanUtr = (document.getElementById('vcUtr')?.value || '').replace(/\D/g, '').trim();
-      if (!selectedPay.toLowerCase().includes('cod') && !/^\d{12}$/.test(cleanUtr)) { errBox.textContent = 'Please enter the exact 12-digit UPI UTR / Reference number.'; errBox.classList.add('is-visible'); return; }
       btn.disabled = true;
       btn.textContent = 'Verifying Prices & Recording Order...';
 
@@ -265,7 +261,6 @@
       // Send only product IDs, finish, qty and promoCode — server computes authoritative prices
       const payload = {
         action: 'createOrder',
-        clientOrderKey: currentOrderKey,
         website: document.getElementById('vcWebsite').value,
         customer,
         items: totals.items.map((it) => ({
