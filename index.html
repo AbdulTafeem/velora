@@ -302,11 +302,11 @@
             <img src="assets/images/spotlight-tstand.jpg" alt="The Carrara & Steel Atelier" />
             <div class="collection-panel-overlay"></div>
             <span class="collection-index">01</span>
-            <span class="collection-badge">6 Pieces</span>
+            <span class="collection-badge">0 PIECES</span>
             <div class="collection-body">
               <p class="collection-subtitle">Solid Wood &amp; Metal</p><h3 class="collection-title">Solid Wood Base &amp; Steel Stands</h3>
               <div class="collection-meta">
-                <span>From ₹1,799</span>
+                <span>CURATING SOON</span>
                 <a href="#bestsellers" data-filter="clothes-rack">Explore Series &rarr;</a>
               </div>
             </div>
@@ -317,11 +317,11 @@
             <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Halo Wall Architecture" />
             <div class="collection-panel-overlay"></div>
             <span class="collection-index">02</span>
-            <span class="collection-badge">4 Pieces</span>
+            <span class="collection-badge">0 PIECES</span>
             <div class="collection-body">
               <p class="collection-subtitle">Space-Saving Storage</p><h3 class="collection-title">Round &amp; Tiered Wall Shelves</h3>
               <div class="collection-meta">
-                <span>From ₹3,999</span>
+                <span>CURATING SOON</span>
                 <a href="#bestsellers" data-filter="wall-shelf">Explore Series &rarr;</a>
               </div>
             </div>
@@ -332,11 +332,11 @@
             <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Boutique Wardrobe Systems" />
             <div class="collection-panel-overlay"></div>
             <span class="collection-index">03</span>
-            <span class="collection-badge">8 Pieces</span>
+            <span class="collection-badge">0 PIECES</span>
             <div class="collection-body">
               <p class="collection-subtitle">Open Wardrobe Racks</p><h3 class="collection-title">Heavy-Duty Garment Racks</h3>
               <div class="collection-meta">
-                <span>From ₹1,799</span>
+                <span>CURATING SOON</span>
                 <a href="#bestsellers" data-filter="storage-rack">Explore Series &rarr;</a>
               </div>
             </div>
@@ -347,11 +347,11 @@
             <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Cantilever Seating & Light" />
             <div class="collection-panel-overlay"></div>
             <span class="collection-index">04</span>
-            <span class="collection-badge">5 Pieces</span>
+            <span class="collection-badge">0 PIECES</span>
             <div class="collection-body">
               <p class="collection-subtitle">Accent Seating &amp; Lighting</p><h3 class="collection-title">Steel Stools &amp; Wall Lamps</h3>
               <div class="collection-meta">
-                <span>From ₹1,799</span>
+                <span>CURATING SOON</span>
                 <a href="#bestsellers" data-filter="stool">Explore Series &rarr;</a>
               </div>
             </div>
@@ -883,26 +883,22 @@
     });
     var fmt = function (n) { return '₹' + Number(n || 0).toLocaleString('en-IN'); };
 
-    // 1. Hero Slides: show ONLY as many slides as live products exist (no repeated dummy images)
-    var heroSlides = Array.from(document.querySelectorAll('.hero-slide'));
-    heroSlides.forEach(function (slide, idx) {
+    // 1. Hero Slides: strictly match live products count
+    document.querySelectorAll('.hero-slide').forEach(function (slide, idx) {
       var p = products[idx];
-      if (!p) {
-        slide.style.display = 'none';
-        return;
-      }
+      if (!p) { slide.style.display = 'none'; return; }
       slide.style.display = '';
       var img = slide.querySelector('img');
       if (img) { img.src = p.image; img.alt = p.name; }
       var labelEl = slide.querySelector('.tag-label');
       var titleEl = slide.querySelector('.hero-floating-tag strong');
       var priceEl = slide.querySelector('.tag-price');
-      if (labelEl) labelEl.textContent = p.badge || p.category || 'New Arrival';
+      if (labelEl) labelEl.textContent = p.badge || p.category || 'Curated Piece';
       if (titleEl) titleEl.textContent = p.name;
       if (priceEl) priceEl.textContent = fmt(p.price);
     });
 
-    // 2. Featured Spotlight: bind strictly to products[0] (or hide if 0 products)
+    // 2. Featured Spotlight: bind strictly to products[0]
     var spotlightHeading = Array.from(document.querySelectorAll('h2, h3')).find(function (el) {
       return el.textContent.indexOf('Tealight Stand') > -1 || el.textContent.indexOf('Floral Arch') > -1 || el.textContent.indexOf('Minimalist Stepped') > -1;
     });
@@ -920,24 +916,61 @@
       }
     }
 
-    // 3. Collection Cards, Shop by Room & #StyledWithVelora: show ONLY cards that have real live products
-    document.querySelectorAll('.collection-card, .room-card, .social-card, .lookbook-card, .insta-card').forEach(function (card, idx) {
-      var p = products[idx];
-      var img = card.querySelector('img');
-      if (!p) {
-        card.style.display = 'none';
-        return;
-      }
+    // 3. Shop by Collection Cards: live piece count & lowest price per category
+    document.querySelectorAll('.collection-card').forEach(function (card) {
       card.style.display = '';
-      if (img) { img.src = p.image; img.alt = p.name; }
+      var link = card.querySelector('a[href*="cat="]');
+      var href = link ? link.getAttribute('href') : '';
+      var match = href.match(/cat=([^&]+)/);
+      var cat = match ? decodeURIComponent(match[1]).toLowerCase() : '';
+      var matching = cat ? products.filter(function (p) { return String(p.category || '').toLowerCase() === cat; }) : [];
+
+      var countEl = Array.from(card.querySelectorAll('span, div, p')).find(function (el) {
+        return /\bPIECES?\b/i.test(el.textContent.trim());
+      });
+      if (countEl) {
+        countEl.textContent = matching.length === 1 ? '1 PIECE' : (matching.length + ' PIECES');
+      }
+
+      var priceEl = Array.from(card.querySelectorAll('span, div, p')).find(function (el) {
+        return /CURATING SOON|FROM\s*₹/i.test(el.textContent.trim());
+      });
+      if (priceEl) {
+        if (matching.length > 0) {
+          var minPrice = Math.min.apply(null, matching.map(function (m) { return Number(m.price) || 0; }));
+          priceEl.textContent = 'FROM ' + fmt(minPrice);
+        } else {
+          priceEl.textContent = 'CURATING SOON';
+        }
+      }
+
+      var img = card.querySelector('img');
+      if (img) {
+        if (matching.length > 0 && matching[0].image) {
+          img.style.display = '';
+          img.src = matching[0].image;
+          img.alt = matching[0].name;
+        } else {
+          img.style.display = 'none';
+        }
+      }
     });
 
-    // 4. Hide any remaining blank/unassigned demo image wrappers so zero empty boxes appear
+    // 4. Shop by Room & Social Gallery: show ONLY cards backed by real products
+    document.querySelectorAll('.room-card, .social-card, .lookbook-card, .insta-card').forEach(function (card, idx) {
+      var p = products[idx];
+      if (!p) { card.style.display = 'none'; return; }
+      card.style.display = '';
+      var img = card.querySelector('img');
+      if (img) { img.style.display = ''; img.src = p.image; img.alt = p.name; }
+    });
+
+    // 5. Hide any unassigned blank images outside collection cards
     document.querySelectorAll('img').forEach(function (img) {
-      if (img.id === 'qvImage') return;
+      if (img.id === 'qvImage' || img.closest('.collection-card')) return;
       var s = img.getAttribute('src') || '';
       if (!s || s === BLANK) {
-        var wrapper = img.closest('.collection-card, .room-card, .hero-slide, figure, .gallery-item, .insta-item, a');
+        var wrapper = img.closest('.room-card, .hero-slide, figure, .gallery-item, .insta-item');
         if (wrapper) wrapper.style.display = 'none';
         else img.style.display = 'none';
       }
@@ -951,6 +984,7 @@
 </script>
 </body>
 </html>
+
 
 
 
