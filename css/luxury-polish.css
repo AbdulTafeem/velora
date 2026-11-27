@@ -302,11 +302,7 @@ html, body {
   touch-action: pan-y pinch-zoom;
   overscroll-behavior-y: auto;
 }
-.preloader.is-parting,
-.preloader[style*="display: none"] {
-  pointer-events: none !important;
-  visibility: hidden !important;
-}
+.preloader[style*="display: none"] { pointer-events: none !important; visibility: hidden !important; }
 
 /* Lightweight smoothness & mobile GPU relief */
 html {
@@ -377,5 +373,6 @@ a.btn,
     transition: transform 0.32s var(--velora-ease);
   }
 }
+
 
 

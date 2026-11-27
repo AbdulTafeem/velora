@@ -18,7 +18,7 @@
       preloader.classList.add('is-parting');
       document.body.classList.add('velora-loaded');
       preloader.style.pointerEvents = 'none';
-      setTimeout(() => { preloader.style.display = 'none'; }, 1050);
+      setTimeout(() => { preloader.style.display = 'none'; }, 1400);
     }, delayMs);
   }
   if (preloader) {
@@ -224,4 +224,5 @@
     if (track) track.scrollBy({ left: 340, behavior: 'smooth' });
   });
 })();
+
 
