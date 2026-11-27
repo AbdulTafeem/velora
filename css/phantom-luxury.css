@@ -28,39 +28,66 @@ body, .section-cream {
   color: var(--ink-noir) !important;
 }
 
-/* 2. High-End Cartier / Apple Architectural Velvet Curtain & Gold Crest Choreography */
+/* 2. High-End Theatrical Split-Velvet Curtain & Gold Crest Choreography */
 .preloader {
-  background: radial-gradient(circle at 50% 44%, #520b18 0%, #240309 56%, #090305 100%) !important;
+  background: transparent !important;
   overflow: hidden !important;
-  transition: transform 0.95s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.45s ease 0.55s !important;
-  will-change: transform, opacity;
+  pointer-events: all;
+  will-change: opacity;
 }
-.curtain-panel, .preloader-seam { display: none !important; }
 
-/* Ambient Radial Halo behind Crest */
-.preloader::before {
-  content: '';
+/* Left & Right Royal Velvet Curtains */
+.curtain-panel {
+  display: block !important;
   position: absolute;
-  width: 440px;
-  height: 440px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(212, 175, 55, 0.20) 0%, rgba(212, 175, 55, 0.04) 48%, transparent 72%);
-  animation: veloraHaloPulse 1.8s cubic-bezier(0.22, 1, 0.36, 1) infinite alternate;
-  pointer-events: none;
+  top: 0;
+  bottom: 0;
+  width: 50.5%;
+  z-index: 1;
+  background: radial-gradient(circle at 50% 44%, #520b18 0%, #240309 62%, #0c0205 100%);
+  transition: transform 1.05s cubic-bezier(0.76, 0, 0.24, 1);
+  will-change: transform;
 }
-@keyframes veloraHaloPulse {
-  from { transform: scale(0.92); opacity: 0.65; }
-  to { transform: scale(1.08); opacity: 1; }
+.curtain-left {
+  left: 0;
+  border-right: 1px solid rgba(212, 175, 55, 0.45);
+  box-shadow: 16px 0 50px rgba(0, 0, 0, 0.75);
+}
+.curtain-right {
+  right: 0;
+  border-left: 1px solid rgba(212, 175, 55, 0.45);
+  box-shadow: -16px 0 50px rgba(0, 0, 0, 0.75);
 }
 
-/* Diagonal Champagne-Gold Specular Light Sweep */
+/* Center Gold Seam Line */
+.preloader-seam {
+  display: block !important;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1.5px;
+  transform: translateX(-50%) scaleY(0);
+  transform-origin: center;
+  z-index: 3;
+  background: linear-gradient(180deg, transparent 0%, #FFF3CE 25%, #D4AF37 50%, #FFF3CE 75%, transparent 100%);
+  box-shadow: 0 0 18px rgba(212, 175, 55, 0.9);
+  animation: veloraSeamDraw 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards;
+  transition: opacity 0.3s ease;
+}
+@keyframes veloraSeamDraw {
+  to { transform: translateX(-50%) scaleY(1); }
+}
+
+/* Diagonal Champagne-Gold Specular Sheen across Curtains */
 .preloader::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(115deg, transparent 22%, rgba(243, 229, 192, 0.07) 44%, rgba(255, 248, 225, 0.18) 50%, rgba(212, 175, 55, 0.08) 56%, transparent 78%);
+  z-index: 2;
+  background: linear-gradient(115deg, transparent 22%, rgba(243, 229, 192, 0.06) 44%, rgba(255, 248, 225, 0.16) 50%, rgba(212, 175, 55, 0.07) 56%, transparent 78%);
   transform: translateX(-110%);
-  animation: veloraSpecularSweep 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.06s forwards;
+  animation: veloraSpecularSweep 1.05s cubic-bezier(0.22, 1, 0.36, 1) 0.05s forwards;
   pointer-events: none;
 }
 @keyframes veloraSpecularSweep {
@@ -71,10 +98,11 @@ body, .section-cream {
 .preloader-frame {
   position: absolute;
   inset: clamp(16px, 3vw, 30px) !important;
-  border: 1px solid rgba(212, 175, 55, 0.22) !important;
+  z-index: 4;
+  border: 1px solid rgba(212, 175, 55, 0.24) !important;
   pointer-events: none;
-  animation: veloraFrameIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
-  transition: opacity 0.35s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1) !important;
+  animation: veloraFrameIn 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+  transition: opacity 0.32s ease, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) !important;
 }
 @keyframes veloraFrameIn {
   from { opacity: 0; transform: scale(1.03); }
@@ -96,18 +124,25 @@ body, .section-cream {
   bottom: 14px;
   left: 50%;
   transform: translateX(-50%);
-  color: rgba(243, 229, 192, 0.75) !important;
+  color: rgba(243, 229, 192, 0.8) !important;
   font-size: 0.6rem !important;
   letter-spacing: 0.42em !important;
   white-space: nowrap;
 }
 
-/* Center Crest, Wordmark & Tagline */
+/* Center Crest, Wordmark & Tagline (no dark box behind text) */
 .preloader-logo-wrap {
   position: relative;
-  z-index: 2;
+  z-index: 5;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
   animation: none !important;
-  transition: opacity 0.36s cubic-bezier(0.22, 1, 0.36, 1), transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) !important;
+  transition: opacity 0.34s cubic-bezier(0.22, 1, 0.36, 1), transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+.preloader-logo-wrap::before,
+.preloader-logo-wrap::after {
+  display: none !important;
 }
 .preloader-crest {
   width: 74px !important;
@@ -117,7 +152,7 @@ body, .section-cream {
 .preloader-crest path {
   stroke-dasharray: 160;
   stroke-dashoffset: 160;
-  animation: veloraCrestStroke 0.68s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
+  animation: veloraCrestStroke 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
 }
 @keyframes veloraCrestStroke {
   to { stroke-dashoffset: 0; }
@@ -125,12 +160,12 @@ body, .section-cream {
 .preloader-crest rect {
   opacity: 0;
   transform-origin: center;
-  animation: veloraSquarePop 0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
+  animation: veloraSquarePop 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
 }
-.preloader-crest rect:nth-of-type(1) { animation-delay: 0.22s !important; }
-.preloader-crest rect:nth-of-type(2) { animation-delay: 0.28s !important; }
-.preloader-crest rect:nth-of-type(3) { animation-delay: 0.34s !important; }
-.preloader-crest rect:nth-of-type(4) { animation-delay: 0.40s !important; }
+.preloader-crest rect:nth-of-type(1) { animation-delay: 0.2s !important; }
+.preloader-crest rect:nth-of-type(2) { animation-delay: 0.26s !important; }
+.preloader-crest rect:nth-of-type(3) { animation-delay: 0.32s !important; }
+.preloader-crest rect:nth-of-type(4) { animation-delay: 0.38s !important; }
 @keyframes veloraSquarePop {
   from { opacity: 0; transform: scale(0.4); }
   to { opacity: 1; transform: scale(1); }
@@ -144,11 +179,11 @@ body, .section-cream {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent !important;
-  animation: veloraWordmarkSettle 0.78s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both !important;
+  animation: veloraWordmarkSettle 0.74s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both !important;
 }
 @keyframes veloraWordmarkSettle {
-  from { opacity: 0; letter-spacing: 0.48em; text-indent: 0.48em; transform: translateY(12px) scale(0.96); filter: blur(4px); }
-  to { opacity: 1; letter-spacing: 0.26em; text-indent: 0.26em; transform: translateY(0) scale(1); filter: blur(0); }
+  from { opacity: 0; letter-spacing: 0.48em; text-indent: 0.48em; transform: translateY(12px) scale(0.96); }
+  to { opacity: 1; letter-spacing: 0.26em; text-indent: 0.26em; transform: translateY(0) scale(1); }
 }
 
 .preloader-tagline {
@@ -156,7 +191,7 @@ body, .section-cream {
   font-size: 0.88rem !important;
   letter-spacing: 0.22em !important;
   margin-top: 0.35rem !important;
-  animation: veloraTaglineRise 0.72s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both !important;
+  animation: veloraTaglineRise 0.68s cubic-bezier(0.16, 1, 0.3, 1) 0.18s both !important;
 }
 @keyframes veloraTaglineRise {
   from { opacity: 0; transform: translateY(10px); }
@@ -166,42 +201,46 @@ body, .section-cream {
 .preloader-bar {
   width: 220px !important;
   height: 1.5px !important;
-  background: rgba(243, 229, 192, 0.14) !important;
+  background: rgba(243, 229, 192, 0.16) !important;
   margin-top: 1.25rem !important;
   border-radius: 99px;
   overflow: hidden;
-  box-shadow: 0 0 16px rgba(212, 175, 55, 0.25);
 }
 .preloader-progress {
   background: linear-gradient(90deg, #B8892B 0%, #FFF3CE 50%, #D4AF37 100%) !important;
   box-shadow: 0 0 12px rgba(255, 243, 206, 0.85);
 }
 
-/* Silk Curtain Lift Exit */
+/* Split-Curtain Ending Animation (Left & Right Velvet Panels Part Open) */
 .preloader.is-parting {
-  transform: translate3d(0, -100%, 0) !important;
-  border-bottom: 1.5px solid rgba(212, 175, 55, 0.82) !important;
-  box-shadow: 0 32px 96px rgba(0, 0, 0, 0.88) !important;
+  pointer-events: none !important;
+}
+.preloader.is-parting .curtain-left {
+  transform: translate3d(-102%, 0, 0) !important;
+}
+.preloader.is-parting .curtain-right {
+  transform: translate3d(102%, 0, 0) !important;
+}
+.preloader.is-parting .preloader-seam {
+  opacity: 0 !important;
 }
 .preloader.is-parting .preloader-logo-wrap {
   opacity: 0 !important;
-  transform: translateY(-22px) scale(0.95) !important;
+  transform: scale(1.04) !important;
 }
 .preloader.is-parting .preloader-frame {
   opacity: 0 !important;
-  transform: scale(1.02) !important;
+  transform: scale(1.03) !important;
 }
-.preloader.is-closing {
-  transform: translate3d(0, 0, 0) !important;
-  opacity: 1 !important;
-  transition: transform 0.52s cubic-bezier(0.76, 0, 0.24, 1) !important;
+.preloader.is-parting::after {
+  opacity: 0 !important;
 }
 
-/* Hero Arch Choreographed Entry after Curtain Lifts */
+/* Hero Arch Choreographed Entry as Curtains Part */
 .hero-section .hero-arch-frame {
   transform: scale(1.06) translateY(14px);
   opacity: 0.78;
-  transition: transform 1.25s cubic-bezier(0.16, 1, 0.3, 1) 0.12s, opacity 0.95s ease 0.12s;
+  transition: transform 1.25s cubic-bezier(0.16, 1, 0.3, 1) 0.15s, opacity 0.95s ease 0.15s;
 }
 body.velora-loaded .hero-section .hero-arch-frame {
   transform: scale(1) translateY(0);
@@ -392,5 +431,6 @@ header.site-header .navbar .nav-link.is-active::after {
 header.site-header.is-scrolled .brand-wordmark { color: #F3E5C0 !important; }
 header.site-header.is-scrolled .icon-btn { color: #F8F5EE !important; }
 header.site-header.is-scrolled .mobile-menu-btn span { background: #F3E5C0 !important; }
+
 
 
