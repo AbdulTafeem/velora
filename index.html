@@ -30,15 +30,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/luxury-polish.css" />
   <link rel="stylesheet" href="css/phantom-luxury.css" />
-<style>
-  .wa-float, .whatsapp-float, a[href*="wa.me"][style*="fixed"] {
-    width: 44px !important;
-    height: 44px !important;
-    bottom: 14px !important;
-    right: 14px !important;
-    opacity: 0.92;
-  }
-</style>
 <style id="velora-ui-polish">
   .whatsapp-float, .wa-float {
     right: 18px !important;
@@ -1059,22 +1050,23 @@
       }
     });
 
-    // 5. #StyledWithVelora GALLERY
-    var socialSection = Array.from(document.querySelectorAll('section')).find(function (s) {
-      return /StyledWithVelora/i.test(s.textContent);
+    // 5. #StyledWithVelora GALLERY (.gallery-tile) — sync live image, product name & category filter
+    document.querySelectorAll('.gallery-section .gallery-tile').forEach(function (tile, idx) {
+      var item = showcase[idx % showcase.length];
+      if (!item) return;
+      tile.setAttribute('data-filter', item.category || 'all');
+      var img = tile.querySelector('img');
+      if (img && item.image) {
+        img.style.display = 'block';
+        img.style.opacity = '1';
+        img.src = item.image;
+        img.alt = item.name;
+      }
+      var label = tile.querySelector('.gallery-tile-overlay span');
+      if (label) {
+        label.textContent = 'Shop ' + item.name;
+      }
     });
-    if (socialSection) {
-      var socialImgs = Array.from(socialSection.querySelectorAll('img'));
-      socialImgs.forEach(function (img, idx) {
-        var item = showcase[idx % showcase.length];
-        if (item && item.image) {
-          img.style.display = 'block';
-          img.style.opacity = '1';
-          img.src = item.image;
-          img.alt = item.name;
-        }
-      });
-    }
   }
 
   window.addEventListener('velora:catalogUpdated', renderVeloraStorefront);
@@ -1085,6 +1077,7 @@
 </script>
 </body>
 </html>
+
 
 
 
