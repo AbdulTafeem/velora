@@ -1028,8 +1028,8 @@
         badgeEl.textContent = dLabel + ' • ' + totalStock + ' IN STOCK';
       }
       if (priceEl) {
-        var minP = Math.min.apply(null, items.map(function (m) { return Number(m.price) || 0; }));
-        priceEl.textContent = minP > 0 ? ('FROM ' + fmt(minP)) : 'CURATING SOON';
+        var leadPrice = Number(lead.price) || 0;
+        priceEl.textContent = leadPrice > 0 ? fmt(leadPrice) : 'CURATING SOON';
       }
       if (linkEl) {
         linkEl.setAttribute('data-filter', grp.filter);
@@ -1085,6 +1085,7 @@
 </script>
 </body>
 </html>
+
 
 
 
