@@ -146,7 +146,7 @@ window.VELORA_CATALOG_STATE = {
 
           const rawPriceStr = String(row.price || '').replace(/[^0-9]/g, '');
           if (!rawPriceStr) return null;
-          const price = Number(rawPriceStr);
+          const price = Math.round(Number(rawPriceStr));
 
           const rawMrp = Math.round(Number(String(row.mrp || '').replace(/[^0-9.]/g, '')) || 0);
           const mrp = rawMrp > price ? rawMrp : null;
@@ -214,6 +214,7 @@ window.VELORA_CATALOG_STATE = {
   window.reloadVeloraCatalog = loadCatalog;
   loadCatalog();
 })();
+
 
 
 
