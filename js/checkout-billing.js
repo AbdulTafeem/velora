@@ -11,6 +11,7 @@
   const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbycPTz5PqooEFkcZo2CRcJgXFgqJOYdrZem705OTFHGxa9yeCYBYZutDEDjZF6vcz0k/exec';
   const WHATSAPP_NUMBER = '918284029319';
   const RAZORPAY_KEY_ID = '';
+  let currentOrderKey = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('ord-' + Date.now() + '-' + Math.random().toString(36).slice(2));
   const MERCHANT_UPI_ID = 'houseofvelora@hdfcbank'; // Replace with your verified Merchant VPA
   const MERCHANT_NAME = 'VELORA';
 
@@ -178,7 +179,6 @@
     document.body.appendChild(wrap);
 
     let selectedPay = 'Cash on Delivery (COD)';
-    let currentOrderKey = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('ord-' + Date.now() + '-' + Math.random().toString(36).slice(2));
     document.getElementById('vcPayGrid').addEventListener('click', (e) => {
       const card = e.target.closest('.vc-pay-opt');
       if (!card) return;
@@ -405,13 +405,13 @@
     document.getElementById('cartDrawer')?.classList.remove('is-open');
     document.getElementById('drawerBackdrop')?.classList.remove('is-visible');
     lockScroll();
+    currentOrderKey = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('ord-' + Date.now() + '-' + Math.random().toString(36).slice(2));
     const upiLink = document.getElementById('vcUpiAppBtn');
     if (upiLink) {
       const refTag = encodeURIComponent('VELORA-' + currentOrderKey.slice(0, 8).toUpperCase());
       upiLink.href = 'upi://pay?pa=' + MERCHANT_UPI_ID + '&pn=' + encodeURIComponent(MERCHANT_NAME) + '&am=' + Number(totals.grandTotal).toFixed(2) + '&cu=INR&tr=' + refTag + '&tn=' + refTag;
       upiLink.innerHTML = 'Pay ' + fmt(totals.grandTotal) + ' via UPI App &rarr;';
     }
-    currentOrderKey = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('ord-' + Date.now() + '-' + Math.random().toString(36).slice(2));
     document.getElementById('veloraCheckoutModal').classList.add('is-open');
   }
 
@@ -425,6 +425,7 @@
     }
   });
 })();
+
 
 
 
