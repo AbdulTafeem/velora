@@ -23,7 +23,7 @@
   }
   if (preloader) {
     const isSubPage = /shop\.html|product\.html|policies\.html/i.test(window.location.pathname);
-    openVelvetCurtain(isSubPage ? 340 : 620);
+    openVelvetCurtain(isSubPage ? 440 : 780);
     window.addEventListener('pageshow', (e) => {
       if (e.persisted) openVelvetCurtain(240);
     });
@@ -224,3 +224,4 @@
     if (track) track.scrollBy({ left: 340, behavior: 'smooth' });
   });
 })();
+
