@@ -48,6 +48,46 @@
     white-space: nowrap !important;
     z-index: 990 !important;
   }
+  .hero-floating-tag {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 6px 14px !important;
+    padding: 14px 18px !important;
+  }
+  .hero-floating-tag .tag-label {
+    flex: 0 0 100% !important;
+    margin-bottom: 2px !important;
+  }
+  .hero-floating-tag strong {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    padding-right: 8px !important;
+    line-height: 1.3 !important;
+    position: static !important;
+  }
+  .hero-floating-tag .tag-price {
+    flex: 0 0 auto !important;
+    position: static !important;
+    margin-left: auto !important;
+    white-space: nowrap !important;
+    font-weight: 600 !important;
+  }
+  .velora-oos-pill {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: rgba(20, 10, 12, 0.88);
+    border: 1px solid rgba(212, 175, 55, 0.5);
+    color: #f3d27a;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 4px 9px;
+    border-radius: 999px;
+    z-index: 5;
+  }
 </style>
 </head>
 <body>
@@ -887,25 +927,26 @@
 
   function syncVeloraHomepage() {
     var raw = Array.isArray(window.VELORA_PRODUCTS) ? window.VELORA_PRODUCTS : [];
-    var products = raw.filter(function (p) {
+    var activeProducts = raw.filter(function (p) {
       return p && String(p.status || 'active').toLowerCase() !== 'hidden';
     });
-    if (!products.length) return;
+    if (!activeProducts.length) return;
 
+    // Prefer in-stock items for showcase sections, fallback to activeProducts
+    var inStock = activeProducts.filter(function (p) {
+      return p.stock === undefined || p.stock === '' || Number(p.stock) > 0;
+    });
+    var showcase = inStock.length ? inStock : activeProducts;
     var fmt = function (n) { return '₹' + Number(n || 0).toLocaleString('en-IN'); };
-    var p0 = products[0];
 
-    // 1. Hero Slides: show ONLY as many slides as real products exist (no duplicate slides)
+    // A. HERO SLIDES (zero overlap, strictly live products)
     var slides = Array.from(document.querySelectorAll('.hero-slide'));
     slides.forEach(function (slide, idx) {
-      var item = products[idx];
-      if (!item) {
-        slide.style.display = 'none';
-        return;
-      }
+      var item = showcase[idx];
+      if (!item) { slide.style.display = 'none'; return; }
       slide.style.display = '';
       var img = slide.querySelector('img');
-      if (img && item.image) { img.src = item.image; img.alt = item.name; }
+      if (img && item.image) { img.style.display = ''; img.src = item.image; img.alt = item.name; }
       var lbl = slide.querySelector('.tag-label');
       var ttl = slide.querySelector('.hero-floating-tag strong');
       var prc = slide.querySelector('.tag-price');
@@ -913,20 +954,16 @@
       if (ttl) ttl.textContent = item.name;
       if (prc) prc.textContent = fmt(item.price);
     });
-    if (products.length <= 1) {
-      document.querySelectorAll('.hero-dots, .hero-slider-controls, .hero-nav').forEach(function (el) {
-        el.style.display = 'none';
-      });
-    }
 
-    // 2. Featured Product Spotlight: bind image, title, price, description, dimensions, finishes
+    // B. FEATURED SPOTLIGHT (bind to showcase[0])
+    var p0 = showcase[0];
     var spotSec = document.querySelector('#spotlight, .spotlight-section, [data-spotlight]') ||
       Array.from(document.querySelectorAll('section')).find(function (s) {
         return s.textContent.indexOf('FEATURED PRODUCT') > -1 || s.textContent.indexOf('ADD TO BAG') > -1;
       });
     if (spotSec && p0) {
       var spotImg = spotSec.querySelector('img');
-      if (spotImg && p0.image) { spotImg.src = p0.image; spotImg.alt = p0.name; }
+      if (spotImg && p0.image) { spotImg.style.display = ''; spotImg.src = p0.image; spotImg.alt = p0.name; }
       var spotH = spotSec.querySelector('h2, h3');
       if (spotH) spotH.textContent = p0.name;
       var spotPrice = Array.from(spotSec.querySelectorAll('span, div, p')).find(function (el) {
@@ -934,7 +971,7 @@
       });
       if (spotPrice) spotPrice.textContent = fmt(p0.price);
       var spotDesc = Array.from(spotSec.querySelectorAll('p')).find(function (p) {
-        return p.textContent.indexOf('Handcrafted architectural') > -1 || p.textContent.indexOf('kiln-dried') > -1;
+        return p.textContent.indexOf('Handcrafted architectural') > -1 || p.textContent.indexOf('kiln-dried') > -1 || p.textContent.length > 60;
       });
       if (spotDesc && p0.description) spotDesc.textContent = p0.description;
       if (p0.dimensions) {
@@ -942,112 +979,142 @@
           if (el.textContent.trim() === 'Standard Artisan Dimensions') el.textContent = p0.dimensions;
         });
       }
-      var finishes = Array.isArray(p0.finishes) ? p0.finishes : String(p0.finishes || '').split('|').map(function (x) { return x.trim(); }).filter(Boolean);
-      var fBtns = Array.from(spotSec.querySelectorAll('button')).filter(function (b) {
-        return /Signature Finish|Limited Edition|Teak|Walnut/i.test(b.textContent);
+      var stockBadge = Array.from(spotSec.querySelectorAll('span, div')).find(function (el) {
+        return /IN STOCK|OUT OF STOCK|SHIPS IN/i.test(el.textContent.trim()) && el.children.length === 0;
       });
-      if (finishes.length && fBtns.length) {
-        fBtns.forEach(function (btn, i) {
-          if (finishes[i]) { btn.style.display = ''; btn.textContent = finishes[i]; }
-          else { btn.style.display = 'none'; }
-        });
+      if (stockBadge) {
+        stockBadge.textContent = Number(p0.stock) <= 0 ? 'OUT OF STOCK' : ('IN STOCK (' + p0.stock + ') • SHIPS IN 48 HRS');
       }
-      spotSec.querySelectorAll('.hotspot-pin, .hotspot-dot, [data-title]').forEach(function (el) {
-        el.style.display = 'none';
-      });
+      spotSec.querySelectorAll('.hotspot-pin, .hotspot-dot, [data-title]').forEach(function (el) { el.style.display = 'none'; });
     }
 
-    // 3. Shop by Collection Cards: match live Sheet products by category or keyword
-    var matchedAnyCollection = false;
-    var cards = Array.from(document.querySelectorAll('.collection-card'));
-    cards.forEach(function (card) {
-      var text = card.textContent.toLowerCase();
-      var matching = products.filter(function (p) {
-        var cat = String(p.category || '').toLowerCase();
-        var nm = String(p.name || '').toLowerCase();
-        if (text.indexOf('stand') > -1 && (cat.indexOf('stand') > -1 || cat.indexOf('decor') > -1 || nm.indexOf('stand') > -1)) return true;
-        if (text.indexOf('shelf') > -1 || text.indexOf('shelves') > -1) return cat.indexOf('shel') > -1;
-        if (text.indexOf('rack') > -1) return cat.indexOf('rack') > -1;
-        if (text.indexOf('stool') > -1 || text.indexOf('seating') > -1) return cat.indexOf('seat') > -1 || cat.indexOf('stool') > -1;
-        return false;
+    // C. SHOP BY COLLECTION CARDS (detect by section heading, independent of card class name)
+    var collSec = Array.from(document.querySelectorAll('section')).find(function (s) {
+      return /Shop by Collection/i.test(s.textContent);
+    });
+    if (collSec) {
+      var collCards = Array.from(collSec.querySelectorAll('a, article, .collection-card, [class*="collection"]')).filter(function (el) {
+        return /\bPIECES?\b/i.test(el.textContent) && /EXPLORE SERIES|CURATING SOON|FROM\s*₹/i.test(el.textContent);
       });
-      if (matching.length) matchedAnyCollection = true;
+      // Deduplicate nested elements: keep innermost card container
+      collCards = collCards.filter(function (el) {
+        return !collCards.some(function (other) { return other !== el && el.contains(other); });
+      });
 
-      var countEl = Array.from(card.querySelectorAll('span, div, p')).find(function (el) {
-        return /\bPIECES?\b/i.test(el.textContent.trim());
-      });
-      if (countEl) countEl.textContent = matching.length === 1 ? '1 PIECE' : (matching.length + ' PIECES');
+      collCards.forEach(function (card, idx) {
+        var txt = card.textContent.toLowerCase();
+        var matching = activeProducts.filter(function (p) {
+          var cat = String(p.category || '').toLowerCase();
+          var nm = String(p.name || '').toLowerCase();
+          if (txt.indexOf('stand') > -1 || txt.indexOf('decor') > -1) {
+            return cat.indexOf('decor') > -1 || cat.indexOf('stand') > -1 || cat.indexOf('light') > -1 || nm.indexOf('tealight') > -1 || nm.indexOf('bakhoor') > -1;
+          }
+          if (txt.indexOf('shel') > -1) {
+            return cat.indexOf('shel') > -1 || nm.indexOf('shelf') > -1;
+          }
+          if (txt.indexOf('garment') > -1 || txt.indexOf('wardrobe') > -1 || txt.indexOf('clothes') > -1) {
+            return cat.indexOf('clothes') > -1 || cat.indexOf('rack') > -1 || nm.indexOf('garment') > -1 || nm.indexOf('rack') > -1;
+          }
+          if (txt.indexOf('stool') > -1 || txt.indexOf('table') > -1 || txt.indexOf('seating') > -1) {
+            return cat.indexOf('stool') > -1 || nm.indexOf('table') > -1 || nm.indexOf('stool') > -1;
+          }
+          if (txt.indexOf('shoe') > -1 || txt.indexOf('valet') > -1 || txt.indexOf('storage') > -1) {
+            return cat.indexOf('shoe') > -1 || cat.indexOf('valet') > -1 || cat.indexOf('storage') > -1;
+          }
+          return false;
+        });
 
-      var priceEl = Array.from(card.querySelectorAll('span, div, p')).find(function (el) {
-        return /CURATING SOON|FROM\s*₹/i.test(el.textContent.trim());
-      });
-      if (priceEl) {
-        if (matching.length > 0) {
-          var minP = Math.min.apply(null, matching.map(function (m) { return Number(m.price) || 0; }));
-          priceEl.textContent = 'FROM ' + fmt(minP);
-        } else {
-          priceEl.textContent = 'CURATING SOON';
+        // Fallback: if card has 0 matches, map unique products by index so no card stays empty black
+        if (!matching.length && activeProducts[idx]) {
+          matching = [activeProducts[idx]];
         }
-      }
 
-      var cImg = card.querySelector('img');
-      if (cImg) {
-        if (matching.length > 0 && matching[0].image) {
+        var countEl = Array.from(card.querySelectorAll('span, div, p')).find(function (el) {
+          return el.children.length === 0 && /\bPIECES?\b/i.test(el.textContent.trim());
+        });
+        if (countEl) {
+          countEl.textContent = matching.length === 1 ? '1 PIECE' : (matching.length + ' PIECES');
+        }
+
+        var priceEl = Array.from(card.querySelectorAll('span, div, p')).find(function (el) {
+          return el.children.length === 0 && /CURATING SOON|FROM\s*₹/i.test(el.textContent.trim());
+        });
+        if (priceEl) {
+          if (matching.length > 0) {
+            var minP = Math.min.apply(null, matching.map(function (m) { return Number(m.price) || 0; }));
+            priceEl.textContent = 'FROM ' + fmt(minP);
+          } else {
+            priceEl.textContent = 'CURATING SOON';
+          }
+        }
+
+        var cImg = card.querySelector('img');
+        if (cImg && matching[0] && matching[0].image) {
           cImg.style.display = '';
+          cImg.style.opacity = '1';
           cImg.src = matching[0].image;
           cImg.alt = matching[0].name;
-        } else {
-          cImg.style.display = 'none';
         }
-      }
-    });
-
-    // If product category didn't match old furniture card names, map first product into Card 01 cleanly
-    if (!matchedAnyCollection && cards.length && p0) {
-      var c0 = cards[0];
-      var c0Count = Array.from(c0.querySelectorAll('span, div, p')).find(function (el) { return /\bPIECES?\b/i.test(el.textContent.trim()); });
-      var c0Price = Array.from(c0.querySelectorAll('span, div, p')).find(function (el) { return /CURATING SOON|FROM\s*₹/i.test(el.textContent.trim()); });
-      var c0Sub = c0.querySelector('.collection-subtitle');
-      var c0Title = c0.querySelector('.collection-title');
-      var c0Img = c0.querySelector('img');
-      if (c0Count) c0Count.textContent = products.length === 1 ? '1 PIECE' : (products.length + ' PIECES');
-      if (c0Price) c0Price.textContent = 'FROM ' + fmt(p0.price);
-      if (c0Sub && p0.category) c0Sub.textContent = p0.category;
-      if (c0Title) c0Title.textContent = p0.name;
-      if (c0Img && p0.image) { c0Img.style.display = ''; c0Img.src = p0.image; c0Img.alt = p0.name; }
+      });
     }
 
-    // 4. Shop by Room & Social Gallery: display ONLY cards backed by real Sheet products
-    document.querySelectorAll('.room-card, .social-card, .lookbook-card, .insta-card').forEach(function (card, idx) {
-      var item = products[idx];
-      if (!item || !item.image) {
-        card.style.display = 'none';
-        return;
-      }
-      card.style.display = '';
-      var img = card.querySelector('img');
-      if (img) { img.style.display = ''; img.src = item.image; img.alt = item.name; }
+    // D. #StyledWithVelora & Shop by Room: populate every black box with real product photos
+    var socialSec = Array.from(document.querySelectorAll('section')).find(function (s) {
+      return /StyledWithVelora/i.test(s.textContent);
     });
+    if (socialSec) {
+      var boxes = Array.from(socialSec.querySelectorAll('a, figure, div')).filter(function (el) {
+        var r = el.getBoundingClientRect();
+        return r.width > 140 && r.height > 140 && el.querySelector('img') && !el.closest('header');
+      });
+      boxes = boxes.filter(function (el) {
+        return !boxes.some(function (other) { return other !== el && el.contains(other); });
+      });
+      boxes.forEach(function (box, idx) {
+        var item = showcase[idx % showcase.length];
+        if (!item || !item.image) { box.style.display = 'none'; return; }
+        box.style.display = '';
+        var img = box.querySelector('img');
+        if (img) {
+          img.style.display = '';
+          img.style.opacity = '1';
+          img.style.width = '100%';
+          img.style.height = '100%';
+          img.style.objectFit = 'cover';
+          img.src = item.image;
+          img.alt = item.name;
+        }
+      });
+    }
 
-    // 5. Hide any remaining unassigned blank images
-    document.querySelectorAll('img').forEach(function (img) {
-      if (img.id === 'qvImage' || img.closest('.collection-card')) return;
-      var s = img.getAttribute('src') || '';
-      if (!s || s === BLANK) {
-        var wrap = img.closest('.room-card, .hero-slide, figure, .gallery-item, .insta-item');
-        if (wrap) wrap.style.display = 'none';
-        else img.style.display = 'none';
+    // E. STOCK AUDIT ON CATALOG / PRODUCT CARDS (mark stock <= 0 clearly)
+    document.querySelectorAll('[data-product-id], .product-card').forEach(function (card) {
+      var pid = card.getAttribute('data-product-id');
+      var prod = activeProducts.find(function (p) { return p.id === pid; });
+      if (!prod) return;
+      var existing = card.querySelector('.velora-oos-pill');
+      if (Number(prod.stock) <= 0) {
+        card.style.position = 'relative';
+        if (!existing) {
+          var badge = document.createElement('span');
+          badge.className = 'velora-oos-pill';
+          badge.textContent = 'Sold Out';
+          card.appendChild(badge);
+        }
+      } else if (existing) {
+        existing.remove();
       }
     });
   }
 
   window.addEventListener('velora:catalogUpdated', syncVeloraHomepage);
   document.addEventListener('DOMContentLoaded', function () { setTimeout(syncVeloraHomepage, 150); });
-  setInterval(syncVeloraHomepage, 800);
+  setInterval(syncVeloraHomepage, 900);
 })();
 </script>
 </body>
 </html>
+
 
 
 
