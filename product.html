@@ -61,6 +61,10 @@
           <li><a href="#footer" class="nav-link">Contact</a></li>
         </ul>
         <div class="nav-actions">
+          <a href="shop.html?wishlist=1" class="icon-btn" id="wishlistOpenBtn" aria-label="Saved Wishlist" style="text-decoration:none;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <span class="badge-count" id="wishlistCount">0</span>
+          </a>
           <button class="icon-btn" id="cartOpenBtn" aria-label="Shopping Bag">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
             <span class="action-badge" id="cartCount">0</span>
@@ -99,8 +103,8 @@
         <div><span class="badge-shimmer" id="pdpBadge">Best Seller</span></div>
         <h1 class="pdp-title" id="pdpTitle">Loading...</h1>
         <div class="product-price-box">
-          <span class="price-now" id="pdpPrice" style="font-size:1.65rem;">₹3,499</span>
-          <span class="price-mrp" id="pdpMrp" style="font-size:1.05rem;">₹3,999</span>
+          <span class="price-now" id="pdpPrice" style="font-size:1.65rem;">&mdash;</span>
+          <span class="price-mrp" id="pdpMrp" style="font-size:1.05rem;"></span>
         </div>
         <p id="pdpDesc" style="color:var(--ink-muted);line-height:1.75;"></p>
 
@@ -376,5 +380,6 @@
   <script src="js/billing-helpers.js" defer></script>
 </body>
 </html>
+
 
 

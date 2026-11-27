@@ -31,23 +31,43 @@
 </head>
 <body>
   <header class="site-header is-scrolled" id="siteHeader">
-    <div class="container header-inner">
+    <div class="container nav-container">
       <a href="index.html" class="brand-logo" aria-label="VELORA Home">
         <span class="font-wordmark text-gold-gradient">VELORA</span>
       </a>
-      <nav class="desktop-nav" aria-label="Primary Navigation">
-        <a href="index.html" class="nav-link">Home</a>
-        <a href="shop.html" class="nav-link">Catalog</a>
-        <a href="#privacy" class="nav-link">Privacy</a>
-        <a href="#returns" class="nav-link">Returns</a>
-        <a href="#shipping" class="nav-link">Shipping</a>
-        <a href="#contact" class="nav-link">Contact</a>
+      <nav class="main-nav" aria-label="Primary Navigation">
+        <ul class="nav-list">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="shop.html" class="nav-link">Catalog</a></li>
+          <li><a href="#privacy" class="nav-link">Privacy</a></li>
+          <li><a href="#returns" class="nav-link">Returns</a></li>
+          <li><a href="#shipping" class="nav-link">Shipping</a></li>
+          <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
       </nav>
-      <div class="header-actions">
+      <div class="nav-actions">
         <a href="shop.html" class="btn-magnetic btn-gold" style="padding:0.55rem 1rem;text-decoration:none;"><span class="btn-text">Shop Catalog</span></a>
+        <button class="icon-btn mobile-menu-btn" id="mobileMenuBtn" aria-label="Open Navigation Menu" aria-expanded="false" aria-controls="mobileDrawer">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
       </div>
     </div>
   </header>
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <aside class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+    <div class="mobile-drawer-head">
+      <span class="font-wordmark text-gold-gradient">VELORA</span>
+      <button class="icon-btn" id="mobileMenuClose" aria-label="Close Menu">&times;</button>
+    </div>
+    <ul class="mobile-nav-list">
+      <li><a href="index.html" class="mobile-nav-link">Home</a></li>
+      <li><a href="shop.html" class="mobile-nav-link">Catalog</a></li>
+      <li><a href="#privacy" class="mobile-nav-link">Privacy Policy</a></li>
+      <li><a href="#returns" class="mobile-nav-link">Returns &amp; Warranty</a></li>
+      <li><a href="#shipping" class="mobile-nav-link">Shipping Policy</a></li>
+      <li><a href="#contact" class="mobile-nav-link">Grievance Contact</a></li>
+    </ul>
+  </aside>
 
   <main>
     <section class="policy-hero">
@@ -142,7 +162,9 @@
       </div>
     </div>
   </footer>
+  <script src="js/animations.js" defer></script>
 </body>
 </html>
+
 
 

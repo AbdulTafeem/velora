@@ -128,6 +128,10 @@
           <li><a href="#footer" class="nav-link">Contact</a></li>
         </ul>
         <div class="nav-actions">
+          <a href="shop.html?wishlist=1" class="icon-btn" id="wishlistOpenBtn" aria-label="Saved Wishlist" style="text-decoration:none;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <span class="badge-count" id="wishlistCount">0</span>
+          </a>
           <button class="icon-btn" id="cartOpenBtn" aria-label="Shopping Bag">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
             <span class="action-badge" id="cartCount">0</span>
@@ -179,7 +183,7 @@
       </div>
 
       <div class="filter-group">
-        <h4>Max Price: <span id="maxPriceLabel">₹4,000</span></h4>
+        <h4>Max Price: <span id="maxPriceLabel">₹25,000</span></h4>
         <input type="range" id="priceRangeInput" min="0" max="25000" step="100" value="25000" style="width:100%;accent-color:var(--maroon-900);cursor:pointer;" />
       </div>
 
@@ -190,7 +194,7 @@
 
     <div>
       <div class="shop-toolbar">
-        <span id="shopResultCount" style="font-size:var(--text-sm);color:var(--ink-muted);">Showing 8 products</span>
+        <span id="shopResultCount" style="font-size:var(--text-sm);color:var(--ink-muted);">Loading pieces...</span>
         <div class="mood-pills" aria-label="Room lighting"><button type="button" class="mood-pill is-active" data-mood="daylight">Daylight</button><button type="button" class="mood-pill" data-mood="golden">Golden Hour</button><button type="button" class="mood-pill" data-mood="evening">Evening</button></div><select id="shopSortSelect" class="shop-sort-select" aria-label="Sort products">
           <option value="featured">Sort by: Featured</option>
           <option value="price-asc">Price: Low to High (₹)</option>
@@ -279,8 +283,8 @@
         <span class="badge-shimmer" id="qvBadge">Best Seller</span>
         <h3 class="qv-title" id="qvTitle">Product Name</h3>
         <div class="product-price-box">
-          <span class="price-now" id="qvPrice" style="font-size:1.35rem;">₹3,499</span>
-          <span class="price-mrp" id="qvMrp">₹3,999</span>
+          <span class="price-now" id="qvPrice" style="font-size:1.35rem;">&mdash;</span>
+          <span class="price-mrp" id="qvMrp"></span>
         </div>
         <p class="qv-desc" id="qvDesc"></p>
         <div>
@@ -310,7 +314,9 @@
       const priceInput = document.getElementById('priceRangeInput');
       const priceLabel = document.getElementById('maxPriceLabel');
       const sortSelect = document.getElementById('shopSortSelect');
-      const urlCatRaw = new URLSearchParams(window.location.search).get('cat');
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlCatRaw = urlParams.get('cat');
+      const onlyWishlist = urlParams.get('wishlist') === '1';
       let selectedCat = urlCatRaw ? Store.normalizeCategory(urlCatRaw) : 'all';
       const initRadio = document.querySelector('input[name="cat"][value="' + selectedCat + '"]');
       if (initRadio) initRadio.checked = true; else selectedCat = 'all';
@@ -429,5 +435,6 @@
   <script src="js/billing-helpers.js" defer></script>
 </body>
 </html>
+
 
 
