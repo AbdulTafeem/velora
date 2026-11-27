@@ -87,3 +87,59 @@
     }
   });
 })();
+
+
+/* VELORA LIVE CATALOG HOMEPAGE SYNC */
+(function syncHomepageWithLiveCatalog() {
+  function applySync() {
+    const Store = window.VeloraStore;
+    if (!Store || typeof Store.getProducts !== 'function') return;
+    const products = Store.getProducts().filter(p => String(p.status || 'active').toLowerCase() !== 'hidden');
+    if (!products.length) return;
+
+    const fmt = (n) => '₹' + Number(n || 0).toLocaleString('en-IN');
+
+    // 1. Sync Hero Showcase Arch Slides with actual live products
+    const heroSlides = document.querySelectorAll('.hero-slide, .showcase-slide, [data-hero-slide]');
+    if (heroSlides.length) {
+      heroSlides.forEach((slide, i) => {
+        const p = products[i % products.length];
+        const img = slide.querySelector('img');
+        const titleEl = slide.querySelector('h2, h3, .slide-title, .hero-caption-title, span');
+        const priceEl = slide.querySelector('.slide-price, .hero-caption-price, strong');
+        if (img && p.image) { img.src = p.image; img.alt = p.name; }
+        if (titleEl && p.name) titleEl.textContent = p.name;
+        if (priceEl && p.price) priceEl.textContent = fmt(p.price);
+      });
+    }
+
+    // 2. Sync Featured Product Spotlight image & specs with live first product
+    const feat = products[0];
+    const featSec = document.querySelector('#featured-product, .featured-spotlight, [data-featured-section]');
+    if (featSec && feat) {
+      const featImg = featSec.querySelector('img');
+      if (featImg && feat.image) { featImg.src = feat.image; featImg.alt = feat.name; }
+      featSec.querySelectorAll('.hotspot-pin, .hotspot-card, [data-hotspot]').forEach(el => el.style.display = 'none');
+    }
+
+    // 3. Update Collection Cards piece counts & starting prices dynamically
+    document.querySelectorAll('[data-category], .collection-card').forEach(card => {
+      const cat = (card.getAttribute('data-category') || '').toLowerCase();
+      if (!cat) return;
+      const matching = products.filter(p => String(p.category || '').toLowerCase() === cat);
+      const pill = card.querySelector('.piece-count, .collection-count, [data-piece-count]');
+      if (pill) {
+        pill.textContent = matching.length === 1 ? '1 PIECE' : `${matching.length} PIECES`;
+      }
+      const fromEl = card.querySelector('.collection-price, [data-from-price]');
+      if (fromEl && matching.length > 0) {
+        const minPrice = Math.min(...matching.map(m => Number(m.price) || 0));
+        fromEl.textContent = `FROM ${fmt(minPrice)}`;
+      }
+    });
+  }
+
+  window.addEventListener('velora:catalog-updated', applySync);
+  document.addEventListener('DOMContentLoaded', () => setTimeout(applySync, 400));
+  setTimeout(applySync, 1200);
+})();
