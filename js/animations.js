@@ -1,31 +1,34 @@
 ﻿/* ==========================================================================
-   VELORA — ULTRA-SMOOTH ZERO-JITTER 60FPS MOTION ENGINE
+   VELORA — LUXURY VELVET CURTAIN, MAGNETIC CTAS & 60FPS MOTION ENGINE
    ========================================================================== */
 (function () {
   'use strict';
 
-  // 1. Preloader: show only on first visit in session; instant on subsequent page loads
+  // 1. Haute-Couture Velvet Curtain Reveal (smooth, crisp, non-blocking)
   const preloader = document.getElementById('preloader');
   const bar = document.getElementById('preloaderProgress');
-  if (preloader) {
-    let seen = false;
-    try { seen = sessionStorage.getItem('velora_intro_seen') === '1'; } catch (e) {}
-    if (seen) {
-      preloader.style.display = 'none';
-      document.body.classList.add('velora-loaded');
-    } else {
-      try { sessionStorage.setItem('velora_intro_seen', '1'); } catch (e) {}
-      if (bar) {
-        bar.style.transition = 'transform 0.55s cubic-bezier(0.22, 1, 0.36, 1)';
-        requestAnimationFrame(() => { bar.style.transform = 'scaleX(1)'; });
-      }
-      setTimeout(() => {
-        preloader.classList.add('is-parting');
-        document.body.classList.add('velora-loaded');
-        preloader.style.pointerEvents = 'none';
-        setTimeout(() => { preloader.style.display = 'none'; }, 700);
-      }, 550);
+  function openVelvetCurtain(delayMs) {
+    if (!preloader) return;
+    preloader.classList.remove('is-closing');
+    if (bar) {
+      bar.style.transition = 'transform ' + (delayMs / 1000).toFixed(2) + 's cubic-bezier(0.22, 1, 0.36, 1)';
+      requestAnimationFrame(() => { bar.style.transform = 'scaleX(1)'; });
     }
+    setTimeout(() => {
+      preloader.classList.add('is-parting');
+      document.body.classList.add('velora-loaded');
+      preloader.style.pointerEvents = 'none';
+      setTimeout(() => { preloader.style.display = 'none'; }, 1050);
+    }, delayMs);
+  }
+  if (preloader) {
+    const isSubPage = /shop\.html|product\.html|policies\.html/i.test(window.location.pathname);
+    openVelvetCurtain(isSubPage ? 340 : 620);
+    window.addEventListener('pageshow', (e) => {
+      if (e.persisted) openVelvetCurtain(240);
+    });
+  } else {
+    document.body.classList.add('velora-loaded');
   }
 
   // 2. Smooth anchor scrolling
@@ -43,24 +46,68 @@
     });
   });
 
-  // 3. Lightweight IntersectionObserver for section & card reveals
-  const revealEls = document.querySelectorAll('.section-header, .why-header, .why-card, .collection-panel, .room-card, .testimonial-card, .spotlight-stage, .spotlight-details');
-  if ('IntersectionObserver' in window) {
+  // 3. Staggered Luxury Scroll Reveals
+  const revealEls = document.querySelectorAll(
+    '.section-header, .why-header, .why-card, .collection-panel, .room-card, .testimonial-card, .spotlight-stage, .spotlight-details, .pillar-item'
+  );
+  if ('IntersectionObserver' in window && revealEls.length) {
     const io = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
+      entries.forEach((entry, idx) => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('is-revealed');
+          entry.target.style.transitionDelay = Math.min(idx * 50, 260) + 'ms';
+          entry.target.classList.add('is-revealed', 'is-visible');
           io.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+    }, { threshold: 0.08, rootMargin: '0px 0px -24px 0px' });
     revealEls.forEach((el) => {
       el.classList.add('velora-reveal');
       io.observe(el);
     });
   }
 
-  // 4. GPU-Only Scroll Progress Line
+  // 4. Smooth Animated Counters (fixes 0 counters cleanly)
+  document.querySelectorAll('[data-target], [data-count], .counter-number, .stat-number').forEach((counter) => {
+    const raw = (counter.getAttribute('data-target') || counter.getAttribute('data-count')) || counter.textContent.replace(/[^0-9]/g, '');
+    const target = parseInt(raw, 10);
+    if (!target || isNaN(target)) return;
+    const suffix = counter.getAttribute('data-suffix') || (counter.textContent.includes('+') ? '+' : '');
+    if ('IntersectionObserver' in window) {
+      const cio = new IntersectionObserver((entries) => {
+        if (!entries[0].isIntersecting) return;
+        cio.unobserve(counter);
+        const start = performance.now();
+        const dur = 1100;
+        const step = (now) => {
+          const t = Math.min(1, (now - start) / dur);
+          const ease = 1 - Math.pow(1 - t, 3);
+          counter.textContent = Math.floor(target * ease).toLocaleString('en-IN') + suffix;
+          if (t < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      }, { threshold: 0.15 });
+      cio.observe(counter);
+    } else {
+      counter.textContent = target.toLocaleString('en-IN') + suffix;
+    }
+  });
+
+  // 5. Desktop Magnetic Pull on Primary Gold & Outline CTAs
+  if (window.matchMedia('(pointer: fine)').matches) {
+    document.querySelectorAll('.btn-magnetic').forEach((btn) => {
+      btn.addEventListener('mousemove', (e) => {
+        const r = btn.getBoundingClientRect();
+        const dx = (e.clientX - (r.left + r.width / 2)) * 0.16;
+        const dy = (e.clientY - (r.top + r.height / 2)) * 0.20;
+        btn.style.transform = `translate3d(${dx.toFixed(1)}px, ${dy.toFixed(1)}px, 0)`;
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transform = '';
+      });
+    });
+  }
+
+  // 6. GPU-Only Scroll Progress Line & Header Scroll State
   const progressLine = document.getElementById('scrollProgressBar');
   const hdr = document.querySelector('.site-header');
   let maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
@@ -86,7 +133,7 @@
   }, { passive: true });
 })();
 
-/* Hero Slider Controls */
+/* Hero Slider Controls (Auto-play + Manual Arrows & Dots) */
 (function () {
   const slides = document.querySelectorAll('.hero-slide');
   const dots = document.querySelectorAll('.hero-dot');
@@ -100,6 +147,11 @@
   document.getElementById('heroNextBtn')?.addEventListener('click', () => showSlide(idx + 1));
   document.getElementById('heroPrevBtn')?.addEventListener('click', () => showSlide(idx - 1));
   dots.forEach((d, i) => d.addEventListener('click', () => showSlide(i)));
+  if (slides.length > 1) {
+    setInterval(() => {
+      if (!document.hidden) showSlide(idx + 1);
+    }, 5500);
+  }
 })();
 
 /* Mobile Menu, Search Drawer & Announcement Bar Controls */
