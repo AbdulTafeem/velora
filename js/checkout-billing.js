@@ -12,8 +12,8 @@
   const WHATSAPP_NUMBER = '918284029319';
   const RAZORPAY_KEY_ID = '';
   let currentOrderKey = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('ord-' + Date.now() + '-' + Math.random().toString(36).slice(2));
-  const MERCHANT_UPI_ID = 'houseofvelora@hdfcbank'; // Replace with your verified Merchant VPA
-  const MERCHANT_NAME = 'VELORA';
+  const MERCHANT_UPI_ID = '50100918358454@HDFC0003029.ifsc.npci'; // Replace with your verified Merchant VPA
+  const MERCHANT_NAME = 'RIYAN';
 
   function lockScroll() {
     document.documentElement.style.overflow = 'hidden';
@@ -142,7 +142,7 @@
                   <div style="font-size:0.62rem;font-weight:600;margin-top:4px;color:#540A18;">Scan via Any UPI App</div>
                 </div>
                 <div style="flex:1;min-width:195px;line-height:1.5;color:#3E3537;">
-                  <div style="font-weight:700;color:#120C0E;margin-bottom:4px;">Payee: VELORA Official Merchant</div>
+                  <div style="font-weight:700;color:#120C0E;margin-bottom:4px;">Payee: RIYAN (VELORA)</div>
                   <div style="margin-bottom:0.55rem;">On mobile, tap below to open GPay, PhonePe, or Paytm directly with your exact payable amount:</div>
                   <a id="vcUpiAppBtn" href="upi://pay?pa=${MERCHANT_UPI_ID}&pn=${encodeURIComponent(MERCHANT_NAME)}&cu=INR&tn=VELORA%20Order" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:0.55rem 0.9rem;background:#140508;color:#F3E5C0;border:1px solid #D4AF37;border-radius:4px;text-decoration:none;font-weight:700;font-size:0.75rem;letter-spacing:0.06em;text-transform:uppercase;">
                     Open UPI App &amp; Pay Now &rarr;
@@ -427,6 +427,7 @@
     }
   });
 })();
+
 
 
 
